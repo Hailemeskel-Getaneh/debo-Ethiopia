@@ -1,12 +1,12 @@
 # Debo Ethiopia
 
-
-```markdown
+````markdown
 # Debo NGO Frontend
 
 A modern, responsive **NGO website frontend** built for an organization focused on community empowerment through education, impact showcasing, donations, and engagement.
 
 This is the **client-side** application (React + Vite + TypeScript + Tailwind CSS) with:
+
 - Public/user-facing pages (home, about, tutorials, gallery, achievements, donate, contact, newsletter)
 - Protected admin dashboard (manage donations, contacts, subscribers, gallery uploads, achievements)
 
@@ -48,6 +48,7 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
    git clone https://github.com/YOUR_USERNAME/debo-ngo-frontend.git
    cd debo-ngo-frontend
    ```
+````
 
 2. Install dependencies
 
@@ -129,6 +130,7 @@ src/
 3. **API Integration** — all backend calls go through `services/` (configurable via `VITE_API_BASE_URL`)
 
 To contribute:
+
 - Fork the repo
 - Create feature branch (`git checkout -b feature/add-events`)
 - Commit changes (`git commit -m 'Add events page'`)
@@ -149,13 +151,13 @@ This project uses Tailwind CSS integrated with Vite following the official guide
 3. Added plugin to `vite.config.ts`:
 
    ```ts
-   import { defineConfig } from 'vite'
-   import tailwindcss from '@tailwindcss/vite'
-   import react from '@vitejs/plugin-react'
+   import { defineConfig } from "vite";
+   import tailwindcss from "@tailwindcss/vite";
+   import react from "@vitejs/plugin-react";
 
    export default defineConfig({
      plugins: [react(), tailwindcss()],
-   })
+   });
    ```
 
 4. Imported Tailwind in main CSS file (`src/index.css` or `src/style.css`):
@@ -181,13 +183,14 @@ MIT License — feel free to use, modify, and distribute.
 
 Made with ❤️ for community impact  
 Last updated: February 2026
-```
+
+````
 
 ### Quick Tips Before Pushing to GitHub
 
 - Replace `YOUR_USERNAME` with your actual GitHub username
 - Add real screenshots (use tools like Lightshot or browser dev tools → save as PNG → put in `public/screenshots/` and link them with `![Home Page](public/screenshots/home.png)`)
-- If you have a live demo (Vercel/Netlify), add a badge/link at the top:  
+- If you have a live demo (Vercel/Netlify), add a badge/link at the top:
   [![Live Demo](https://img.shields.io/badge/Live%20Demo-View-brightgreen)](https://your-demo-url.vercel.app)
 - Add badges for tech stack (shields.io):
 
@@ -195,5 +198,4 @@ Last updated: February 2026
   [![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)](https://react.dev)
   [![Vite](https://img.shields.io/badge/Vite-B73BFE?logo=vite&logoColor=white)](https://vitejs.dev)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-  ```
-
+````
