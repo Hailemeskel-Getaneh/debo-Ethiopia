@@ -47,7 +47,6 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
    git clone https://github.com/Hailemeskel-Getaneh/debo-Ethiopia.git
    cd debo-ngo-frontend
    ```
-````
 
 2. Install dependencies
    ```bash
