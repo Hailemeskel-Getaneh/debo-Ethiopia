@@ -43,15 +43,13 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
 ### Installation
 
 1. Clone the repository
-
    ```bash
-   git clone https://github.com/YOUR_USERNAME/debo-ngo-frontend.git
+   git clone https://github.com/Hailemeskel-Getaneh/debo-Ethiopia.git
    cd debo-ngo-frontend
    ```
 ````
 
 2. Install dependencies
-
    ```bash
    npm install
    # or
@@ -60,30 +58,25 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
    pnpm install
    ```
 
-3. Set up environment variables  
+3. Set up environment variables
    Create `.env.local` in the root:
-
    ```env
    VITE_API_BASE_URL=http://localhost:5000/api   # or your backend URL
    ```
 
 4. Start the development server
-
    ```bash
    npm run dev
    # or
    yarn dev
    ```
-
    → Open http://localhost:5173 (default Vite port)
 
-### Build for Production
-
-```bash
-npm run build
-```
-
-Output goes to `dist/` folder — ready for deployment (Vercel, Netlify, GitHub Pages, etc.)
+5. Build for Production
+   ```bash
+   npm run build
+   ```
+   Output goes to `dist/` folder — ready for deployment (Vercel, Netlify, GitHub Pages, etc.)
 
 ## 📁 Project Structure
 
@@ -125,9 +118,9 @@ src/
 
 ## 🖥️ How to Use / Contribute
 
-1. **Public Pages** — accessible without login (home, donate, gallery...)
-2. **Admin Panel** — login required (role-based via AuthContext)
-3. **API Integration** — all backend calls go through `services/` (configurable via `VITE_API_BASE_URL`)
+- **Public Pages** — accessible without login (home, donate, gallery...)
+- **Admin Panel** — login required (role-based via AuthContext)
+- **API Integration** — all backend calls go through `services/` (configurable via `VITE_API_BASE_URL`)
 
 To contribute:
 
@@ -137,31 +130,27 @@ To contribute:
 - Push (`git push origin feature/add-events`)
 - Open Pull Request
 
-## 🎨 Tailwind CSS Setup (How It Was Installed)
+## 🎨 Tailwind CSS Setup
 
 This project uses Tailwind CSS integrated with Vite following the official guide:
+[Tailwind CSS Vite Installation](https://tailwindcss.com/docs/installation/using-vite)
 
 1. Created Vite + React + TS project
 2. Installed Tailwind:
-
    ```bash
    npm install tailwindcss @tailwindcss/vite
    ```
-
 3. Added plugin to `vite.config.ts`:
-
-   ```ts
-   import { defineConfig } from "vite";
-   import tailwindcss from "@tailwindcss/vite";
-   import react from "@vitejs/plugin-react";
+   ```typescript
+   import { defineConfig } from 'vite'
+   import tailwindcss from '@tailwindcss/vite'
+   import react from '@vitejs/plugin-react'
 
    export default defineConfig({
      plugins: [react(), tailwindcss()],
    });
    ```
-
-4. Imported Tailwind in main CSS file (`src/index.css` or `src/style.css`):
-
+4. Imported Tailwind in main CSS file (`src/index.css`):
    ```css
    @import "tailwindcss";
    ```
@@ -174,28 +163,11 @@ MIT License — feel free to use, modify, and distribute.
 
 ## 🙏 Acknowledgments
 
-- [Vite](https://vitejs.dev)
-- [React](https://react.dev)
-- [Tailwind CSS](https://tailwindcss.com)
-- Official Tailwind + Vite installation guide: https://tailwindcss.com/docs/installation/using-vite
+- Vite
+- React
+- Tailwind CSS
+- Official Tailwind + Vite installation guide
 
 ---
-
-Made with ❤️ for community impact  
+Made with ❤️ for community impact
 Last updated: February 2026
-
-````
-
-### Quick Tips Before Pushing to GitHub
-
-- Replace `YOUR_USERNAME` with your actual GitHub username
-- Add real screenshots (use tools like Lightshot or browser dev tools → save as PNG → put in `public/screenshots/` and link them with `![Home Page](public/screenshots/home.png)`)
-- If you have a live demo (Vercel/Netlify), add a badge/link at the top:
-  [![Live Demo](https://img.shields.io/badge/Live%20Demo-View-brightgreen)](https://your-demo-url.vercel.app)
-- Add badges for tech stack (shields.io):
-
-  ```markdown
-  [![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)](https://react.dev)
-  [![Vite](https://img.shields.io/badge/Vite-B73BFE?logo=vite&logoColor=white)](https://vitejs.dev)
-  [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-````
