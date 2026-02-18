@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+    /* NGO Branding Colors */
+    --color-primary-50: oklch(0.97 0.01 165);
+    --color-primary-100: oklch(0.92 0.03 165);
+    --color-primary-200: oklch(0.85 0.06 165);
+    --color-primary-300: oklch(0.75 0.10 165);
+    --color-primary-400: oklch(0.65 0.14 165);
+    --color-primary-500: oklch(0.55 0.17 165);
+    --color-primary-600: oklch(0.48 0.14 165);
+    /* Main Brand Green/Teal */
+    --color-primary-700: oklch(0.38 0.11 165);
+    --color-primary-800: oklch(0.28 0.08 165);
+    --color-primary-900: oklch(0.18 0.05 165);
+    --color-primary-950: oklch(0.12 0.03 165);
+
+    --color-secondary-50: oklch(0.97 0.01 45);
+    --color-secondary-500: oklch(0.65 0.15 45);
+    /* Warm secondary (Gold/Orange-ish) */
+    --color-secondary-900: oklch(0.25 0.05 45);
+
+    --color-accent-500: oklch(0.6 0.18 20);
+    /* Action color (Warm Red/Coral for "Donate") */
+
+    /* Semantic Aliases */
+    --color-brand-main: var(--color-primary-600);
+    --color-brand-secondary: var(--color-secondary-500);
+    --color-brand-action: var(--color-accent-500);
+}
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply antialiased text-zinc-900 bg-white dark:bg-zinc-950 dark:text-zinc-50;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+}

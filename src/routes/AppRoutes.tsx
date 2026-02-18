@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 // Layouts
@@ -8,10 +8,9 @@ import UserLayout from '../components/layout/UserLayout';
 import AdminLayout from '../components/layout/AdminLayout';
 
 // Features
-import Login from '../features/auth/pages/Login';
-import Register from '../features/auth/pages/Register';
-import ForgotPassword from '../features/auth/pages/ForgotPassword';
-import AdminDashboard from '../admin/dashboard/AdminDashboard';
+import { Login, Register, ForgotPassword } from '../features/auth/pages';
+import { AdminDashboard } from '../admin/dashboard';
+import ThemeTest from '../features/ThemeTest';
 
 // Protected Route Wrapper
 import ProtectedRoute from './ProtectedRoute';
@@ -21,6 +20,10 @@ const AppRoutes: React.FC = () => {
 
     return (
         <Routes>
+            {/* Primary Entry Point for Color Testing */}
+            <Route path="/" element={<ThemeTest />} />
+            <Route path="/theme-test" element={<ThemeTest />} />
+
             {/* Auth Routes */}
             <Route element={<AuthLayout />}>
                 <Route path="/login" element={<Login />} />
@@ -31,7 +34,7 @@ const AppRoutes: React.FC = () => {
             {/* User Routes */}
             <Route element={<ProtectedRoute isAllowed={isAuthenticated} />}>
                 <Route element={<UserLayout />}>
-                    <Route path="/dashboard" element={<div>User Dashboard Placeholder</div>} />
+                    <Route path="/dashboard" element={<ThemeTest />} />
                     <Route path="/profile" element={<div>Profile Placeholder</div>} />
                 </Route>
             </Route>
@@ -45,7 +48,6 @@ const AppRoutes: React.FC = () => {
             </Route>
 
             {/* Redirects */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="*" element={<div>404 - Not Found</div>} />
         </Routes>
     );
