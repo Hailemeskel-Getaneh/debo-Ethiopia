@@ -1,5 +1,8 @@
 # Debo Ethiopia
 
+````markdown
+# Debo NGO Frontend
+
 A modern, responsive **NGO website frontend** built for an organization focused on community empowerment through education, impact showcasing, donations, and engagement.
 
 This is the **client-side** application (React + Vite + TypeScript + Tailwind CSS) with:
@@ -44,6 +47,7 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
    git clone https://github.com/Hailemeskel-Getaneh/debo-Ethiopia.git
    cd debo-ngo-frontend
    ```
+````
 
 2. Install dependencies
    ```bash
@@ -119,20 +123,12 @@ src/
 - **API Integration** — all backend calls go through `services/` (configurable via `VITE_API_BASE_URL`)
 
 To contribute:
-1. Fork the repo
-2. Create feature branch
-   ```bash
-   git checkout -b feature/add-events
-   ```
-3. Commit changes
-   ```bash
-   git commit -m 'Add events page'
-   ```
-4. Push
-   ```bash
-   git push origin feature/add-events
-   ```
-5. Open Pull Request
+
+- Fork the repo
+- Create feature branch (`git checkout -b feature/add-events`)
+- Commit changes (`git commit -m 'Add events page'`)
+- Push (`git push origin feature/add-events`)
+- Open Pull Request
 
 ## 🎨 Tailwind CSS Setup
 
@@ -152,7 +148,7 @@ This project uses Tailwind CSS integrated with Vite following the official guide
 
    export default defineConfig({
      plugins: [react(), tailwindcss()],
-   })
+   });
    ```
 4. Imported Tailwind in main CSS file (`src/index.css`):
    ```css
