@@ -33,7 +33,7 @@ const NavBar = () => {
             </li>
 
             <li>
-              <a>About</a>
+              <a role="button">About</a>
               <ul className="p-2">
                 <li>
                   <a href="/about">About Us</a>
