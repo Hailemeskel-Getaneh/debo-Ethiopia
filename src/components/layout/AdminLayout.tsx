@@ -3,20 +3,14 @@ import { Outlet } from 'react-router-dom';
 
 const AdminLayout: React.FC = () => {
     return (
-        <div className="min-h-screen bg-zinc-100 flex">
-            <aside className="w-64 bg-zinc-900 text-white p-6">
-                <h2 className="text-2xl font-bold mb-6">Admin Panel</h2>
-                <nav>
-                    <ul className="space-y-2">
-                        <li>Dashboard</li>
-                        <li>Users</li>
-                        <li>Products</li>
-                    </ul>
-                </nav>
-            </aside>
-            <main className="flex-1 p-10">
-                <Outlet />
-            </main>
+        <div className="min-h-screen flex bg-zinc-50">
+            <aside className="w-64 bg-zinc-900 text-white p-4">Admin Sidebar</aside>
+            <div className="flex-1">
+                <header className="p-4 border-b bg-white">Admin Header</header>
+                <main className="p-4">
+                    <Outlet />
+                </main>
+            </div>
         </div>
     );
 };

@@ -1,9 +1,10 @@
 import React, { useState, type ReactNode } from 'react';
-import { AuthContext, type Role } from './auth-context-core';
+import { AuthContext } from './AuthContextCore';
+import type { Role } from '../types/auth';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true); // Placeholder state
-    const [userRole, setUserRole] = useState<Role | null>('user'); // Placeholder state
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true); // Logged in by default for testing
+    const [userRole, setUserRole] = useState<Role | null>('user');
 
     const login = (role: Role) => {
         setIsAuthenticated(true);
@@ -21,3 +22,4 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         </AuthContext.Provider>
     );
 };
+
