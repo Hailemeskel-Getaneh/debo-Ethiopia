@@ -1,6 +1,6 @@
 # Debo Ethiopia
 
-````markdown
+
 # Debo NGO Frontend
 
 A modern, responsive **NGO website frontend** built for an organization focused on community empowerment through education, impact showcasing, donations, and engagement.
@@ -47,7 +47,6 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
    git clone https://github.com/Hailemeskel-Getaneh/debo-Ethiopia.git
    cd debo-ngo-frontend
    ```
-````
 
 2. Install dependencies
    ```bash
