@@ -122,7 +122,7 @@ const ThemeTest: React.FC = () => {
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
                         Theme Configuration Source
                     </h2>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white text-sm">
                         All colors are defined in <code className="text-brand-secondary bg-zinc-900 px-2 py-0.5 rounded">src/styles/globals.css</code> using the Tailwind v4 <code className="text-brand-main">@theme</code> directive.
                     </p>
                     <div className="bg-zinc-950 p-4 rounded-xl text-xs font-mono text-zinc-400 border border-zinc-800 overflow-x-auto">
