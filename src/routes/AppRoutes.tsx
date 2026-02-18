@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-=======
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
->>>>>>> c8a83c5 (Set up the DaisyUI and test it on the feature/add-events branch.)
+import { useAuth } from "../hooks/useAuth";
 
 // Layouts
 import AuthLayout from "../components/layout/AuthLayout";
