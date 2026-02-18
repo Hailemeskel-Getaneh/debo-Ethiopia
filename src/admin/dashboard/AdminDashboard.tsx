@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react";
 
 const AdminDashboard: React.FC = () => {
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+        <div>
+            <h2 className="text-3xl font-bold mb-6">System Overview</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <h2 className="text-lg font-semibold">Total Donations</h2>
-                    <p className="text-3xl font-bold text-primary-600">$0.00</p>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-zinc-200">
+                    <h3 className="text-zinc-500 text-sm font-medium">Total Users</h3>
+                    <p className="text-3xl font-bold mt-1">1,234</p>
                 </div>
-                <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <h2 className="text-lg font-semibold">New Messages</h2>
-                    <p className="text-3xl font-bold text-secondary-500">0</p>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-zinc-200">
+                    <h3 className="text-zinc-500 text-sm font-medium">Active Orders</h3>
+                    <p className="text-3xl font-bold mt-1">56</p>
                 </div>
-                <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <h2 className="text-lg font-semibold">Subscribers</h2>
-                    <p className="text-3xl font-bold text-accent-500">0</p>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-zinc-200">
+                    <h3 className="text-zinc-500 text-sm font-medium">Revenue</h3>
+                    <p className="text-3xl font-bold mt-1">$12,345</p>
                 </div>
             </div>
         </div>
