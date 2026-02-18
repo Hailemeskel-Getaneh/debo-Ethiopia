@@ -1,15 +1,5 @@
-import React, { createContext, useState, type ReactNode } from 'react';
-
-type Role = 'user' | 'admin';
-
-interface AuthContextType {
-    isAuthenticated: boolean;
-    userRole: Role | null;
-    login: (role: Role) => void;
-    logout: () => void;
-}
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import React, { useState, type ReactNode } from 'react';
+import { AuthContext, type Role } from './auth-context-core';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true); // Placeholder state
