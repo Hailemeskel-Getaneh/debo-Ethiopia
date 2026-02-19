@@ -1,8 +1,27 @@
-
+import { useState, useEffect, useRef } from 'react';
+import logo from "@/assets/images/image copy.png";
 
 const NavBar = () => {
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  // Close menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setOpenMenu(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleMenu = (menuId: string) => {
+    setOpenMenu(prev => (prev === menuId ? null : menuId));
+  };
+
   return (
-    <div className="navbar bg-base-100 shadow-sm fixed top-0 left-0 w-full z-50">
+    <div ref={navRef} className="navbar bg-base-100 shadow-sm fixed top-0 left-0 w-full z-50">
       {/* Left Section */}
       <div className="navbar-start">
         {/* Mobile Dropdown */}
@@ -111,7 +130,9 @@ const NavBar = () => {
         </div>
 
         {/* Logo */}
-        <a className="btn btn-ghost text-xl">Debo Ethiopia</a>
+        <a href="/" className="btn btn-ghost px-2 hover:bg-transparent">
+          <img src={logo} alt="Debo Ethiopia" className="h-10 w-auto object-contain" />
+        </a>
       </div>
 
       {/* Desktop Menu */}
@@ -122,79 +143,79 @@ const NavBar = () => {
           </li>
 
           <li>
-            <details>
-              <summary>About</summary>
+            <details open={openMenu === 'about'}>
+              <summary onClick={(e) => { e.preventDefault(); toggleMenu('about'); }}>About</summary>
               <ul className="p-2 bg-base-100 w-44 shadow">
                 <li>
-                  <a href="/about">About Us</a>
+                  <a href="/about" onClick={() => setOpenMenu(null)}>About Us</a>
                 </li>
                 <li>
-                  <a href="/achievements">Achievements</a>
+                  <a href="/achievements" onClick={() => setOpenMenu(null)}>Achievements</a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details>
-              <summary>Programs</summary>
+            <details open={openMenu === 'programs'}>
+              <summary onClick={(e) => { e.preventDefault(); toggleMenu('programs'); }}>Programs</summary>
               <ul className="p-2 bg-base-100 w-52 shadow">
                 <li>
-                  <a href="/programs">All Programs</a>
+                  <a href="/programs" onClick={() => setOpenMenu(null)}>All Programs</a>
                 </li>
                 <li>
-                  <a href="/programs?type=education">Education</a>
+                  <a href="/programs?type=education" onClick={() => setOpenMenu(null)}>Education</a>
                 </li>
                 <li>
-                  <a href="/programs?type=health">Health</a>
+                  <a href="/programs?type=health" onClick={() => setOpenMenu(null)}>Health</a>
                 </li>
                 <li>
-                  <a href="/programs?type=social">Social Support</a>
+                  <a href="/programs?type=social" onClick={() => setOpenMenu(null)}>Social Support</a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details>
-              <summary>Projects</summary>
+            <details open={openMenu === 'projects'}>
+              <summary onClick={(e) => { e.preventDefault(); toggleMenu('projects'); }}>Projects</summary>
               <ul className="p-2 bg-base-100 w-52 shadow">
                 <li>
-                  <a href="/projects?status=active">Active Projects</a>
+                  <a href="/projects?status=active" onClick={() => setOpenMenu(null)}>Active Projects</a>
                 </li>
                 <li>
-                  <a href="/projects?status=completed">Completed Projects</a>
+                  <a href="/projects?status=completed" onClick={() => setOpenMenu(null)}>Completed Projects</a>
                 </li>
                 <li>
-                  <a href="/projects?status=upcoming">Upcoming Projects</a>
+                  <a href="/projects?status=upcoming" onClick={() => setOpenMenu(null)}>Upcoming Projects</a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details>
-              <summary>Events</summary>
+            <details open={openMenu === 'events'}>
+              <summary onClick={(e) => { e.preventDefault(); toggleMenu('events'); }}>Events</summary>
               <ul className="p-2 bg-base-100 w-52 shadow">
                 <li>
-                  <a href="/events?type=upcoming">Upcoming Events</a>
+                  <a href="/events?type=upcoming" onClick={() => setOpenMenu(null)}>Upcoming Events</a>
                 </li>
                 <li>
-                  <a href="/events?type=past">Past Events</a>
+                  <a href="/events?type=past" onClick={() => setOpenMenu(null)}>Past Events</a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details>
-              <summary>Media</summary>
+            <details open={openMenu === 'media'}>
+              <summary onClick={(e) => { e.preventDefault(); toggleMenu('media'); }}>Media</summary>
               <ul className="p-2 bg-base-100 w-44 shadow">
                 <li>
-                  <a href="/news">News</a>
+                  <a href="/news" onClick={() => setOpenMenu(null)}>News</a>
                 </li>
                 <li>
-                  <a href="/gallery">Gallery</a>
+                  <a href="/gallery" onClick={() => setOpenMenu(null)}>Gallery</a>
                 </li>
               </ul>
             </details>
@@ -214,9 +235,7 @@ const NavBar = () => {
 
       {/* Right Section */}
       <div className="navbar-end">
-        <a href="/login" className="btn btn-outline btn-primary">
-          Login
-        </a>
+        {/* Login button removed as requested */}
       </div>
     </div>
   );
