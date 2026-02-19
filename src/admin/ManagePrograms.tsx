@@ -9,6 +9,7 @@ import {
     ChevronUp,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { X, AlertTriangle } from 'lucide-react';
 
 interface Program {
     id: string;
@@ -21,8 +22,14 @@ const ManagePrograms: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
+    // UI State for Modals
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<'Add' | 'Edit'>('Add');
+    const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+
     // Mock data aligned with `programs` DB table
-    const programs: Program[] = [
+    const [programs, setPrograms] = useState<Program[]>([
         {
             id: '1',
             name: 'Clean Water Initiative',
@@ -47,7 +54,7 @@ const ManagePrograms: React.FC = () => {
             description: 'Microfinance, business skills training, and mentorship for women entrepreneurs in underserved areas.',
             created_at: '2025-09-15T14:00:00',
         },
-    ];
+    ]);
 
     const filtered = programs.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -74,7 +81,10 @@ const ManagePrograms: React.FC = () => {
                         Manage ongoing services and programs offered by DEBO.
                     </p>
                 </div>
-                <button className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20">
+                <button
+                    onClick={() => { setModalMode('Add'); setSelectedProgram(null); setIsModalOpen(true); }}
+                    className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20"
+                >
                     <Plus className="w-4 h-4" />
                     Add Program
                 </button>
@@ -127,13 +137,13 @@ const ManagePrograms: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
-                                    onClick={e => { e.stopPropagation(); }}
+                                    onClick={e => { e.stopPropagation(); setModalMode('Edit'); setSelectedProgram(program); setIsModalOpen(true); }}
                                     className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
                                 >
                                     <Edit2 className="w-4 h-4" />
                                 </button>
                                 <button
-                                    onClick={e => { e.stopPropagation(); }}
+                                    onClick={e => { e.stopPropagation(); setSelectedProgram(program); setIsDeleteOpen(true); }}
                                     className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
                                 >
                                     <Trash2 className="w-4 h-4" />
@@ -165,6 +175,107 @@ const ManagePrograms: React.FC = () => {
                     </motion.div>
                 ))}
             </div>
+
+            {/* Program Modal (Add/Edit) */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)}
+                            className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" />
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800"
+                        >
+                            <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
+                                <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                                    {modalMode === 'Add' ? 'Add New Program' : 'Edit Program Info'}
+                                </h3>
+                                <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-colors">
+                                    <X className="w-5 h-5 text-zinc-500" />
+                                </button>
+                            </div>
+
+                            <form className="p-8 space-y-6" onSubmit={(e) => {
+                                e.preventDefault();
+                                const formData = new FormData(e.currentTarget);
+                                const newProgram: Program = {
+                                    id: selectedProgram?.id || (programs.length + 1).toString(),
+                                    name: formData.get('name') as string,
+                                    description: formData.get('description') as string,
+                                    created_at: selectedProgram?.created_at || new Date().toISOString(),
+                                };
+
+                                if (modalMode === 'Add') {
+                                    setPrograms([newProgram, ...programs]);
+                                } else {
+                                    setPrograms(programs.map(p => p.id === newProgram.id ? newProgram : p));
+                                }
+                                setIsModalOpen(false);
+                            }}>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Program Name</label>
+                                        <input name="name" defaultValue={selectedProgram?.name} required placeholder="e.g. Literacy Support"
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Description</label>
+                                        <textarea name="description" defaultValue={selectedProgram?.description} required placeholder="What does this program do?" rows={4}
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none resize-none" />
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-4 pt-4">
+                                    <button type="button" onClick={() => setIsModalOpen(false)}
+                                        className="flex-1 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 font-bold hover:bg-zinc-50 transition-colors">
+                                        Cancel
+                                    </button>
+                                    <button type="submit"
+                                        className="flex-1 px-6 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 shadow-lg shadow-primary-500/20 transition-all hover:scale-[1.02]">
+                                        {modalMode === 'Add' ? 'Add Program' : 'Save Changes'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {isDeleteOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsDeleteOpen(false)}
+                            className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" />
+                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                            className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl p-8 border border-zinc-100 dark:border-zinc-800 text-center">
+                            <div className="w-16 h-16 rounded-2xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-6">
+                                <AlertTriangle className="w-8 h-8 text-red-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">Remove Program?</h3>
+                            <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+                                Are you sure you want to remove <span className="font-bold text-zinc-900 dark:text-zinc-100">{selectedProgram?.name}</span>?
+                                This might affect associated projects and events.
+                            </p>
+                            <div className="flex gap-4">
+                                <button onClick={() => setIsDeleteOpen(false)}
+                                    className="flex-1 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 font-bold hover:bg-zinc-50 transition-colors">
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        if (selectedProgram) {
+                                            setPrograms(programs.filter(p => p.id !== selectedProgram.id));
+                                        }
+                                        setIsDeleteOpen(false);
+                                    }}
+                                    className="flex-1 px-6 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 shadow-lg shadow-red-500/20 transition-all">
+                                    Delete
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

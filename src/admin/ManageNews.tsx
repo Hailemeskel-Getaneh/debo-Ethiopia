@@ -9,7 +9,8 @@ import {
     EyeOff,
     User2,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, AlertTriangle } from 'lucide-react';
 
 interface NewsArticle {
     id: string;
@@ -29,8 +30,14 @@ const ManageNews: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterTab, setFilterTab] = useState<'All' | 'Published' | 'Draft'>('All');
 
+    // UI State for Modals
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [modalMode, setModalMode] = useState<'Add' | 'Edit'>('Add');
+    const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
+
     // Mock data aligned with `news` DB table
-    const articles: NewsArticle[] = [
+    const [articles, setArticles] = useState<NewsArticle[]>([
         {
             id: '1',
             author_id: 'u1',
@@ -70,11 +77,12 @@ const ManageNews: React.FC = () => {
             updated_at: '2026-02-18T11:00:00',
             image_url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=600&auto=format&fit=crop',
         },
-    ];
+    ]);
 
     const filtered = articles.filter(a => {
         const matchSearch = a.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            a.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+            a.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            a.author_name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchTab = filterTab === 'All' || (filterTab === 'Published' ? a.is_published : !a.is_published);
         return matchSearch && matchTab;
     });
@@ -95,7 +103,10 @@ const ManageNews: React.FC = () => {
                         Manage news articles and publications.
                     </p>
                 </div>
-                <button className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20">
+                <button
+                    onClick={() => { setModalMode('Add'); setSelectedArticle(null); setIsModalOpen(true); }}
+                    className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20"
+                >
                     <Plus className="w-4 h-4" />
                     New Article
                 </button>
@@ -158,17 +169,27 @@ const ManageNews: React.FC = () => {
                                 {article.excerpt}
                             </p>
                             <div className="mt-4 flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800">
-                                <button className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg transition-colors ${article.is_published
-                                    ? 'text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/10'
-                                    : 'text-green-600 hover:bg-green-50 dark:hover:bg-green-900/10'}`}>
+                                <button
+                                    onClick={() => {
+                                        setArticles(articles.map(a => a.id === article.id ? { ...a, is_published: !a.is_published, published_at: !a.is_published ? new Date().toISOString() : null } : a));
+                                    }}
+                                    className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg transition-colors ${article.is_published
+                                        ? 'text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/10'
+                                        : 'text-green-600 hover:bg-green-50 dark:hover:bg-green-900/10'}`}>
                                     {article.is_published ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                                     {article.is_published ? 'Unpublish' : 'Publish'}
                                 </button>
                                 <div className="flex gap-1">
-                                    <button className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors">
+                                    <button
+                                        onClick={() => { setModalMode('Edit'); setSelectedArticle(article); setIsModalOpen(true); }}
+                                        className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                                    >
                                         <Edit2 className="w-4 h-4" />
                                     </button>
-                                    <button className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors">
+                                    <button
+                                        onClick={() => { setSelectedArticle(article); setIsDeleteOpen(true); }}
+                                        className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                                    >
                                         <Trash2 className="w-4 h-4" />
                                     </button>
                                 </div>
@@ -177,6 +198,139 @@ const ManageNews: React.FC = () => {
                     </motion.div>
                 ))}
             </div>
+
+            {/* Article Modal (Add/Edit) */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)}
+                            className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" />
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800"
+                        >
+                            <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                                        <Newspaper className="w-5 h-5 text-primary-600" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                                            {modalMode === 'Add' ? 'Create New Article' : 'Edit Article'}
+                                        </h3>
+                                        <p className="text-sm text-zinc-500">Publish news and stories to your audience.</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-colors">
+                                    <X className="w-5 h-5 text-zinc-500" />
+                                </button>
+                            </div>
+
+                            <form className="p-8 space-y-6 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800" onSubmit={(e) => {
+                                e.preventDefault();
+                                const formData = new FormData(e.currentTarget);
+                                const newArticle: NewsArticle = {
+                                    id: selectedArticle?.id || (articles.length + 1).toString(),
+                                    author_id: selectedArticle?.author_id || 'u1',
+                                    author_name: selectedArticle?.author_name || 'Admin User',
+                                    title: formData.get('title') as string,
+                                    content: formData.get('content') as string,
+                                    excerpt: formData.get('excerpt') as string,
+                                    is_published: formData.get('published') === 'true',
+                                    published_at: selectedArticle?.published_at || (formData.get('published') === 'true' ? new Date().toISOString() : null),
+                                    created_at: selectedArticle?.created_at || new Date().toISOString(),
+                                    updated_at: new Date().toISOString(),
+                                    image_url: (formData.get('image_url') as string) || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=600&auto=format&fit=crop',
+                                };
+
+                                if (modalMode === 'Add') {
+                                    setArticles([newArticle, ...articles]);
+                                } else {
+                                    setArticles(articles.map(a => a.id === newArticle.id ? newArticle : a));
+                                }
+                                setIsModalOpen(false);
+                            }}>
+                                <div className="grid grid-cols-1 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Article Title</label>
+                                        <input name="title" defaultValue={selectedArticle?.title} required placeholder="Major headline here..."
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Featured Image URL</label>
+                                        <input name="image_url" defaultValue={selectedArticle?.image_url} placeholder="https://images.unsplash.com/..."
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Excerpt (Short Summary)</label>
+                                        <textarea name="excerpt" defaultValue={selectedArticle?.excerpt} required placeholder="A brief summary for the preview card..." rows={2}
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none resize-none" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Full Content</label>
+                                        <textarea name="content" defaultValue={selectedArticle?.content} required placeholder="Write the full story..." rows={8}
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none" />
+                                    </div>
+                                    <div className="flex items-center gap-2 pt-2">
+                                        <input name="published" type="checkbox" id="news-published-chk" defaultChecked={selectedArticle?.is_published} value="true"
+                                            className="w-5 h-5 rounded border-zinc-300 text-primary-600 focus:ring-primary-500" />
+                                        <label htmlFor="news-published-chk" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
+                                            Publish this article immediately
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-4 pt-4 sticky bottom-0 bg-white dark:bg-zinc-900 py-2">
+                                    <button type="button" onClick={() => setIsModalOpen(false)}
+                                        className="flex-1 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 font-bold hover:bg-zinc-50 transition-colors">
+                                        Cancel
+                                    </button>
+                                    <button type="submit"
+                                        className="flex-1 px-6 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 shadow-lg shadow-primary-500/20 transition-all hover:scale-[1.02]">
+                                        {modalMode === 'Add' ? 'Create Article' : 'Save Changes'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {isDeleteOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsDeleteOpen(false)}
+                            className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" />
+                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                            className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl p-8 border border-zinc-100 dark:border-zinc-800 text-center">
+                            <div className="w-16 h-16 rounded-2xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-6">
+                                <AlertTriangle className="w-8 h-8 text-red-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">Delete Article?</h3>
+                            <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+                                Are you sure you want to delete <span className="font-bold text-zinc-900 dark:text-zinc-100">{selectedArticle?.title}</span>?
+                                This record will be removed permanently.
+                            </p>
+                            <div className="flex gap-4">
+                                <button onClick={() => setIsDeleteOpen(false)}
+                                    className="flex-1 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 font-bold hover:bg-zinc-50 transition-colors">
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        if (selectedArticle) {
+                                            setArticles(articles.filter(a => a.id !== selectedArticle.id));
+                                        }
+                                        setIsDeleteOpen(false);
+                                    }}
+                                    className="flex-1 px-6 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 shadow-lg shadow-red-500/20 transition-all">
+                                    Delete Article
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

@@ -26,11 +26,12 @@ interface ContactMessage {
 }
 
 const ManageMessages: React.FC = () => {
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
     const [filterStatus, setFilterStatus] = useState('All');
 
     // Mock data aligned with `contacts` DB table
-    const messages: ContactMessage[] = [
+    const [messages, setMessages] = useState<ContactMessage[]>([
         {
             id: '1',
             first_name: 'John',
@@ -83,15 +84,22 @@ const ManageMessages: React.FC = () => {
             created_at: '2026-02-15T16:20:00',
             isStarred: true,
         },
-    ];
+    ]);
 
-    const filtered = (() => {
-        if (filterStatus === 'All') return messages;
-        if (filterStatus === 'Unread') return messages.filter(m => !m.is_responded);
-        if (filterStatus === 'Responded') return messages.filter(m => m.is_responded);
-        if (filterStatus === 'Starred') return messages.filter(m => m.isStarred);
-        return messages;
-    })();
+    const filtered = messages.filter(m => {
+        const fullName = `${m.first_name} ${m.last_name}`.toLowerCase();
+        const matchSearch = fullName.includes(searchTerm.toLowerCase()) ||
+            m.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            m.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            m.message.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchTab = filterStatus === 'All' ||
+            (filterStatus === 'Unread' && !m.is_responded) ||
+            (filterStatus === 'Responded' && m.is_responded) ||
+            (filterStatus === 'Starred' && m.isStarred);
+
+        return matchSearch && matchTab;
+    });
 
     const selectedMessage = messages.find(m => m.id === selectedMessageId);
 
@@ -123,6 +131,8 @@ const ManageMessages: React.FC = () => {
                     <div className="relative">
                         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                         <input type="text" placeholder="Search messages..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                     </div>
                     <div className="flex gap-2 overflow-x-auto pb-1">
@@ -198,15 +208,49 @@ const ManageMessages: React.FC = () => {
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <button className="p-2 text-zinc-400 hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/10 rounded-lg transition-colors">
+                                <button
+                                    onClick={() => {
+                                        setMessages(messages.map(m => m.id === selectedMessage.id ? { ...m, isStarred: !m.isStarred } : m));
+                                    }}
+                                    className="p-2 text-zinc-400 hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/10 rounded-lg transition-colors"
+                                >
                                     <Star className={`w-5 h-5 ${selectedMessage.isStarred ? 'fill-yellow-400 text-yellow-400' : ''}`} />
                                 </button>
-                                <button className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors">
+                                <button
+                                    onClick={() => {
+                                        if (confirm('Are you sure you want to delete this message?')) {
+                                            setMessages(messages.filter(m => m.id !== selectedMessage.id));
+                                            setSelectedMessageId(null);
+                                        }
+                                    }}
+                                    className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                                >
                                     <Trash2 className="w-5 h-5" />
                                 </button>
-                                <button className="p-2 text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">
-                                    <MoreVertical className="w-5 h-5" />
-                                </button>
+                                <div className="relative group/menu">
+                                    <button className="p-2 text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">
+                                        <MoreVertical className="w-5 h-5" />
+                                    </button>
+                                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-10 p-1">
+                                        <button
+                                            onClick={() => setMessages(messages.map(m => m.id === selectedMessage.id ? { ...m, is_responded: !m.is_responded } : m))}
+                                            className="w-full text-left px-3 py-2 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-lg transition-colors flex items-center gap-2"
+                                        >
+                                            <CheckCircle2 className="w-4 h-4" />
+                                            Mark as {selectedMessage.is_responded ? 'Unread' : 'Read'}
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setMessages(messages.filter(m => m.id !== selectedMessage.id));
+                                                setSelectedMessageId(null);
+                                            }}
+                                            className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors flex items-center gap-2"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            Delete Permanently
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

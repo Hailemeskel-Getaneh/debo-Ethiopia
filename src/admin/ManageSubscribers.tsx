@@ -6,7 +6,8 @@ import {
     Download,
     Users,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertTriangle } from 'lucide-react';
 
 interface Subscriber {
     id: string;
@@ -17,8 +18,12 @@ interface Subscriber {
 const ManageSubscribers: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
+    // UI State for Delete
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [selectedSubscriber, setSelectedSubscriber] = useState<Subscriber | null>(null);
+
     // Mock data aligned with `subscribers` DB table
-    const subscribers: Subscriber[] = [
+    const [subscribers, setSubscribers] = useState<Subscriber[]>([
         { id: '1', email: 'alice@example.com', subscribed_at: '2026-01-03T10:15:00' },
         { id: '2', email: 'bob.johnson@gmail.com', subscribed_at: '2026-01-15T08:00:00' },
         { id: '3', email: 'charlie.b@company.org', subscribed_at: '2026-01-22T14:30:00' },
@@ -27,7 +32,7 @@ const ManageSubscribers: React.FC = () => {
         { id: '6', email: 'fiona.green@gmail.com', subscribed_at: '2026-02-10T16:00:00' },
         { id: '7', email: 'george.miller@hotmail.com', subscribed_at: '2026-02-14T07:55:00' },
         { id: '8', email: 'hannah.scott@debo.org', subscribed_at: '2026-02-17T12:30:00' },
-    ];
+    ]);
 
     const filtered = subscribers.filter(s =>
         s.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -135,7 +140,10 @@ const ManageSubscribers: React.FC = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right">
                                             <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors">
+                                                <button
+                                                    onClick={() => { setSelectedSubscriber(sub); setIsDeleteOpen(true); }}
+                                                    className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                                                >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>
@@ -163,6 +171,43 @@ const ManageSubscribers: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {isDeleteOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsDeleteOpen(false)}
+                            className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" />
+                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                            className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl p-8 border border-zinc-100 dark:border-zinc-800 text-center">
+                            <div className="w-16 h-16 rounded-2xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-6">
+                                <AlertTriangle className="w-8 h-8 text-red-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">Remove Subscriber?</h3>
+                            <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+                                Are you sure you want to remove <span className="font-bold text-zinc-900 dark:text-zinc-100">{selectedSubscriber?.email}</span>?
+                                This user will no longer receive newsletter updates.
+                            </p>
+                            <div className="flex gap-4">
+                                <button onClick={() => setIsDeleteOpen(false)}
+                                    className="flex-1 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 font-bold hover:bg-zinc-50 transition-colors">
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        if (selectedSubscriber) {
+                                            setSubscribers(subscribers.filter(s => s.id !== selectedSubscriber.id));
+                                        }
+                                        setIsDeleteOpen(false);
+                                    }}
+                                    className="flex-1 px-6 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 shadow-lg shadow-red-500/20 transition-all">
+                                    Remove
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
