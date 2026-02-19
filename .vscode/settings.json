@@ -1,0 +1,8 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": false,
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "css.validate": false,
+    "scss.validate": false
+}
