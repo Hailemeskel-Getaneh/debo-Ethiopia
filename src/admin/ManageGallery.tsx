@@ -55,12 +55,12 @@ const ManageGallery: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
                 <div>
                     <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <ImageIcon className="w-6 h-6 text-[--color-primary-600]" />
+                        <ImageIcon className="w-6 h-6 text-primary-600" />
                         Gallery
                     </h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Manage photos and videos in the media gallery.</p>
                 </div>
-                <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-5 py-2.5 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
+                <button className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20">
                     <Plus className="w-4 h-4" />
                     Upload Media
                 </button>
@@ -71,7 +71,7 @@ const ManageGallery: React.FC = () => {
                 <div className="relative flex-1">
                     <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                     <input type="text" placeholder="Search by title..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 outline-none transition-all shadow-sm" />
+                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary-500/20 outline-none transition-all shadow-sm" />
                 </div>
                 <div className="flex gap-2">
                     {(['All', 'Image', 'Video'] as const).map(tab => (

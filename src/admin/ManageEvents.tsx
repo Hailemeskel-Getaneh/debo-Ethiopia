@@ -106,7 +106,7 @@ const ManageEvents: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <Calendar className="w-6 h-6 text-[--color-primary-600]" />
+                        <Calendar className="w-6 h-6 text-primary-600" />
                         Events Management
                     </h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
@@ -120,7 +120,7 @@ const ManageEvents: React.FC = () => {
                         <select
                             value={filterStatus}
                             onChange={e => setFilterStatus(e.target.value)}
-                            className="pl-9 pr-8 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 outline-none appearance-none cursor-pointer shadow-sm text-sm"
+                            className="pl-9 pr-8 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary-500/20 outline-none appearance-none cursor-pointer shadow-sm text-sm"
                         >
                             <option value="All">All Events</option>
                             <option value="Upcoming">Upcoming</option>
@@ -128,7 +128,7 @@ const ManageEvents: React.FC = () => {
                             <option value="Past">Past</option>
                         </select>
                     </div>
-                    <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-4 py-2.5 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
+                    <button className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20">
                         <Plus className="w-4 h-4" />
                         Create Event
                     </button>
@@ -146,8 +146,8 @@ const ManageEvents: React.FC = () => {
                         className="bg-white dark:bg-zinc-900 p-4 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row gap-6 hover:shadow-md transition-shadow group"
                     >
                         {/* Event Date Badge */}
-                        <div className="hidden sm:flex flex-col items-center justify-center w-16 h-16 bg-[--color-primary-50] dark:bg-[--color-primary-900]/20 rounded-xl border border-[--color-primary-100] dark:border-[--color-primary-800] shrink-0">
-                            <span className="text-xs font-bold text-[--color-primary-600] uppercase">
+                        <div className="hidden sm:flex flex-col items-center justify-center w-16 h-16 bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-100 dark:border-primary-800 shrink-0">
+                            <span className="text-xs font-bold text-primary-600 uppercase">
                                 {new Date(event.start_date).toLocaleDateString('en-US', { month: 'short' })}
                             </span>
                             <span className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
@@ -166,7 +166,7 @@ const ManageEvents: React.FC = () => {
                                 <div>
                                     <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">{event.title}</h3>
                                     {event.program_name && (
-                                        <div className="flex items-center gap-1 text-xs text-[--color-primary-600] mb-2 font-medium">
+                                        <div className="flex items-center gap-1 text-xs text-primary-600 mb-2 font-medium">
                                             <Layers className="w-3 h-3" /> {event.program_name}
                                         </div>
                                     )}
@@ -197,12 +197,12 @@ const ManageEvents: React.FC = () => {
                                             T
                                         </div>
                                     ))}
-                                    <div className="w-7 h-7 rounded-full bg-[--color-primary-50] dark:bg-[--color-primary-900]/30 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-[--color-primary-600]">
+                                    <div className="w-7 h-7 rounded-full bg-primary-50 dark:bg-primary-900/30 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-primary-600">
                                         +{event.attendees}
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <button className="p-2 text-zinc-400 hover:text-[--color-primary-600] hover:bg-[--color-primary-50] dark:hover:bg-[--color-primary-900]/20 rounded-lg transition-colors">
+                                    <button className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors">
                                         <Edit2 className="w-4 h-4" />
                                     </button>
                                     <button className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors">

@@ -66,7 +66,7 @@ const ManageDonations: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
                 <div>
                     <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <DollarSign className="w-6 h-6 text-[--color-primary-600]" />
+                        <DollarSign className="w-6 h-6 text-primary-600" />
                         Donations
                     </h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Track and manage all incoming donations.</p>
@@ -88,7 +88,7 @@ const ManageDonations: React.FC = () => {
                 <div className="relative flex-1">
                     <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                     <input type="text" placeholder="Search by name, email, or transaction ID..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 outline-none transition-all shadow-sm" />
+                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary-500/20 outline-none transition-all shadow-sm" />
                 </div>
                 <div className="relative">
                     <Filter className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />

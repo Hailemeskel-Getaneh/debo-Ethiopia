@@ -71,14 +71,14 @@ const ManageAchievements: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
                 <div>
                     <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <Award className="w-6 h-6 text-[--color-primary-600]" />
+                        <Award className="w-6 h-6 text-primary-600" />
                         Achievements
                     </h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
                         Showcase milestones and awards earned by DEBO.
                     </p>
                 </div>
-                <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-5 py-2.5 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
+                <button className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20">
                     <Plus className="w-4 h-4" />
                     Add Achievement
                 </button>
@@ -88,7 +88,7 @@ const ManageAchievements: React.FC = () => {
             <div className="relative">
                 <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                 <input type="text" placeholder="Search achievements..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 outline-none transition-all shadow-sm" />
+                    className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary-500/20 outline-none transition-all shadow-sm" />
             </div>
 
             {/* Grid */}
@@ -107,12 +107,12 @@ const ManageAchievements: React.FC = () => {
                                 <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             </div>
                         ) : (
-                            <div className="h-24 bg-gradient-to-br from-[--color-primary-50] to-[--color-secondary-50] dark:from-[--color-primary-900]/20 dark:to-[--color-secondary-900]/20 flex items-center justify-center">
-                                <Award className="w-10 h-10 text-[--color-primary-400]" />
+                            <div className="h-24 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 flex items-center justify-center">
+                                <Award className="w-10 h-10 text-primary-400" />
                             </div>
                         )}
                         <div className="p-5 flex flex-col flex-1">
-                            <div className="flex items-center gap-1.5 text-xs text-[--color-primary-600] font-medium mb-2">
+                            <div className="flex items-center gap-1.5 text-xs text-primary-600 font-medium mb-2">
                                 <Calendar className="w-3.5 h-3.5" />
                                 Achieved: {formatDate(item.achieved_at)}
                             </div>
@@ -123,7 +123,7 @@ const ManageAchievements: React.FC = () => {
                                 {item.description}
                             </p>
                             <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-end gap-2">
-                                <button className="p-2 text-zinc-400 hover:text-[--color-primary-600] hover:bg-[--color-primary-50] dark:hover:bg-[--color-primary-900]/20 rounded-lg transition-colors">
+                                <button className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors">
                                     <Edit2 className="w-4 h-4" />
                                 </button>
                                 <button className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors">

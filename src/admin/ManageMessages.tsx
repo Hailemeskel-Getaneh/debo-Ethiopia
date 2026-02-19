@@ -113,7 +113,7 @@ const ManageMessages: React.FC = () => {
                 <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 space-y-4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                            <MessageSquare className="w-5 h-5 text-[--color-primary-600]" />
+                            <MessageSquare className="w-5 h-5 text-primary-600" />
                             Inbox
                         </h2>
                         <span className="text-xs font-medium px-2 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-full text-zinc-500">
@@ -123,7 +123,7 @@ const ManageMessages: React.FC = () => {
                     <div className="relative">
                         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                         <input type="text" placeholder="Search messages..."
-                            className="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20" />
+                            className="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                     </div>
                     <div className="flex gap-2 overflow-x-auto pb-1">
                         {['All', 'Unread', 'Responded', 'Starred'].map(status => (
@@ -143,7 +143,7 @@ const ManageMessages: React.FC = () => {
                     {filtered.map((msg) => (
                         <div key={msg.id} onClick={() => setSelectedMessageId(msg.id)}
                             className={`p-4 border-b border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors ${selectedMessageId === msg.id
-                                ? 'bg-[--color-primary-50]/50 dark:bg-[--color-primary-900]/10 border-l-4 border-l-[--color-primary-600]'
+                                ? 'bg-primary-50/50 dark:bg-primary-900/10 border-l-4 border-l-primary-600'
                                 : 'border-l-4 border-l-transparent'
                                 } ${!msg.is_responded ? 'bg-white dark:bg-zinc-900' : 'bg-zinc-50/30 dark:bg-zinc-900/50'}`}
                         >
@@ -151,7 +151,7 @@ const ManageMessages: React.FC = () => {
                                 <h4 className={`text-sm ${!msg.is_responded ? 'font-bold text-zinc-900 dark:text-zinc-100' : 'font-medium text-zinc-700 dark:text-zinc-300'}`}>
                                     {msg.first_name} {msg.last_name}
                                 </h4>
-                                <span className={`text-xs ${!msg.is_responded ? 'text-[--color-primary-600] font-semibold' : 'text-zinc-400'}`}>
+                                <span className={`text-xs ${!msg.is_responded ? 'text-primary-600 font-semibold' : 'text-zinc-400'}`}>
                                     {formatDate(msg.created_at)}
                                 </span>
                             </div>
@@ -160,7 +160,7 @@ const ManageMessages: React.FC = () => {
                             </p>
                             <p className="text-xs text-zinc-500 line-clamp-1">{msg.message}</p>
                             <div className="flex items-center gap-2 mt-2">
-                                {!msg.is_responded && <span className="w-2 h-2 rounded-full bg-[--color-primary-500]" />}
+                                {!msg.is_responded && <span className="w-2 h-2 rounded-full bg-primary-500" />}
                                 {msg.isStarred && <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />}
                                 {msg.is_responded && (
                                     <div className="flex items-center gap-1 text-[10px] text-green-600 bg-green-50 dark:bg-green-900/20 px-1.5 py-0.5 rounded">
@@ -241,13 +241,13 @@ const ManageMessages: React.FC = () => {
                                 <div className="flex-1">
                                     <textarea
                                         placeholder="Type your reply here..."
-                                        className="w-full p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20 min-h-[100px] resize-none text-sm"
+                                        className="w-full p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 min-h-[100px] resize-none text-sm"
                                     />
                                     <div className="flex justify-end gap-3 mt-3">
                                         <button className="px-4 py-2 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-lg text-sm font-medium transition-colors">
                                             Save Draft
                                         </button>
-                                        <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-6 py-2 rounded-lg font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20 text-sm">
+                                        <button className="flex items-center gap-2 bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20 text-sm">
                                             <Reply className="w-4 h-4" />
                                             Send Reply
                                         </button>

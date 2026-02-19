@@ -67,14 +67,14 @@ const ManagePrograms: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
                 <div>
                     <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <Layers className="w-6 h-6 text-[--color-primary-600]" />
+                        <Layers className="w-6 h-6 text-primary-600" />
                         Programs
                     </h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
                         Manage ongoing services and programs offered by DEBO.
                     </p>
                 </div>
-                <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-5 py-2.5 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
+                <button className="flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20">
                     <Plus className="w-4 h-4" />
                     Add Program
                 </button>
@@ -88,7 +88,7 @@ const ManagePrograms: React.FC = () => {
                     placeholder="Search programs..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 focus:border-[--color-primary-500] outline-none transition-all shadow-sm"
+                    className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all shadow-sm"
                 />
             </div>
 
@@ -113,11 +113,11 @@ const ManagePrograms: React.FC = () => {
                             onClick={() => setExpandedId(expandedId === program.id ? null : program.id)}
                         >
                             <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-[--color-primary-50] dark:bg-[--color-primary-900]/20 flex items-center justify-center shrink-0">
-                                    <Layers className="w-5 h-5 text-[--color-primary-600]" />
+                                <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center shrink-0">
+                                    <Layers className="w-5 h-5 text-primary-600" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-[--color-primary-600] transition-colors">
+                                    <h3 className="font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 transition-colors">
                                         {program.name}
                                     </h3>
                                     <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">
@@ -128,7 +128,7 @@ const ManagePrograms: React.FC = () => {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={e => { e.stopPropagation(); }}
-                                    className="p-2 text-zinc-400 hover:text-[--color-primary-600] hover:bg-[--color-primary-50] dark:hover:bg-[--color-primary-900]/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                                    className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
                                 >
                                     <Edit2 className="w-4 h-4" />
                                 </button>

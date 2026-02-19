@@ -46,7 +46,7 @@ const ManageSubscribers: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
                 <div>
                     <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <Mail className="w-6 h-6 text-[--color-primary-600]" />
+                        <Mail className="w-6 h-6 text-primary-600" />
                         Newsletter Subscribers
                     </h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
@@ -86,7 +86,7 @@ const ManageSubscribers: React.FC = () => {
                     placeholder="Search by email..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 focus:border-[--color-primary-500] outline-none transition-all shadow-sm"
+                    className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all shadow-sm"
                 />
             </div>
 
@@ -122,8 +122,8 @@ const ManageSubscribers: React.FC = () => {
                                         <td className="px-6 py-4 text-sm text-zinc-400 tabular-nums">{index + 1}</td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-[--color-primary-50] dark:bg-[--color-primary-900]/20 flex items-center justify-center shrink-0">
-                                                    <Mail className="w-4 h-4 text-[--color-primary-600]" />
+                                                <div className="w-8 h-8 rounded-full bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center shrink-0">
+                                                    <Mail className="w-4 h-4 text-primary-600" />
                                                 </div>
                                                 <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                                     {sub.email}

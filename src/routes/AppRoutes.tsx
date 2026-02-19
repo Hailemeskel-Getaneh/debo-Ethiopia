@@ -45,7 +45,14 @@ const AppRoutes: React.FC = () => {
             {/* User Routes */}
             <Route element={<ProtectedRoute isAllowed={isAuthenticated} />}>
                 <Route element={<UserLayout />}>
-                    <Route path="/dashboard" element={<AdminDashboard />} />
+                    <Route
+                        path="/dashboard"
+                        element={
+                            userRole === 'admin'
+                                ? <Navigate to="/admin/dashboard" replace />
+                                : <AdminDashboard />
+                        }
+                    />
                     <Route path="/profile" element={<div>Profile Placeholder</div>} />
                 </Route>
             </Route>
