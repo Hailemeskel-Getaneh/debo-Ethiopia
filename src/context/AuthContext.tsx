@@ -4,7 +4,7 @@ import type { Role } from '../types/auth';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true); // Logged in by default for testing
-    const [userRole, setUserRole] = useState<Role | null>('user');
+    const [userRole, setUserRole] = useState<Role | null>('admin'); // 'admin' for dev testing
 
     const login = (role: Role) => {
         setIsAuthenticated(true);
