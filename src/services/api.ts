@@ -1,28 +1,45 @@
+import axios from 'axios';
+
 export const API_BASE_URL = 'http://localhost:5000/api';
 
-// Simple fetch wrapper — currently returns mock data.
-// When backend is ready, uncomment the fetch calls below.
+const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+    }
+});
+
+// Add a request interceptor to include auth tokens if needed
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 export const api = {
-    get: async <T>(): Promise<T> => {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        // const response = await fetch(`${API_BASE_URL}${_endpoint}`);
-        // if (!response.ok) throw new Error(`API Error: ${response.status}`);
-        // return response.json() as Promise<T>;
-        return {} as T;
+    get: async <T>(endpoint: string): Promise<T> => {
+        const response = await axiosInstance.get<T>(endpoint);
+        return response.data;
     },
-    post: async <T>(data: unknown): Promise<T> => {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        // const response = await fetch(`${API_BASE_URL}${_endpoint}`, {
-        //   method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data),
-        // });
-        // return response.json() as Promise<T>;
-        return data as T;
+    post: async <T>(endpoint: string, data?: unknown): Promise<T> => {
+        const response = await axiosInstance.post<T>(endpoint, data);
+        return response.data;
     },
-    put: async <T>(data: unknown): Promise<T> => {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        return data as T;
+    put: async <T>(endpoint: string, data?: unknown): Promise<T> => {
+        const response = await axiosInstance.put<T>(endpoint, data);
+        return response.data;
     },
-    delete: async (): Promise<void> => {
-        await new Promise(resolve => setTimeout(resolve, 300));
-    },
+    delete: async (endpoint: string): Promise<void> => {
+        await axiosInstance.delete(endpoint);
+    }
 };
+
+export default axiosInstance;
