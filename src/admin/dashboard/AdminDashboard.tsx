@@ -184,7 +184,7 @@ const AdminDashboard: React.FC = () => {
               </div>
             ))}
           </div>
-          <button className="w-full mt-4 py-2 text-sm font-medium text-[--color-primary-600] dark:text-[--color-primary-400] hover:bg-[--color-primary-50] dark:hover:bg-[--color-primary-900]/20 rounded-xl transition-colors">
+          <button className="w-full mt-4 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl transition-colors">
             View All Activity
           </button>
         </motion.div>
@@ -199,7 +199,7 @@ const AdminDashboard: React.FC = () => {
       >
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Project Progress</h3>
-          <button className="text-sm text-[--color-primary-600] font-medium hover:underline">View Reports</button>
+          <button className="text-sm text-primary-600 font-medium hover:underline">View Reports</button>
         </div>
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
