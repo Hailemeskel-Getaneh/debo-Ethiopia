@@ -15,7 +15,9 @@ import {
     MessageSquare,
     DollarSign,
     Newspaper,
-    Award
+    Award,
+    Layers,
+    Mail
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -27,6 +29,7 @@ const AdminLayout: React.FC = () => {
     const navItems = [
         { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
         { name: 'Users', icon: Users, path: '/admin/users' },
+        { name: 'Programs', icon: Layers, path: '/admin/programs' },
         { name: 'Projects', icon: Briefcase, path: '/admin/projects' },
         { name: 'Events', icon: Calendar, path: '/admin/events' },
         { name: 'Donations', icon: DollarSign, path: '/admin/donations' },
@@ -34,6 +37,7 @@ const AdminLayout: React.FC = () => {
         { name: 'Gallery', icon: ImageIcon, path: '/admin/gallery' },
         { name: 'Messages', icon: MessageSquare, path: '/admin/messages' },
         { name: 'Achievements', icon: Award, path: '/admin/achievements' },
+        { name: 'Subscribers', icon: Mail, path: '/admin/subscribers' },
         { name: 'Settings', icon: Settings, path: '/admin/settings' },
     ];
 
@@ -55,7 +59,7 @@ const AdminLayout: React.FC = () => {
                 {/* Logo Area */}
                 <div className="h-20 flex items-center px-8 border-b border-zinc-100 dark:border-zinc-800/50">
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[--color-primary-500] to-[--color-secondary-500] flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-[--color-primary-500]/20">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[--color-primary-900] to-[--color-secondary-900] flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-[--color-primary-500]/20">
                             D
                         </div>
                         <span className="text-xl font-bold bg-gradient-to-r from-[--color-primary-600] to-[--color-secondary-500] bg-clip-text text-transparent">
@@ -82,14 +86,14 @@ const AdminLayout: React.FC = () => {
                                 key={item.path}
                                 to={item.path}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
-                                        ? 'bg-[--color-primary-50] text-[--color-primary-700] dark:bg-[--color-primary-500]/10 dark:text-[--color-primary-400] shadow-sm ring-1 ring-[--color-primary-500]/10'
-                                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100'
+                                    ? 'bg-[--color-primary-50] text-[--color-primary-700] dark:bg-[--color-primary-500]/10 dark:text-[--color-primary-400] shadow-sm ring-1 ring-[--color-primary-500]/10'
+                                    : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100'
                                     }`}
                             >
                                 <item.icon
                                     className={`w-5 h-5 transition-colors duration-200 ${isActive
-                                            ? 'text-[--color-primary-600] dark:text-[--color-primary-400]'
-                                            : 'text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300'
+                                        ? 'text-[--color-primary-600] dark:text-[--color-primary-400]'
+                                        : 'text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300'
                                         }`}
                                 />
                                 {item.name}
