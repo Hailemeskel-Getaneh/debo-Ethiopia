@@ -31,7 +31,7 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
 - **Routing**: React Router v6
 - **HTTP Client**: Axios (via services layer)
 - **State Management**: React Context (for auth & global state)
-- **Icons/Assets**: Custom or libraries like lucide-react / heroicons
+- **Icons/Assets**: lucide-react, framer-motion, recharts
 
 ## 🚀 Getting Started
 
@@ -51,122 +51,70 @@ This is the **client-side** application (React + Vite + TypeScript + Tailwind CS
 2. Install dependencies
    ```bash
    npm install
-   # or
-   yarn install
-   # or
-   pnpm install
    ```
 
 3. Set up environment variables
    Create `.env.local` in the root:
    ```env
-   VITE_API_BASE_URL=http://localhost:5000/api   # or your backend URL
+   VITE_API_BASE_URL=http://localhost:5000/api
    ```
 
 4. Start the development server
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
-   → Open http://localhost:5173 (default Vite port)
-
-5. Build for Production
-   ```bash
-   npm run build
-   ```
-   Output goes to `dist/` folder — ready for deployment (Vercel, Netlify, GitHub Pages, etc.)
+   → Open http://localhost:5173
 
 ## 📁 Project Structure
 
 ```text
 src/
-├── assets/                  # images, icons, PDFs (tutorials), fonts
-├── components/              # reusable UI (common Button, Card, Modal + layouts)
-│   ├── common/
-│   ├── layout/
-│   └── ui/
-├── features/                # public/user-facing features
-│   ├── auth/
-│   ├── home/
-│   ├── about/
-│   ├── tutorials/
-│   ├── gallery/
-│   ├── achievements/
-│   ├── donate/
-│   ├── contact/
-│   └── newsletter/
-├── admin/                   # protected admin panel
-│   ├── dashboard/
-│   ├── donations/
-│   ├── contacts/
-│   ├── subscribers/
-│   ├── gallery/
-│   ├── achievements/
-│   └── shared/
+├── admin/                   # protected admin panel & dashboard
+├── assets/                  # images, icons, fonts
+├── components/              # reusable UI (common components + layouts)
 ├── context/                 # global state (AuthContext, ThemeContext)
+├── features/                # public/user-facing features
 ├── hooks/                   # shared custom hooks
-├── services/                # API layer (axios instance + domain services)
 ├── routes/                  # routing config + protected routes
-├── types/                   # shared TypeScript types (Donation, Contact, etc.)
-├── utils/                   # helpers (formatCurrency, dateFormat...)
-├── App.tsx
-├── main.tsx
-└── index.css
+├── services/                # API layer (base API + domain services)
+├── styles/                  # global CSS & Tailwind configuration
+├── types/                   # shared TypeScript types
+└── utils/                   # helpers & formatters
 ```
 
-## 🖥️ How to Use / Contribute
+## 🖥️ Admin Panel Features
 
-- **Public Pages** — accessible without login (home, donate, gallery...)
-- **Admin Panel** — login required (role-based via AuthContext)
-- **API Integration** — all backend calls go through `services/` (configurable via `VITE_API_BASE_URL`)
+The admin panel has been fully implemented with a modern design and responsive sidebar:
 
-To contribute:
-
-- Fork the repo
-- Create feature branch (`git checkout -b feature/add-events`)
-- Commit changes (`git commit -m 'Add events page'`)
-- Push (`git push origin feature/add-events`)
-- Open Pull Request
+- **Dashboard**: Real-time stats overview with interactive charts (Recharts) for donation trends and project progress.
+- **User Management**: Comprehensive table with role filtering and status tracking.
+- **Projects**: Grid/List views for monitoring active community projects, budgets, and progress.
+- **Donations**: Transaction monitoring with detailed donor info and payment statuses.
+- **Content Management**: News and Blog post management with draft/published state control.
+- **Media Gallery**: Unified upload and filtering interface for project images and videos.
+- **Communication**: Integrated contact message inbox with subject filtering and status tagging.
+- **Achievements**: Visual timeline of NGO milestones and awards.
+- **Settings**: Admin profile and security management.
 
 ## 🎨 Tailwind CSS Setup
 
-This project uses Tailwind CSS integrated with Vite following the official guide:
-[Tailwind CSS Vite Installation](https://tailwindcss.com/docs/installation/using-vite)
+This project uses Tailwind CSS integrated with Vite:
 
-1. Created Vite + React + TS project
-2. Installed Tailwind:
-   ```bash
-   npm install tailwindcss @tailwindcss/vite
-   ```
-3. Added plugin to `vite.config.ts`:
-   ```typescript
-   import { defineConfig } from 'vite'
-   import tailwindcss from '@tailwindcss/vite'
-   import react from '@vitejs/plugin-react'
-
-   export default defineConfig({
-     plugins: [react(), tailwindcss()],
-   });
-   ```
-4. Imported Tailwind in main CSS file (`src/index.css`):
-   ```css
-   @import "tailwindcss";
-   ```
-
-Now you can use utility classes like `bg-blue-600 text-white p-6 rounded-lg` everywhere.
+1. Added plugin to `vite.config.ts`
+2. Integrated with `index.css`
+3. Custom NGO color palette defined in `src/styles/globals.css`
 
 ## 📄 License
 
-MIT License — feel free to use, modify, and distribute.
+MIT License
 
 ## 🙏 Acknowledgments
 
-- Vite
-- React
-- Tailwind CSS
-- Official Tailwind + Vite installation guide
+- Vite & React
+- Tailwind CSS & DaisyUI
+- Lucide React & Framer Motion
+- Recharts for visualization
 
 ---
 Made with ❤️ for community impact
-Last updated: February 2026
+Last updated: February 2026.
