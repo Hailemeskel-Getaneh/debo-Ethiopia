@@ -1,164 +1,132 @@
 import React, { useState } from 'react';
 import {
     Image as ImageIcon,
-    Upload,
+    Plus,
+    Search,
     Trash2,
-    PlayCircle,
-    Maximize2
+    Eye,
+    Film,
+    Calendar,
+    User2,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const ManageGallery: React.FC = () => {
-    const [selectedTab, setSelectedTab] = useState<'All' | 'Images' | 'Videos'>('All');
+type MediaType = 'Image' | 'Video';
 
-    // Mock Gallery Data
-    const mediaItems = [
-        {
-            id: '1',
-            type: 'image',
-            url: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=600&auto=format&fit=crop',
-            title: 'School Groundbreaking',
-            date: '2026-02-10'
-        },
-        {
-            id: '2',
-            type: 'image',
-            url: 'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=600&auto=format&fit=crop',
-            title: 'Water Well Project',
-            date: '2026-02-12'
-        },
-        {
-            id: '3',
-            type: 'video',
-            thumbnail: 'https://images.unsplash.com/photo-1576091160550-21733e99db29?q=80&w=600&auto=format&fit=crop',
-            title: 'Community Health Workshop Highlights',
-            date: '2026-02-14',
-            duration: '3:45'
-        },
-        {
-            id: '4',
-            type: 'image',
-            url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=600&auto=format&fit=crop',
-            title: 'Coding Bootcamp Class',
-            date: '2026-02-15'
-        },
-        {
-            id: '5',
-            type: 'image',
-            url: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600&auto=format&fit=crop',
-            title: 'New Classroom Supplies',
-            date: '2026-02-16'
-        },
-        {
-            id: '6',
-            type: 'video',
-            thumbnail: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=600&auto=format&fit=crop',
-            title: 'Volunteer Thank You Message',
-            date: '2026-02-17',
-            duration: '1:20'
-        }
+interface GalleryItem {
+    id: string;
+    user_id: string;
+    uploaded_by: string;
+    media_id: string;
+    media_type: MediaType;
+    resource_url: string;
+    title: string;
+    description: string | null;
+    uploaded_at: string;
+    updated_at: string;
+}
+
+const ManageGallery: React.FC = () => {
+    const [selectedTab, setSelectedTab] = useState<'All' | MediaType>('All');
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Mock data aligned with `gallery` DB table (with media_types)
+    const mediaItems: GalleryItem[] = [
+        { id: '1', user_id: 'u1', uploaded_by: 'Admin User', media_id: 'm1', media_type: 'Image', resource_url: 'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=600&auto=format&fit=crop', title: 'Well Inauguration', description: 'Opening of the solar-powered well in Somali Region.', uploaded_at: '2025-09-02T10:00:00', updated_at: '2025-09-02T10:00:00' },
+        { id: '2', user_id: 'u2', uploaded_by: 'Project Manager', media_id: 'm1', media_type: 'Image', resource_url: 'https://images.unsplash.com/photo-1576091160550-21733e99db29?q=80&w=600&auto=format&fit=crop', title: 'Health Camp 2025', description: null, uploaded_at: '2025-10-22T16:00:00', updated_at: '2025-10-22T16:00:00' },
+        { id: '3', user_id: 'u1', uploaded_by: 'Admin User', media_id: 'm2', media_type: 'Video', resource_url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop', title: 'Coding Bootcamp Highlights', description: 'Recap video of the youth coding bootcamp.', uploaded_at: '2025-11-06T09:00:00', updated_at: '2025-11-06T09:00:00' },
+        { id: '4', user_id: 'u2', uploaded_by: 'Project Manager', media_id: 'm1', media_type: 'Image', resource_url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=600&auto=format&fit=crop', title: 'Annual Gala Night', description: 'Photos from the Annual Charity Gala 2025.', uploaded_at: '2025-12-16T08:00:00', updated_at: '2025-12-16T08:00:00' },
+        { id: '5', user_id: 'u1', uploaded_by: 'Admin User', media_id: 'm2', media_type: 'Video', resource_url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=600&auto=format&fit=crop', title: 'Community Impact Documentary', description: 'Short documentary on DEBO\'s 2025 community impact.', uploaded_at: '2026-01-10T11:00:00', updated_at: '2026-01-10T11:00:00' },
+        { id: '6', user_id: 'u2', uploaded_by: 'Project Manager', media_id: 'm1', media_type: 'Image', resource_url: 'https://images.unsplash.com/photo-1610484799863-1f19bca40e06?q=80&w=600&auto=format&fit=crop', title: 'Award Ceremony', description: null, uploaded_at: '2026-01-25T14:00:00', updated_at: '2026-01-25T14:00:00' },
     ];
 
-    const filteredMedia = selectedTab === 'All'
-        ? mediaItems
-        : mediaItems.filter(item =>
-            selectedTab === 'Images' ? item.type === 'image' : item.type === 'video'
-        );
+    const filtered = mediaItems.filter(item => {
+        const matchTab = selectedTab === 'All' || item.media_type === selectedTab;
+        const matchSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchTab && matchSearch;
+    });
+
+    const formatDate = (dateString: string) =>
+        new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
                 <div>
                     <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                         <ImageIcon className="w-6 h-6 text-[--color-primary-600]" />
-                        Media Gallery
+                        Gallery
                     </h2>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-                        Manage photos and videos for the gallery.
-                    </p>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Manage photos and videos in the media gallery.</p>
                 </div>
-                <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-4 py-2 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
-                    <Upload className="w-4 h-4" />
+                <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-5 py-2.5 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
+                    <Plus className="w-4 h-4" />
                     Upload Media
                 </button>
             </div>
 
-            {/* Filter Tabs */}
-            <div className="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-1">
-                {['All', 'Images', 'Videos'].map(tab => (
-                    <button
-                        key={tab}
-                        onClick={() => setSelectedTab(tab as 'All' | 'Images' | 'Videos')}
-                        className={`px-4 py-2 text-sm font-medium transition-colors relative ${selectedTab === tab
-                            ? 'text-[--color-primary-600] dark:text-[--color-primary-400]'
-                            : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
-                            }`}
-                    >
-                        {tab}
-                        {selectedTab === tab && (
-                            <motion.div
-                                layoutId="activeGalleryTab"
-                                className="absolute bottom-0 left-0 right-0 h-0.5 bg-[--color-primary-600] dark:bg-[--color-primary-400]"
-                            />
-                        )}
-                    </button>
-                ))}
+            {/* Filters */}
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative flex-1">
+                    <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                    <input type="text" placeholder="Search by title..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 outline-none transition-all shadow-sm" />
+                </div>
+                <div className="flex gap-2">
+                    {(['All', 'Image', 'Video'] as const).map(tab => (
+                        <button key={tab} onClick={() => setSelectedTab(tab)}
+                            className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${selectedTab === tab
+                                ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                                : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50'}`}>
+                            {tab}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Gallery Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {filteredMedia.map((item, index) => (
-                    <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.05 }}
-                        className="group relative aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all"
-                    >
-                        <img
-                            src={item.type === 'video' ? item.thumbnail : item.url}
-                            alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-
-                        {/* Overlay */}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                            <div className="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                <h3 className="font-semibold text-sm truncate">{item.title}</h3>
-                                <p className="text-xs text-white/80">{item.date}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filtered.length === 0 && (
+                    <div className="col-span-full bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800 p-12 text-center">
+                        <ImageIcon className="w-12 h-12 text-zinc-300 dark:text-zinc-700 mx-auto mb-3" />
+                        <p className="text-zinc-500 dark:text-zinc-400 font-medium">No media found.</p>
+                    </div>
+                )}
+                {filtered.map((item, index) => (
+                    <motion.div key={item.id} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.07 }}
+                        className="group relative bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-shadow">
+                        {/* Thumbnail */}
+                        <div className="h-48 overflow-hidden relative">
+                            <img src={item.resource_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            {/* Type badge */}
+                            <div className={`absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold text-white ${item.media_type === 'Video' ? 'bg-purple-600/90' : 'bg-zinc-700/80'}`}>
+                                {item.media_type === 'Video' ? <Film className="w-3 h-3" /> : <ImageIcon className="w-3 h-3" />}
+                                {item.media_type}
                             </div>
-
-                            <div className="absolute top-2 right-2 flex gap-2">
-                                <button className="p-1.5 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-lg text-white transition-colors">
-                                    <Trash2 className="w-4 h-4" />
+                            {/* Hover Actions */}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                                <button className="p-2.5 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-colors">
+                                    <Eye className="w-5 h-5" />
                                 </button>
-                                <button className="p-1.5 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-lg text-white transition-colors">
-                                    <Maximize2 className="w-4 h-4" />
+                                <button className="p-2.5 bg-red-500/80 backdrop-blur-sm text-white rounded-xl hover:bg-red-500 transition-colors">
+                                    <Trash2 className="w-5 h-5" />
                                 </button>
                             </div>
-
-                            {item.type === 'video' && (
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                    <PlayCircle className="w-12 h-12 text-white/80" />
-                                </div>
-                            )}
                         </div>
-
-                        {/* Video Duration Badge */}
-                        {item.type === 'video' && (
-                            <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/60 backdrop-blur-sm rounded text-[10px] font-medium text-white group-hover:opacity-0 transition-opacity">
-                                {item.duration}
+                        {/* Info */}
+                        <div className="p-4">
+                            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm mb-1 truncate">{item.title}</h3>
+                            {item.description && (
+                                <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1 mb-2">{item.description}</p>
+                            )}
+                            <div className="flex items-center gap-3 text-xs text-zinc-400 mt-2">
+                                <span className="flex items-center gap-1"><User2 className="w-3 h-3" />{item.uploaded_by}</span>
+                                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{formatDate(item.uploaded_at)}</span>
                             </div>
-                        )}
+                        </div>
                     </motion.div>
                 ))}
-
-                {/* Dropzone Placeholder (Visual Only) */}
-                <div className="aspect-square border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl flex flex-col items-center justify-center text-zinc-400 hover:text-[--color-primary-600] hover:border-[--color-primary-500] hover:bg-[--color-primary-50]/50 dark:hover:bg-[--color-primary-900]/10 transition-all cursor-pointer group">
-                    <Upload className="w-8 h-8 mb-2 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium">Drop files here</span>
-                </div>
             </div>
         </div>
     );
