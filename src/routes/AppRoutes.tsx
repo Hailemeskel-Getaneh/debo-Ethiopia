@@ -18,6 +18,8 @@ import ManageNews from '../admin/ManageNews';
 import ManageGallery from '../admin/ManageGallery';
 import ManageMessages from '../admin/ManageMessages';
 import ManageAchievements from '../admin/ManageAchievements';
+import ManagePrograms from '../admin/ManagePrograms';
+import ManageSubscribers from '../admin/ManageSubscribers';
 import AdminSettings from '../admin/AdminSettings';
 // import ThemeTest from '../features/ThemeTest';
 
@@ -67,6 +69,8 @@ const AppRoutes: React.FC = () => {
                     <Route path="/admin/gallery" element={<ManageGallery />} />
                     <Route path="/admin/messages" element={<ManageMessages />} />
                     <Route path="/admin/achievements" element={<ManageAchievements />} />
+                    <Route path="/admin/programs" element={<ManagePrograms />} />
+                    <Route path="/admin/subscribers" element={<ManageSubscribers />} />
                     <Route path="/admin/settings" element={<AdminSettings />} />
                 </Route>
             </Route>
