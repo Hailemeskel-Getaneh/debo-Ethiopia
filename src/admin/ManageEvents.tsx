@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Calendar,
     MapPin,
@@ -7,64 +7,97 @@ import {
     Filter,
     Edit2,
     Trash2,
+    Layers,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const ManageEvents: React.FC = () => {
+interface Event {
+    id: string;
+    program_id: string | null;
+    program_name: string | null;
+    title: string;
+    description: string;
+    location: string;
+    start_date: string;
+    end_date: string;
+    created_at: string;
+    status: 'Upcoming' | 'Past' | 'Ongoing';
+    image: string;
+    attendees: number;
+}
 
-    // Mock Events Data
-    const events = [
+const ManageEvents: React.FC = () => {
+    const [filterStatus, setFilterStatus] = useState('All');
+
+    // Mock data aligned with `events` DB table
+    const events: Event[] = [
         {
             id: '1',
+            program_id: 'p2',
+            program_name: 'Youth Education Support',
             title: 'Annual Charity Gala',
-            description: 'A night of fundraising and celebration.',
+            description: 'A night of fundraising and celebration for the DEBO community.',
             location: 'Grand Hotel, Addis Ababa',
-            startDate: '2025-12-15T18:00:00',
-            endDate: '2025-12-15T23:00:00',
+            start_date: '2025-12-15T18:00:00',
+            end_date: '2025-12-15T23:00:00',
+            created_at: '2025-10-01T10:00:00',
             image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=600&auto=format&fit=crop',
             attendees: 120,
-            status: 'Upcoming'
+            status: 'Upcoming',
         },
         {
             id: '2',
+            program_id: 'p3',
+            program_name: 'Community Health Outreach',
             title: 'Community Health Awareness',
-            description: 'Workshops on basic focused on hygiene and nutrition.',
+            description: 'Workshops on basic hygiene and nutrition for rural communities.',
             location: 'Community Center, Hawassa',
-            startDate: '2025-10-20T09:00:00',
-            endDate: '2025-10-22T16:00:00',
+            start_date: '2025-10-20T09:00:00',
+            end_date: '2025-10-22T16:00:00',
+            created_at: '2025-09-10T09:00:00',
             image: 'https://images.unsplash.com/photo-1576091160550-21733e99db29?q=80&w=600&auto=format&fit=crop',
             attendees: 450,
-            status: 'Upcoming'
+            status: 'Past',
         },
         {
             id: '3',
+            program_id: 'p2',
+            program_name: 'Youth Education Support',
             title: 'Youth Coding Bootcamp',
             description: 'Teaching basic programming skills to high school students.',
             location: 'Tech Hub, Adama',
-            startDate: '2025-11-05T10:00:00',
-            endDate: '2025-11-05T15:00:00',
+            start_date: '2025-11-05T10:00:00',
+            end_date: '2025-11-05T15:00:00',
+            created_at: '2025-10-05T08:00:00',
             image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=600&auto=format&fit=crop',
             attendees: 30,
-            status: 'Upcoming'
+            status: 'Upcoming',
         },
         {
             id: '4',
+            program_id: 'p1',
+            program_name: 'Clean Water Initiative',
             title: 'Water Well Inauguration',
-            description: 'Opening ceremony for the new solar-powered well.',
+            description: 'Opening ceremony for the new solar-powered well built for the village.',
             location: 'Rural Village, Somali Region',
-            startDate: '2025-09-01T10:00:00',
-            endDate: '2025-09-01T14:00:00',
+            start_date: '2025-09-01T10:00:00',
+            end_date: '2025-09-01T14:00:00',
+            created_at: '2025-08-01T08:00:00',
             image: 'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=600&auto=format&fit=crop',
             attendees: 200,
-            status: 'Past'
-        }
+            status: 'Past',
+        },
     ];
 
+    const filtered = filterStatus === 'All' ? events : events.filter(e => e.status === filterStatus);
 
+    const formatTime = (dateString: string) =>
+        new Date(dateString).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    const formatTime = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    const statusStyles: Record<string, string> = {
+        Upcoming: 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300',
+        Past: 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400',
+        Ongoing: 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-300',
     };
 
     return (
@@ -81,11 +114,21 @@ const ManageEvents: React.FC = () => {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors shadow-sm">
-                        <Filter className="w-4 h-4" />
-                        <span className="text-sm font-medium">Filter</span>
-                    </button>
-                    <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-4 py-2 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
+                    {/* Status Filter */}
+                    <div className="relative">
+                        <Filter className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                        <select
+                            value={filterStatus}
+                            onChange={e => setFilterStatus(e.target.value)}
+                            className="pl-9 pr-8 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[--color-primary-500]/20 outline-none appearance-none cursor-pointer shadow-sm text-sm"
+                        >
+                            <option value="All">All Events</option>
+                            <option value="Upcoming">Upcoming</option>
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Past">Past</option>
+                        </select>
+                    </div>
+                    <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-4 py-2.5 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
                         <Plus className="w-4 h-4" />
                         Create Event
                     </button>
@@ -94,7 +137,7 @@ const ManageEvents: React.FC = () => {
 
             {/* Events List */}
             <div className="grid gap-4">
-                {events.map((event, index) => (
+                {filtered.map((event, index) => (
                     <motion.div
                         key={event.id}
                         initial={{ opacity: 0, y: 10 }}
@@ -105,14 +148,14 @@ const ManageEvents: React.FC = () => {
                         {/* Event Date Badge */}
                         <div className="hidden sm:flex flex-col items-center justify-center w-16 h-16 bg-[--color-primary-50] dark:bg-[--color-primary-900]/20 rounded-xl border border-[--color-primary-100] dark:border-[--color-primary-800] shrink-0">
                             <span className="text-xs font-bold text-[--color-primary-600] uppercase">
-                                {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short' })}
+                                {new Date(event.start_date).toLocaleDateString('en-US', { month: 'short' })}
                             </span>
                             <span className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                                {new Date(event.startDate).getDate()}
+                                {new Date(event.start_date).getDate()}
                             </span>
                         </div>
 
-                        {/* Image (Mobile / Detail) */}
+                        {/* Image */}
                         <div className="w-full sm:w-48 h-32 sm:h-auto rounded-lg overflow-hidden shrink-0">
                             <img src={event.image} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         </div>
@@ -122,10 +165,15 @@ const ManageEvents: React.FC = () => {
                             <div className="flex justify-between items-start">
                                 <div>
                                     <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">{event.title}</h3>
-                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-zinc-500 dark:text-zinc-400">
+                                    {event.program_name && (
+                                        <div className="flex items-center gap-1 text-xs text-[--color-primary-600] mb-2 font-medium">
+                                            <Layers className="w-3 h-3" /> {event.program_name}
+                                        </div>
+                                    )}
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-zinc-500 dark:text-zinc-400">
                                         <div className="flex items-center gap-1">
                                             <Clock className="w-3.5 h-3.5" />
-                                            {formatTime(event.startDate)} - {formatTime(event.endDate)}
+                                            {formatTime(event.start_date)} – {formatTime(event.end_date)}
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <MapPin className="w-3.5 h-3.5" />
@@ -133,12 +181,9 @@ const ManageEvents: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className={`hidden sm:inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${event.status === 'Upcoming' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300' :
-                                    event.status === 'Past' ? 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400' :
-                                        'bg-green-50 text-green-600'
-                                    }`}>
+                                <span className={`hidden sm:inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${statusStyles[event.status]}`}>
                                     {event.status}
-                                </div>
+                                </span>
                             </div>
 
                             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300 line-clamp-2">
@@ -152,11 +197,10 @@ const ManageEvents: React.FC = () => {
                                             T
                                         </div>
                                     ))}
-                                    <div className="w-7 h-7 rounded-full bg-[--color-primary-50] dark:bg-[--color-primary-900/30] border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-[--color-primary-600]">
+                                    <div className="w-7 h-7 rounded-full bg-[--color-primary-50] dark:bg-[--color-primary-900]/30 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-[--color-primary-600]">
                                         +{event.attendees}
                                     </div>
                                 </div>
-
                                 <div className="flex items-center gap-2">
                                     <button className="p-2 text-zinc-400 hover:text-[--color-primary-600] hover:bg-[--color-primary-50] dark:hover:bg-[--color-primary-900]/20 rounded-lg transition-colors">
                                         <Edit2 className="w-4 h-4" />
