@@ -89,7 +89,7 @@ const ManageGallery: React.FC = () => {
                 {['All', 'Images', 'Videos'].map(tab => (
                     <button
                         key={tab}
-                        onClick={() => setSelectedTab(tab as any)}
+                        onClick={() => setSelectedTab(tab as 'All' | 'Images' | 'Videos')}
                         className={`px-4 py-2 text-sm font-medium transition-colors relative ${selectedTab === tab
                             ? 'text-[--color-primary-600] dark:text-[--color-primary-400]'
                             : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
