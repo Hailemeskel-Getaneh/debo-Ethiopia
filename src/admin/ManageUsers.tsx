@@ -15,13 +15,14 @@ import { X, User as UserIcon, AlertTriangle } from 'lucide-react';
 
 interface User {
     id: string;
-    role_id: string;
-    role_name: string;
     first_name: string;
     last_name: string;
     email: string;
     phone_number: string | null;
     image_url: string | null;
+    role: 'User' | 'Admin' | 'Super Admin';
+    position: string;
+    team: 'Board of Directors' | 'On the Ground in Ethiopia' | 'None';
     status: 'Active' | 'Inactive';
     created_at: string;
 }
@@ -36,26 +37,26 @@ const ManageUsers: React.FC = () => {
     const [modalMode, setModalMode] = useState<'Add' | 'Edit'>('Add');
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-    // Mock data aligned with `users` and `roles` DB tables
+    // Mock data aligned with requirements
     const [users, setUsers] = useState<User[]>([
-        { id: '1', role_id: 'r1', role_name: 'Admin', first_name: 'Alice', last_name: 'Smith', email: 'alice@example.com', phone_number: '+251911000001', image_url: 'https://i.pravatar.cc/150?u=1', status: 'Active', created_at: '2025-11-01T08:00:00' },
-        { id: '2', role_id: 'r2', role_name: 'Project Manager', first_name: 'Bob', last_name: 'Johnson', email: 'bob@example.com', phone_number: '+251911000002', image_url: 'https://i.pravatar.cc/150?u=2', status: 'Active', created_at: '2025-11-15T09:00:00' },
-        { id: '3', role_id: 'r3', role_name: 'Viewer', first_name: 'Charlie', last_name: 'Brown', email: 'charlie@example.com', phone_number: null, image_url: 'https://i.pravatar.cc/150?u=3', status: 'Inactive', created_at: '2025-12-03T10:30:00' },
-        { id: '4', role_id: 'r1', role_name: 'Admin', first_name: 'Diana', last_name: 'Prince', email: 'diana@example.com', phone_number: '+251911000004', image_url: 'https://i.pravatar.cc/150?u=4', status: 'Active', created_at: '2026-01-07T11:00:00' },
-        { id: '5', role_id: 'r4', role_name: 'Volunteer', first_name: 'Evan', last_name: 'Wright', email: 'evan@example.com', phone_number: '+251911000005', image_url: 'https://i.pravatar.cc/150?u=5', status: 'Active', created_at: '2026-01-20T12:00:00' },
+        { id: '1', first_name: 'Alice', last_name: 'Smith', email: 'alice@admin.com', phone_number: '+251911000001', image_url: 'https://i.pravatar.cc/150?u=1', role: 'Super Admin', position: 'President', team: 'Board of Directors', status: 'Active', created_at: '2025-11-01T08:00:00' },
+        { id: '2', first_name: 'Bob', last_name: 'Johnson', email: 'bob@example.com', phone_number: '+251911000002', image_url: 'https://i.pravatar.cc/150?u=2', role: 'Admin', position: 'Project Manager', team: 'On the Ground in Ethiopia', status: 'Active', created_at: '2025-11-15T09:00:00' },
+        { id: '3', first_name: 'Charlie', last_name: 'Brown', email: 'charlie@example.com', phone_number: null, image_url: 'https://i.pravatar.cc/150?u=3', role: 'User', position: 'Teacher', team: 'On the Ground in Ethiopia', status: 'Inactive', created_at: '2025-12-03T10:30:00' },
+        { id: '4', first_name: 'Diana', last_name: 'Prince', email: 'diana@admin.com', phone_number: '+251911000004', image_url: 'https://i.pravatar.cc/150?u=4', role: 'Admin', position: 'Admin', team: 'None', status: 'Active', created_at: '2026-01-07T11:00:00' },
+        { id: '5', first_name: 'Evan', last_name: 'Wright', email: 'evan@example.com', phone_number: '+251911000005', image_url: 'https://i.pravatar.cc/150?u=5', role: 'User', position: 'None', team: 'None', status: 'Active', created_at: '2026-01-20T12:00:00' },
     ]);
 
     const roleColors: Record<string, string> = {
+        'Super Admin': 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800',
         Admin: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800',
-        'Project Manager': 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800',
-        Volunteer: 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800',
-        Viewer: 'bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700',
+        User: 'bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700',
     };
 
     const filteredUsers = users.filter(user =>
-        (selectedRole === 'All' || user.role_name === selectedRole) &&
+        (selectedRole === 'All' || user.role === selectedRole) &&
         (`${user.first_name} ${user.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase()))
+            user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.position.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     return (
@@ -96,9 +97,8 @@ const ManageUsers: React.FC = () => {
                     >
                         <option value="All">All Roles</option>
                         <option value="Admin">Admin</option>
-                        <option value="Project Manager">Project Manager</option>
-                        <option value="Volunteer">Volunteer</option>
-                        <option value="Viewer">Viewer</option>
+                        <option value="Super Admin">Super Admin</option>
+                        <option value="User">User</option>
                     </select>
                 </div>
             </div>
@@ -109,10 +109,10 @@ const ManageUsers: React.FC = () => {
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-100 dark:border-zinc-800">
-                                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">User</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Contact</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">User / Contact</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Position</th>
+                                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Team</th>
                                 <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Role</th>
-                                <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Status</th>
                                 <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
@@ -139,24 +139,26 @@ const ManageUsers: React.FC = () => {
                                                     {user.first_name} {user.last_name}
                                                 </div>
                                                 <div className="text-xs text-zinc-400 mt-0.5">
-                                                    ID: {user.id}
+                                                    {user.email}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <div className="text-sm text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 mb-1">
-                                            <Mail className="w-3.5 h-3.5 text-zinc-400" /> {user.email}
-                                        </div>
-                                        {user.phone_number && (
-                                            <div className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                                                <Phone className="w-3.5 h-3.5 text-zinc-400" /> {user.phone_number}
-                                            </div>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{user.position}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {user.team !== 'None' ? (
+                                            <span className="px-2.5 py-0.5 text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-lg border border-zinc-200 dark:border-zinc-700">
+                                                {user.team}
+                                            </span>
+                                        ) : (
+                                            <span className="text-xs text-zinc-400 font-medium">No Team</span>
                                         )}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${roleColors[user.role_name] ?? 'bg-zinc-100 text-zinc-600 border-zinc-200'}`}>
-                                            {user.role_name}
+                                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${roleColors[user.role] ?? 'bg-zinc-100 text-zinc-600 border-zinc-200'}`}>
+                                            {user.role}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -244,16 +246,33 @@ const ManageUsers: React.FC = () => {
 
                             <form className="p-8 space-y-6 max-h-[75vh] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800" onSubmit={(e) => {
                                 e.preventDefault();
-                                // Mock Save Logic
                                 const formData = new FormData(e.currentTarget);
+                                const role = formData.get('role') as User['role'];
+                                const position = formData.get('position') as string;
+                                const team = formData.get('team') as User['team'];
+
+                                // Validation: If team is selected, position cannot be 'None'
+                                if (team !== 'None' && position === 'None') {
+                                    alert('A position must be assigned when a team is selected.');
+                                    return;
+                                }
+
+                                // Validation: Password for admins (mock validation)
+                                const password = formData.get('password');
+                                if (modalMode === 'Add' && (role === 'Admin' || role === 'Super Admin') && !password) {
+                                    alert('A password is required for administrative accounts.');
+                                    return;
+                                }
+
                                 const newUser: User = {
                                     id: selectedUser?.id || (users.length + 1).toString(),
                                     first_name: formData.get('firstName') as string,
                                     last_name: formData.get('lastName') as string,
                                     email: formData.get('email') as string,
                                     phone_number: formData.get('phone') as string,
-                                    role_id: 'r' + (formData.get('role') === 'Admin' ? '1' : '4'),
-                                    role_name: formData.get('role') as string,
+                                    role: role,
+                                    position: position,
+                                    team: team,
                                     status: formData.get('status') as 'Active' | 'Inactive',
                                     image_url: selectedUser?.image_url || null,
                                     created_at: selectedUser?.created_at || new Date().toISOString(),
@@ -307,19 +326,64 @@ const ManageUsers: React.FC = () => {
                                             placeholder="+251..."
                                         />
                                     </div>
+
+                                    {/* Role Selection */}
                                     <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Role</label>
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">System Role</label>
                                         <select
                                             name="role"
-                                            defaultValue={selectedUser?.role_name || 'Volunteer'}
+                                            defaultValue={selectedUser?.role || 'User'}
                                             className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none cursor-pointer"
+                                            onChange={(e) => {
+                                                // Trigger re-render to show/hide password if needed
+                                                const val = e.target.value;
+                                                const pwdField = document.getElementById('password-section');
+                                                if (pwdField) {
+                                                    if (modalMode === 'Add' && (val === 'Admin' || val === 'Super Admin')) {
+                                                        pwdField.classList.remove('hidden');
+                                                    } else {
+                                                        pwdField.classList.add('hidden');
+                                                    }
+                                                }
+                                            }}
                                         >
-                                            <option>Admin</option>
-                                            <option>Project Manager</option>
-                                            <option>Volunteer</option>
-                                            <option>Viewer</option>
+                                            <option value="User">User (Normal)</option>
+                                            <option value="Admin">Admin</option>
+                                            <option value="Super Admin">Super Admin</option>
                                         </select>
                                     </div>
+
+                                    {/* Position Selection */}
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Position / Job Title</label>
+                                        <select
+                                            name="position"
+                                            defaultValue={selectedUser?.position || 'None'}
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none cursor-pointer"
+                                        >
+                                            <option value="None">No Specific Position</option>
+                                            <option value="President">President</option>
+                                            <option value="Project Manager">Project Manager</option>
+                                            <option value="Teacher">Teacher</option>
+                                            <option value="Admin">Admin (Position)</option>
+                                            <option value="Volunteer">Volunteer</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Team Selection */}
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Team</label>
+                                        <select
+                                            name="team"
+                                            defaultValue={selectedUser?.team || 'None'}
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none cursor-pointer"
+                                        >
+                                            <option value="None">No Team</option>
+                                            <option value="Board of Directors">Board of Directors</option>
+                                            <option value="On the Ground in Ethiopia">On the Ground in Ethiopia</option>
+                                        </select>
+                                    </div>
+
                                     <div className="space-y-2">
                                         <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account Status</label>
                                         <select
@@ -330,6 +394,18 @@ const ManageUsers: React.FC = () => {
                                             <option value="Active">Active</option>
                                             <option value="Inactive">Inactive</option>
                                         </select>
+                                    </div>
+
+                                    {/* Conditional Password Field (for Add mode only) */}
+                                    <div id="password-section" className={`md:col-span-2 space-y-2 ${modalMode === 'Add' && (selectedUser?.role === 'Admin' || selectedUser?.role === 'Super Admin') ? '' : 'hidden'}`}>
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Access Password</label>
+                                        <input
+                                            name="password"
+                                            type="password"
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all"
+                                            placeholder="Create a secure password"
+                                        />
+                                        <p className="text-[10px] text-zinc-400">Required for Admin and Super Admin accounts.</p>
                                     </div>
                                 </div>
 
