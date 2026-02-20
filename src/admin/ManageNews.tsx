@@ -270,12 +270,21 @@ const ManageNews: React.FC = () => {
                                         <textarea name="content" defaultValue={selectedArticle?.content} required placeholder="Write the full story..." rows={8}
                                             className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none" />
                                     </div>
-                                    <div className="flex items-center gap-2 pt-2">
-                                        <input name="published" type="checkbox" id="news-published-chk" defaultChecked={selectedArticle?.is_published} value="true"
-                                            className="w-5 h-5 rounded border-zinc-300 text-primary-600 focus:ring-primary-500" />
-                                        <label htmlFor="news-published-chk" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
-                                            Publish this article immediately
-                                        </label>
+                                    <div className="flex flex-col gap-3 pt-2">
+                                        <div className="flex items-center gap-2">
+                                            <input name="published" type="checkbox" id="news-published-chk" defaultChecked={selectedArticle?.is_published} value="true"
+                                                className="w-5 h-5 rounded border-zinc-300 text-primary-600 focus:ring-primary-500" />
+                                            <label htmlFor="news-published-chk" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
+                                                Publish this article immediately
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <input name="notify_subscribers" type="checkbox" id="news-notify-subscribers" value="true"
+                                                className="w-5 h-5 rounded border-zinc-300 text-secondary-600 focus:ring-secondary-500" />
+                                            <label htmlFor="news-notify-subscribers" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
+                                                Notify all subscribers via Email
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 

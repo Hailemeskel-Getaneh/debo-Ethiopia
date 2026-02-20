@@ -20,6 +20,7 @@ const ManageSubscribers: React.FC = () => {
 
     // UI State for Delete
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const [selectedSubscriber, setSelectedSubscriber] = useState<Subscriber | null>(null);
 
     // Mock data aligned with `subscribers` DB table
@@ -139,10 +140,18 @@ const ManageSubscribers: React.FC = () => {
                                             {formatDate(sub.subscribed_at)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right">
-                                            <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity gap-1">
+                                                <button
+                                                    onClick={() => { setSelectedSubscriber(sub); setIsEmailModalOpen(true); }}
+                                                    className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/10 rounded-lg transition-colors"
+                                                    title="Send Individual Email"
+                                                >
+                                                    <Mail className="w-4 h-4" />
+                                                </button>
                                                 <button
                                                     onClick={() => { setSelectedSubscriber(sub); setIsDeleteOpen(true); }}
                                                     className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                                                    title="Remove Subscriber"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
@@ -204,6 +213,59 @@ const ManageSubscribers: React.FC = () => {
                                     Remove
                                 </button>
                             </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Individual Email Modal */}
+            <AnimatePresence>
+                {isEmailModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsEmailModalOpen(false)}
+                            className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" />
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl p-8 border border-zinc-100 dark:border-zinc-800"
+                        >
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-12 h-12 rounded-2xl bg-primary-50 dark:bg-primary-900/10 flex items-center justify-center text-primary-600">
+                                    <Mail className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Send Direct Email</h3>
+                                    <p className="text-xs text-zinc-500 font-medium">To: {selectedSubscriber?.email}</p>
+                                </div>
+                            </div>
+
+                            <form className="space-y-6" onSubmit={(e) => {
+                                e.preventDefault();
+                                alert('Email Sent Successfully!');
+                                setIsEmailModalOpen(false);
+                            }}>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Subject</label>
+                                        <input required placeholder="Project update for you..."
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Message</label>
+                                        <textarea required rows={4} placeholder="Hello, we wanted to share..."
+                                            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:ring-2 focus:ring-primary-500/20 outline-none resize-none transition-all" />
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-4 pt-4">
+                                    <button type="button" onClick={() => setIsEmailModalOpen(false)}
+                                        className="flex-1 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 font-bold hover:bg-zinc-50 transition-colors">
+                                        Cancel
+                                    </button>
+                                    <button type="submit"
+                                        className="flex-1 px-6 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 shadow-lg shadow-primary-500/20 transition-all">
+                                        Send Email
+                                    </button>
+                                </div>
+                            </form>
                         </motion.div>
                     </div>
                 )}
