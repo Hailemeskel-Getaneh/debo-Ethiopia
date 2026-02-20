@@ -354,12 +354,21 @@ const ManageEvents: React.FC = () => {
                                             </select>
                                         </div>
                                     </div>
-                                    <div className="md:col-span-2 flex items-center gap-2 pt-2">
-                                        <input name="published" type="checkbox" id="published-chk" defaultChecked={selectedEvent?.is_published} value="true"
-                                            className="w-5 h-5 rounded border-zinc-300 text-primary-600 focus:ring-primary-500" />
-                                        <label htmlFor="published-chk" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
-                                            Publish event immediately
-                                        </label>
+                                    <div className="md:col-span-2 flex flex-col gap-3 pt-2">
+                                        <div className="flex items-center gap-2">
+                                            <input name="published" type="checkbox" id="published-chk" defaultChecked={selectedEvent?.is_published} value="true"
+                                                className="w-5 h-5 rounded border-zinc-300 text-primary-600 focus:ring-primary-500" />
+                                            <label htmlFor="published-chk" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
+                                                Publish event immediately
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <input name="notify_subscribers" type="checkbox" id="event-notify-subscribers" value="true"
+                                                className="w-5 h-5 rounded border-zinc-300 text-secondary-600 focus:ring-secondary-500" />
+                                            <label htmlFor="event-notify-subscribers" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer">
+                                                Notify all subscribers via Email
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
