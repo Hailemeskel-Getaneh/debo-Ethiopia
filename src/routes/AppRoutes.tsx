@@ -21,7 +21,7 @@ import ManageAchievements from '../admin/ManageAchievements';
 import ManagePrograms from '../admin/ManagePrograms';
 import ManageSubscribers from '../admin/ManageSubscribers';
 import ManageMetrics from '../admin/ManageMetrics';
-import ManageNotifications from '../admin/ManageNotifications';
+import NotificationHub from '../admin/NotificationHub';
 import AdminSettings from '../admin/AdminSettings';
 // import ThemeTest from '../features/ThemeTest';
 
@@ -81,7 +81,7 @@ const AppRoutes: React.FC = () => {
                     <Route path="/admin/programs" element={<ManagePrograms />} />
                     <Route path="/admin/subscribers" element={<ManageSubscribers />} />
                     <Route path="/admin/metrics" element={<ManageMetrics />} />
-                    <Route path="/admin/notifications" element={<ManageNotifications />} />
+                    <Route path="/admin/notifications" element={<NotificationHub />} />
                     <Route path="/admin/settings" element={<AdminSettings />} />
                 </Route>
             </Route>

@@ -23,7 +23,7 @@ interface NotificationLog {
     timestamp: string;
 }
 
-const ManageNotifications: React.FC = () => {
+const NotificationHub: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isBroadcastOpen, setIsBroadcastOpen] = useState(false);
 
@@ -263,4 +263,5 @@ const ManageNotifications: React.FC = () => {
     );
 };
 
-export default ManageNotifications;
+export default NotificationHub;
+
