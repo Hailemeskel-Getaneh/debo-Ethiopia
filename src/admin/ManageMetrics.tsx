@@ -9,7 +9,6 @@ import {
     CheckCircle2,
     Clock,
     X,
-    AlertTriangle,
     Save
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

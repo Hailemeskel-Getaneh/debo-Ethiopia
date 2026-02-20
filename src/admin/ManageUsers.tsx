@@ -7,8 +7,6 @@ import {
     UserPlus,
     CheckCircle,
     XCircle,
-    Mail,
-    Phone,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User as UserIcon, AlertTriangle } from 'lucide-react';
