@@ -17,7 +17,8 @@ import {
     Newspaper,
     Award,
     Layers,
-    Mail
+    Mail,
+    BarChart3
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -38,6 +39,7 @@ const AdminLayout: React.FC = () => {
         { name: 'Messages', icon: MessageSquare, path: '/admin/messages' },
         { name: 'Achievements', icon: Award, path: '/admin/achievements' },
         { name: 'Subscribers', icon: Mail, path: '/admin/subscribers' },
+        { name: 'Metrics', icon: BarChart3, path: '/admin/metrics' },
         { name: 'Settings', icon: Settings, path: '/admin/settings' },
     ];
 
