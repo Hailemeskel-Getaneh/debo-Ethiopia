@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import logo from "@/assets/images/image copy.png";
 
 const NavBar = () => {
@@ -17,16 +17,26 @@ const NavBar = () => {
   }, []);
 
   const toggleMenu = (menuId: string) => {
-    setOpenMenu(prev => (prev === menuId ? null : menuId));
+    setOpenMenu((prev) => (prev === menuId ? null : menuId));
   };
 
   return (
-    <div ref={navRef} className="navbar bg-base-100 shadow-sm fixed top-0 left-0 w-full z-50">
+    <nav
+      ref={navRef}
+      className="navbar bg-base-100 shadow-sm fixed top-0 left-0 w-full z-50"
+      aria-label="Main Navigation"
+    >
       {/* Left Section */}
       <div className="navbar-start">
         {/* Mobile Dropdown */}
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost lg:hidden"
+            aria-label="Open Mobile Menu"
+            aria-haspopup="true"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -57,6 +67,10 @@ const NavBar = () => {
                 <li>
                   <a href="/about">About Us</a>
                 </li>
+                <li>
+                  <a href="/BoardLeadership">BoardLeadership</a>
+                </li>
+
                 <li>
                   <a href="/achievements">Achievements</a>
                 </li>
@@ -131,7 +145,11 @@ const NavBar = () => {
 
         {/* Logo */}
         <a href="/" className="btn btn-ghost px-2 hover:bg-transparent">
-          <img src={logo} alt="Debo Ethiopia" className="h-10 w-auto object-contain" />
+          <img
+            src={logo}
+            alt="Debo Ethiopia"
+            className="h-10 w-auto object-contain"
+          />
         </a>
       </div>
 
@@ -143,79 +161,176 @@ const NavBar = () => {
           </li>
 
           <li>
-            <details open={openMenu === 'about'}>
-              <summary onClick={(e) => { e.preventDefault(); toggleMenu('about'); }}>About</summary>
+            <details open={openMenu === "about"}>
+              <summary
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleMenu("about");
+                }}
+                aria-expanded={openMenu === "about"}
+                aria-haspopup="true"
+              >
+                About
+              </summary>
               <ul className="p-2 bg-base-100 w-44 shadow">
                 <li>
-                  <a href="/about" onClick={() => setOpenMenu(null)}>About Us</a>
+                  <a href="/about" onClick={() => setOpenMenu(null)}>
+                    About Us
+                  </a>
                 </li>
                 <li>
-                  <a href="/achievements" onClick={() => setOpenMenu(null)}>Achievements</a>
+                  <a href="/achievements" onClick={() => setOpenMenu(null)}>
+                    Achievements
+                  </a>
+                </li>
+                <li>
+                  <a href="/BoardLeadership" onClick={() => setOpenMenu(null)}>
+                    Board Leadership
+                  </a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details open={openMenu === 'programs'}>
-              <summary onClick={(e) => { e.preventDefault(); toggleMenu('programs'); }}>Programs</summary>
+            <details open={openMenu === "programs"}>
+              <summary
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleMenu("programs");
+                }}
+                aria-expanded={openMenu === "programs"}
+                aria-haspopup="true"
+              >
+                Programs
+              </summary>
               <ul className="p-2 bg-base-100 w-52 shadow">
                 <li>
-                  <a href="/programs" onClick={() => setOpenMenu(null)}>All Programs</a>
+                  <a href="/programs" onClick={() => setOpenMenu(null)}>
+                    All Programs
+                  </a>
                 </li>
                 <li>
-                  <a href="/programs?type=education" onClick={() => setOpenMenu(null)}>Education</a>
+                  <a
+                    href="/programs?type=education"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Education
+                  </a>
                 </li>
                 <li>
-                  <a href="/programs?type=health" onClick={() => setOpenMenu(null)}>Health</a>
+                  <a
+                    href="/programs?type=health"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Health
+                  </a>
                 </li>
                 <li>
-                  <a href="/programs?type=social" onClick={() => setOpenMenu(null)}>Social Support</a>
+                  <a
+                    href="/programs?type=social"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Social Support
+                  </a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details open={openMenu === 'projects'}>
-              <summary onClick={(e) => { e.preventDefault(); toggleMenu('projects'); }}>Projects</summary>
+            <details open={openMenu === "projects"}>
+              <summary
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleMenu("projects");
+                }}
+                aria-expanded={openMenu === "projects"}
+                aria-haspopup="true"
+              >
+                Projects
+              </summary>
               <ul className="p-2 bg-base-100 w-52 shadow">
                 <li>
-                  <a href="/projects?status=active" onClick={() => setOpenMenu(null)}>Active Projects</a>
+                  <a
+                    href="/projects?status=active"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Active Projects
+                  </a>
                 </li>
                 <li>
-                  <a href="/projects?status=completed" onClick={() => setOpenMenu(null)}>Completed Projects</a>
+                  <a
+                    href="/projects?status=completed"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Completed Projects
+                  </a>
                 </li>
                 <li>
-                  <a href="/projects?status=upcoming" onClick={() => setOpenMenu(null)}>Upcoming Projects</a>
+                  <a
+                    href="/projects?status=upcoming"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Upcoming Projects
+                  </a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details open={openMenu === 'events'}>
-              <summary onClick={(e) => { e.preventDefault(); toggleMenu('events'); }}>Events</summary>
+            <details open={openMenu === "events"}>
+              <summary
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleMenu("events");
+                }}
+                aria-expanded={openMenu === "events"}
+                aria-haspopup="true"
+              >
+                Events
+              </summary>
               <ul className="p-2 bg-base-100 w-52 shadow">
                 <li>
-                  <a href="/events?type=upcoming" onClick={() => setOpenMenu(null)}>Upcoming Events</a>
+                  <a
+                    href="/events?type=upcoming"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    Upcoming Events
+                  </a>
                 </li>
                 <li>
-                  <a href="/events?type=past" onClick={() => setOpenMenu(null)}>Past Events</a>
+                  <a href="/events?type=past" onClick={() => setOpenMenu(null)}>
+                    Past Events
+                  </a>
                 </li>
               </ul>
             </details>
           </li>
 
           <li>
-            <details open={openMenu === 'media'}>
-              <summary onClick={(e) => { e.preventDefault(); toggleMenu('media'); }}>Media</summary>
+            <details open={openMenu === "media"}>
+              <summary
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleMenu("media");
+                }}
+                aria-expanded={openMenu === "media"}
+                aria-haspopup="true"
+              >
+                Media
+              </summary>
               <ul className="p-2 bg-base-100 w-44 shadow">
                 <li>
-                  <a href="/news" onClick={() => setOpenMenu(null)}>News</a>
+                  <a href="/newsletter" onClick={() => setOpenMenu(null)}>
+                    News
+                  </a>
                 </li>
                 <li>
-                  <a href="/gallery" onClick={() => setOpenMenu(null)}>Gallery</a>
+                  <a href="/gallery" onClick={() => setOpenMenu(null)}>
+                    Gallery
+                  </a>
                 </li>
               </ul>
             </details>
@@ -237,7 +352,7 @@ const NavBar = () => {
       <div className="navbar-end">
         {/* Login button removed as requested */}
       </div>
-    </div>
+    </nav>
   );
 };
 
