@@ -82,14 +82,14 @@ const AdminLayout: React.FC = () => {
                                 key={item.path}
                                 to={item.path}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
-                                        ? 'bg-[--color-primary-50] text-[--color-primary-700] dark:bg-[--color-primary-500]/10 dark:text-[--color-primary-400] shadow-sm ring-1 ring-[--color-primary-500]/10'
-                                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100'
+                                    ? 'bg-[--color-primary-50] text-[--color-primary-700] dark:bg-[--color-primary-500]/10 dark:text-[--color-primary-400] shadow-sm ring-1 ring-[--color-primary-500]/10'
+                                    : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100'
                                     }`}
                             >
                                 <item.icon
                                     className={`w-5 h-5 transition-colors duration-200 ${isActive
-                                            ? 'text-[--color-primary-600] dark:text-[--color-primary-400]'
-                                            : 'text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300'
+                                        ? 'text-[--color-primary-600] dark:text-[--color-primary-400]'
+                                        : 'text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300'
                                         }`}
                                 />
                                 {item.name}
@@ -168,7 +168,7 @@ const AdminLayout: React.FC = () => {
                 </header>
 
                 {/* Scrollable Content */}
-                <main className="flex-1 overflow-y-auto p-4 sm:p-8 scroll-smooth scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
+                <main id="main-content" className="flex-1 overflow-y-auto p-4 sm:p-8 scroll-smooth scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
                     <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <Outlet />
                     </div>
