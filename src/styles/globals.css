@@ -41,4 +41,23 @@
         @apply antialiased text-zinc-900 bg-white dark:bg-zinc-950 dark:text-zinc-50;
         font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     }
+
+    button,
+    .btn {
+        @apply cursor-pointer;
+    }
+
+    /* Focus States */
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-brand-main;
+    }
+
+    /* Skip Link Utility */
+    .skip-link {
+        @apply absolute left-[-9999px] top-auto w-1 h-1 overflow-hidden z-[100] text-white bg-brand-main px-6 py-4 transition-all duration-300;
+    }
+
+    .skip-link:focus {
+        @apply left-4 top-4 w-auto h-auto overflow-visible rounded-xl shadow-2xl;
+    }
 }
