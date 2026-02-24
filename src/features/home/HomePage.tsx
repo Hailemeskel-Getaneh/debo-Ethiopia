@@ -19,6 +19,8 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import heroImg from "@/assets/images/Grade_9.jpg";
 import imgAbout from "@/assets/images/IMG_20231104_083345.jpg";
+import imgHero3 from "@/assets/images/teachers.jpg";
+import imgHero4 from "@/assets/images/G 12.jpg";
 
 const heroBg = heroImg;
 
@@ -133,12 +135,7 @@ const stagger = {
 
 export default function Index() {
   const [currentImage, setCurrentImage] = useState(0);
-  const heroImages = [
-    heroBg,
-    imgAbout,
-    "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=2070&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1520645607147-797cdb05d2e7?q=80&w=2070&auto=format&fit=crop"
-  ];
+  const heroImages = [heroBg, imgAbout, imgHero3, imgHero4];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -151,7 +148,6 @@ export default function Index() {
     <div className="min-h-screen flex flex-col">
       <NavBar />
       <main id="main-content">
-
         {/* HERO */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0">
@@ -167,7 +163,7 @@ export default function Index() {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </AnimatePresence>
-            <div className="absolute inset-0 z-10" />
+            <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
           </div>
           <div className="relative z-20 container mx-auto px-4 text-center">
             <motion.div
@@ -175,24 +171,24 @@ export default function Index() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-brand-action/20 text-brand-action border border-brand-action/40 text-sm font-body font-medium mb-6 backdrop-blur-sm">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 text-white border border-white/40 text-sm font-body font-medium mb-6 backdrop-blur-sm">
                 Empowering Ethiopian Communities Since 2005
               </span>
               <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-6 text-balance leading-tight">
                 Building Stronger
                 <br />
-                <span className="text-brand-action">Communities</span> Together
+                <span className="text-[#009639]">Communities</span> Together
               </h1>
               <p className="font-body text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-                Debo Ethiopia works alongside communities to create lasting change
-                through education, health, agriculture, and sustainable
+                Debo Ethiopia works alongside communities to create lasting
+                change through education, health, agriculture, and sustainable
                 development programs.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/donate">
                   <Button
                     size="lg"
-                    className="bg-linear-to-b from-brand-action to-brand-action/90 text-white font-semibold font-body gap-2 hover:opacity-90 hover:scale-105 transition-all shadow-lg px-8"
+                    className="bg-linear-to-b from-[#009639] to-[#007a2e] text-white font-semibold font-body gap-2 hover:opacity-90 hover:scale-105 transition-all shadow-lg px-8"
                   >
                     <Heart className="w-5 h-5" />
                     Donate Now
@@ -217,8 +213,11 @@ export default function Index() {
               <button
                 key={idx}
                 onClick={() => setCurrentImage(idx)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${idx === currentImage ? "bg-white scale-125" : "bg-white/40 hover:bg-white/80"
-                  }`}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  idx === currentImage
+                    ? "bg-white scale-125"
+                    : "bg-white/40 hover:bg-white/80"
+                }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
@@ -245,7 +244,11 @@ export default function Index() {
               className="grid grid-cols-2 md:grid-cols-4 gap-8"
             >
               {stats.map(({ value, label }) => (
-                <motion.div key={label} variants={fadeUp} className="text-center">
+                <motion.div
+                  key={label}
+                  variants={fadeUp}
+                  className="text-center"
+                >
                   <div className="font-display text-4xl md:text-5xl font-bold text-white mb-1">
                     {value}
                   </div>
@@ -284,7 +287,8 @@ export default function Index() {
                 <p className="font-body text-muted-foreground leading-relaxed mb-8">
                   We deliver essential services that address the root causes of
                   poverty and inequality, guided by the ancient Ethiopian
-                  tradition of "Debo" — communal cooperation for the greater good.
+                  tradition of "Debo" — communal cooperation for the greater
+                  good.
                 </p>
                 <Link to="/about">
                   <Button className="bg-linear-to-r from-brand-main to-primary-700 text-white font-body gap-2 hover:opacity-90">
@@ -355,9 +359,9 @@ export default function Index() {
                 className="font-body text-zinc-600 text-lg leading-relaxed"
               >
                 We operate with a community-centered participatory model. By
-                respecting local knowledge and priorities, we ensure local people
-                are actively involved in identifying challenges and planning
-                solutions.
+                respecting local knowledge and priorities, we ensure local
+                people are actively involved in identifying challenges and
+                planning solutions.
               </motion.p>
             </div>
 
@@ -393,7 +397,7 @@ export default function Index() {
                 <motion.div
                   key={item.title}
                   variants={fadeUp}
-                  className="bg-white p-8 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-md transition-shadow"
+                  className="bg-white p-8 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-md transition-shadow cursor-pointer"
                 >
                   <div className="w-12 h-12 bg-white flex items-center justify-center mb-6">
                     <item.icon className="w-8 h-8 text-brand-main" />
@@ -442,7 +446,7 @@ export default function Index() {
                 <motion.div key={title} variants={fadeUp}>
                   <Link
                     to={href}
-                    className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
+                    className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer"
                   >
                     <div
                       className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center mb-4`}
@@ -499,39 +503,41 @@ export default function Index() {
               variants={stagger}
               className="grid md:grid-cols-3 gap-6"
             >
-              {projects.map(({ title, category, status, progress, location }) => (
-                <motion.div
-                  key={title}
-                  variants={fadeUp}
-                  className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-body font-medium bg-brand-main/10 text-brand-main">
-                      {category}
-                    </span>
-                    <span
-                      className={`text-xs font-body font-medium ${status === "Completed" ? "text-brand-action" : "text-brand-secondary"}`}
-                    >
-                      ● {status}
-                    </span>
-                  </div>
-                  <h3 className="font-display font-semibold text-zinc-900 mb-1">
-                    {title}
-                  </h3>
-                  <p className="font-body text-xs text-zinc-500 mb-4">
-                    {location}
-                  </p>
-                  <div className="w-full bg-zinc-100 rounded-full h-2 mb-1">
-                    <div
-                      className="bg-linear-to-r from-brand-main to-primary-700 h-2 rounded-full transition-all duration-1000"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                  <p className="font-body text-xs text-zinc-500 text-right">
-                    {progress}% Complete
-                  </p>
-                </motion.div>
-              ))}
+              {projects.map(
+                ({ title, category, status, progress, location }) => (
+                  <motion.div
+                    key={title}
+                    variants={fadeUp}
+                    className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-body font-medium bg-brand-main/10 text-brand-main">
+                        {category}
+                      </span>
+                      <span
+                        className={`text-xs font-body font-medium ${status === "Completed" ? "text-brand-action" : "text-brand-secondary"}`}
+                      >
+                        ● {status}
+                      </span>
+                    </div>
+                    <h3 className="font-display font-semibold text-zinc-900 mb-1">
+                      {title}
+                    </h3>
+                    <p className="font-body text-xs text-zinc-500 mb-4">
+                      {location}
+                    </p>
+                    <div className="w-full bg-zinc-100 rounded-full h-2 mb-1">
+                      <div
+                        className="bg-linear-to-r from-brand-main to-primary-700 h-2 rounded-full transition-all duration-1000"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                    <p className="font-body text-xs text-zinc-500 text-right">
+                      {progress}% Complete
+                    </p>
+                  </motion.div>
+                ),
+              )}
             </motion.div>
             <div className="text-center mt-10">
               <Link to="/projects">
@@ -585,7 +591,7 @@ export default function Index() {
               <Link to="/donate">
                 <Button
                   size="lg"
-                  className="bg-linear-to-b from-brand-action to-brand-action/90 text-white font-semibold font-body gap-2 hover:opacity-90 hover:scale-105 transition-all shadow-lg px-10"
+                  className="bg-linear-to-b from-[#009639] to-[#007a2e] text-white font-semibold font-body gap-2 hover:opacity-90 hover:scale-105 transition-all shadow-lg px-10"
                 >
                   <Heart className="w-5 h-5" />
                   Donate Now
@@ -633,7 +639,7 @@ export default function Index() {
                 <motion.div
                   key={title}
                   variants={fadeUp}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
                 >
                   <div className="h-48 bg-linear-to-br from-brand-main to-primary-700 flex items-center justify-center">
                     <BookOpen className="w-12 h-12 text-white/40" />
@@ -659,7 +665,6 @@ export default function Index() {
             </motion.div>
           </div>
         </section>
-
       </main>
       <Footer />
     </div>

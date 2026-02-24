@@ -29,6 +29,7 @@ import { Gallery } from "../features/gallery/Gallery";
 import { Newsletter } from "../features/newsletter/Newsletter";
 import { Donate } from "../features/donate/Donate";
 import { Contact } from "../features/contact/Contact";
+import Achievements from "../features/achievements/Achievements";
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated, userRole } = useAuth();
@@ -45,6 +46,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/newsletter" element={<Newsletter />} />
       <Route path="/donate" element={<Donate />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/achievements" element={<Achievements />} />
 
       {/* Auth Routes */}
       <Route element={<AuthLayout />}>

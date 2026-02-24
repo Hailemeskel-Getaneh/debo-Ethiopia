@@ -73,11 +73,11 @@ export function Newsletter() {
                             {/* Left: copy */}
                             <div>
                                 <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
-                                    <Sparkles className="w-4 h-4 text-[#FCDD09]" /> Monthly Newsletter
+                                    <Sparkles className="w-4 h-4 text-[#00b359]" /> Monthly Newsletter
                                 </div>
                                 <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-6 leading-tight">
                                     Stay Connected to the{" "}
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FCDD09] to-orange-400">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00b359] to-[#00b359]">
                                         Mission
                                     </span>
                                 </h1>
@@ -207,7 +207,7 @@ export function Newsletter() {
                     <div className="max-w-3xl mx-auto px-4 text-center">
                         <h2 className="text-4xl font-extrabold mb-4">Ready to Join 2,400+ Readers?</h2>
                         <p className="text-white/75 text-lg mb-8">Subscribe above or share this page with someone who cares about Ethiopia's future.</p>
-                        <a href="/donate" className="inline-flex items-center gap-2 bg-[#FCDD09] text-black font-bold px-8 py-4 rounded-full hover:scale-105 transition-all duration-300">
+                        <a href="/donate" className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 transition-all duration-300">
                             Also Consider Donating <ArrowRight className="w-5 h-5" />
                         </a>
                     </div>
