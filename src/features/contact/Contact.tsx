@@ -30,7 +30,7 @@ export function Contact() {
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6">
-                        Get in Touch with <span className="text-[#FCDD09]">Us</span>
+                        Get in Touch with <span className="text-[#00b359]">Us</span>
                     </h1>
                     <p className="text-lg text-white/80 max-w-2xl mx-auto">
                         Have a question, want to volunteer, or interested in partnering with DeboEthiopia? We'd love to hear from you. Drop us a message below!

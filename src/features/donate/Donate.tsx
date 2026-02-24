@@ -75,15 +75,15 @@ export function Donate() {
                 {/* ── HERO ── */}
                 <section className="relative min-h-[45vh] flex items-center overflow-hidden pt-20">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#003d1a] via-[#005c28] to-[#009639]" />
-                    <div className="absolute -top-24 -right-24 w-[450px] h-[450px] rounded-full bg-[#FCDD09]/10 blur-3xl" />
+                    <div className="absolute -top-24 -right-24 w-[450px] h-[450px] rounded-full bg-[#00b359]/10 blur-3xl" />
 
                     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center w-full">
                         <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
-                            <Heart className="w-4 h-4 text-[#FCDD09]" /> Every Donation Counts
+                            <Heart className="w-4 h-4 text-[#00b359]" /> Every Donation Counts
                         </div>
                         <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-5">
                             Give a Child a{" "}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FCDD09] to-orange-400">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00b359] to-[#00b359]">
                                 Brighter Future
                             </span>
                         </h1>
@@ -427,7 +427,7 @@ export function Donate() {
                                         <li>🎗️ In memory / in honor donations</li>
                                         <li>📋 Legacy giving & estate planning</li>
                                     </ul>
-                                    <a href="/contact" className="inline-flex items-center gap-1.5 mt-4 text-[#FCDD09] font-semibold text-sm hover:underline">
+                                    <a href="/contact" className="inline-flex items-center gap-1.5 mt-4 text-[#00b359] font-semibold text-sm hover:underline">
                                         Contact us to learn more <ArrowRight className="w-4 h-4" />
                                     </a>
                                 </div>

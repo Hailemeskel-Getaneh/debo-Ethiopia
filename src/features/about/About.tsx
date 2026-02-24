@@ -30,7 +30,7 @@ function StatItem({
   useEffect(() => {
     if (!visible) return;
     let startTime: number | null = null;
-    const duration = 2000;
+    const duration = 1000;
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
@@ -68,32 +68,32 @@ const values = [
     title: "Compassion",
     description:
       "We care deeply about the communities we serve and approach our work with empathy and genuine concern.",
-    colorClass: "text-rose-600",
-    bgClass: "bg-rose-50",
+    colorClass: "text-[#009639]",
+    bgClass: "bg-[#009639]/10",
   },
   {
     icon: Users,
     title: "Collaboration",
     description:
       "We believe in the power of partnership and working together for greater, lasting impact.",
-    colorClass: "text-blue-600",
-    bgClass: "bg-blue-50",
+    colorClass: "text-[#009639]",
+    bgClass: "bg-[#009639]/10",
   },
   {
     icon: Target,
     title: "Excellence",
     description:
       "We strive for the highest quality in all our educational programs and community services.",
-    colorClass: "text-emerald-600",
-    bgClass: "bg-emerald-50",
+    colorClass: "text-[#009639]",
+    bgClass: "bg-[#009639]/10",
   },
   {
     icon: Eye,
     title: "Transparency",
     description:
       "We operate with honesty and accountability to our donors, partners, and communities.",
-    colorClass: "text-amber-600",
-    bgClass: "bg-amber-50",
+    colorClass: "text-[#009639]",
+    bgClass: "bg-[#009639]/10",
   },
 ];
 
@@ -130,9 +130,9 @@ export function About() {
   const [currentImage, setCurrentImage] = useState(0);
 
   const heroImages = [
-    "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&fit=crop",
-    "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1400&fit=crop",
-    "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1400&fit=crop",
+    "/src/assets/images/teachers.jpg",
+    "/src/assets/images/teacher.jpg",
+    "/src/assets/images/primary_teacher.jpg",
   ];
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export function About() {
       ([entry]) => {
         if (entry.isIntersecting) setImpactVisible(true);
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     if (impactRef.current) observer.observe(impactRef.current);
     return () => observer.disconnect();
@@ -177,28 +177,29 @@ export function About() {
           </div>
           {/* Decorative blobs */}
           <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-white/5 blur-3xl z-10" />
-          <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-[#FCDD09]/10 blur-3xl z-10" />
+          <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-[#00b359]/10 blur-3xl z-10" />
 
           <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white/80 text-sm font-medium px-4 py-2 rounded-full mb-6">
-                <Sparkles className="w-4 h-4 text-[#FCDD09]" />
+                <Sparkles className="w-4 h-4 text-[#00b359]" />
                 Transforming lives through education
               </div>
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
                 About{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FCDD09] to-[#FFA500]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#009639] to-[#00b359]">
                   DeboEthiopia
                 </span>
               </h1>
               <p className="text-xl text-white/80 leading-relaxed mb-10 max-w-2xl">
-                A non-profit organization dedicated to transforming lives through education,
-                innovation, and community empowerment in Ethiopia — one child at a time.
+                A non-profit organization dedicated to transforming lives
+                through education, innovation, and community empowerment in
+                Ethiopia — one child at a time.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a
                   href="/BoardLeadership"
-                  className="inline-flex items-center gap-2 bg-white text-[#009639] font-semibold px-6 py-3 rounded-full hover:bg-[#FCDD09] hover:text-black transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 bg-white text-[#009639] font-semibold px-6 py-3 rounded-full hover:bg-[#00b359] hover:text-black transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Meet Our Team <ArrowRight className="w-4 h-4" />
                 </a>
@@ -216,7 +217,7 @@ export function About() {
           <div className="absolute z-20 right-8 top-1/2 -translate-y-1/2 hidden xl:block w-80">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20">
               <img
-                src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=640&h=480&fit=crop"
+                src="/src/assets/images/IMG_20231206_144403.jpg"
                 alt="Ethiopian students"
                 className="w-full h-64 object-cover"
               />
@@ -234,8 +235,11 @@ export function About() {
               <button
                 key={idx}
                 onClick={() => setCurrentImage(idx)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${idx === currentImage ? "bg-white scale-125" : "bg-white/40 hover:bg-white/80"
-                  }`}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  idx === currentImage
+                    ? "bg-white scale-125"
+                    : "bg-white/40 hover:bg-white/80"
+                }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
@@ -273,25 +277,25 @@ export function About() {
                   <span className="text-[#009639]">Purpose & Passion</span>
                 </h2>
                 <p className="text-lg text-gray-600 mb-5 leading-relaxed">
-                  DeboEthiopia was founded with a simple yet powerful vision: to ensure every
-                  child in Ethiopia has access to quality education and the opportunity to
-                  reach their full potential.
+                  DeboEthiopia was founded with a simple yet powerful vision: to
+                  ensure every child in Ethiopia has access to quality education
+                  and the opportunity to reach their full potential.
                 </p>
                 <p className="text-lg text-gray-600 mb-5 leading-relaxed">
-                  Since our inception, we've grown from a small grassroots initiative to a
-                  comprehensive educational organization serving thousands of students across
-                  Ethiopia's diverse regions.
+                  Since our inception, we've grown from a small grassroots
+                  initiative to a comprehensive educational organization serving
+                  thousands of students across Ethiopia's diverse regions.
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  Today, we work with local communities, schools, and global partners to
-                  provide educational resources, technology training, scholarships, and
-                  mentorship programs.
+                  Today, we work with local communities, schools, and global
+                  partners to provide educational resources, technology
+                  training, scholarships, and mentorship programs.
                 </p>
               </div>
 
               {/* Timeline */}
               <div className="relative">
-                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#009639] to-[#FCDD09]" />
+                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#009639] to-[#00b359]" />
                 <div className="space-y-8">
                   {timeline.map((item, i) => (
                     <div key={i} className="relative pl-16">
@@ -301,7 +305,9 @@ export function About() {
                         </span>
                       </div>
                       <div className="bg-gray-50 rounded-xl p-4 hover:shadow-md transition-shadow">
-                        <p className="text-xs font-bold text-[#009639] mb-1">{item.year}</p>
+                        <p className="text-xs font-bold text-[#009639] mb-1">
+                          {item.year}
+                        </p>
                         <p className="text-sm text-gray-700">{item.event}</p>
                       </div>
                     </div>
@@ -316,7 +322,9 @@ export function About() {
         <section className="py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-extrabold text-gray-900 mb-4">Our Purpose</h2>
+              <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+                Our Purpose
+              </h2>
               <p className="text-lg text-gray-500 max-w-xl mx-auto">
                 Guided by a clear mission and an inspiring vision.
               </p>
@@ -332,9 +340,10 @@ export function About() {
                   </div>
                   <h3 className="text-3xl font-bold mb-4">Our Mission</h3>
                   <p className="text-white/85 text-lg leading-relaxed">
-                    To empower Ethiopian children and youth through accessible, quality
-                    education and innovative technology programs that foster critical thinking,
-                    creativity, and leadership skills for a brighter future.
+                    To empower Ethiopian children and youth through accessible,
+                    quality education and innovative technology programs that
+                    foster critical thinking, creativity, and leadership skills
+                    for a brighter future.
                   </p>
                 </div>
               </div>
@@ -348,9 +357,10 @@ export function About() {
                   </div>
                   <h3 className="text-3xl font-bold mb-4">Our Vision</h3>
                   <p className="text-white/85 text-lg leading-relaxed">
-                    A future where every Ethiopian child — regardless of geography, gender, or
-                    socioeconomic status — has equal access to transformative educational
-                    opportunities and can contribute to Ethiopia's growth.
+                    A future where every Ethiopian child — regardless of
+                    geography, gender, or socioeconomic status — has equal
+                    access to transformative educational opportunities and can
+                    contribute to Ethiopia's growth.
                   </p>
                 </div>
               </div>
@@ -365,9 +375,12 @@ export function About() {
               <div className="flex items-center justify-center gap-2 text-[#009639] font-semibold uppercase tracking-widest text-sm mb-4">
                 <Sparkles className="w-5 h-5" /> What Drives Us
               </div>
-              <h2 className="text-4xl font-extrabold text-gray-900 mb-4">Our Core Values</h2>
+              <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+                Our Core Values
+              </h2>
               <p className="text-lg text-gray-500 max-w-xl mx-auto">
-                These principles guide every decision we make and every life we touch.
+                These principles guide every decision we make and every life we
+                touch.
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -381,8 +394,12 @@ export function About() {
                   >
                     <value.icon className={`w-7 h-7 ${value.colorClass}`} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{value.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    {value.description}
+                  </p>
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#009639] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               ))}
@@ -395,17 +412,17 @@ export function About() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-3 gap-4 rounded-2xl overflow-hidden h-64">
               <img
-                src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&h=400&fit=crop"
+                src="/src/assets/images/IMG_20231210_135056.jpg"
                 alt="Students in class"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
               <img
-                src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=500&h=400&fit=crop"
+                src="/src/assets/images/robotics1.jpg"
                 alt="Community gathering"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
               <img
-                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500&h=400&fit=crop"
+                src="/src/assets/images/Grade_9.jpg"
                 alt="Library books"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
@@ -420,13 +437,13 @@ export function About() {
               Join Us in Making a Difference
             </h2>
             <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              Whether you volunteer, donate, or spread the word — every action helps a child
-              in Ethiopia unlock their potential.
+              Whether you volunteer, donate, or spread the word — every action
+              helps a child in Ethiopia unlock their potential.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href="/donate"
-                className="inline-flex items-center gap-2 bg-[#FCDD09] text-black font-bold px-8 py-4 rounded-full hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 hover:shadow-2xl transition-all duration-300"
               >
                 Donate Now <Heart className="w-5 h-5" />
               </a>
