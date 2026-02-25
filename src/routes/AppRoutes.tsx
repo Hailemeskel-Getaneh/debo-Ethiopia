@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 // Layouts
@@ -30,6 +30,10 @@ import { Newsletter } from "../features/newsletter/Newsletter";
 import { Donate } from "../features/donate/Donate";
 import { Contact } from "../features/contact/Contact";
 import Achievements from "../features/achievements/Achievements";
+import ManagePrograms from "../admin/ManagePrograms";
+import NotificationHub from "../admin/NotificationHub";
+import ManageSubscribers from "../admin/ManageSubscribers";
+import ManageMetrics from "../admin/ManageMetrics";
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated, userRole } = useAuth();
@@ -58,7 +62,16 @@ const AppRoutes: React.FC = () => {
       {/* User Routes */}
       <Route element={<ProtectedRoute isAllowed={isAuthenticated} />}>
         <Route element={<UserLayout />}>
-          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              userRole === "admin" ? (
+                <Navigate to="/admin/dashboard" replace />
+              ) : (
+                <AdminDashboard />
+              )
+            }
+          />
           <Route path="/profile" element={<div>Profile Placeholder</div>} />
         </Route>
       </Route>
@@ -82,6 +95,10 @@ const AppRoutes: React.FC = () => {
           <Route path="/admin/gallery" element={<ManageGallery />} />
           <Route path="/admin/messages" element={<ManageMessages />} />
           <Route path="/admin/achievements" element={<ManageAchievements />} />
+          <Route path="/admin/programs" element={<ManagePrograms />} />
+          <Route path="/admin/subscribers" element={<ManageSubscribers />} />
+          <Route path="/admin/metrics" element={<ManageMetrics />} />
+          <Route path="/admin/notifications" element={<NotificationHub />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
       </Route>
