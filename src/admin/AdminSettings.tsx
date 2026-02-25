@@ -28,7 +28,7 @@ const AdminSettings: React.FC = () => {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === tab.id
-                            ? 'bg-[--color-primary-50] text-[--color-primary-700] dark:bg-[--color-primary-900]/20 dark:text-[--color-primary-400]'
+                            ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400'
                             : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
                             }`}
                     >
@@ -64,24 +64,24 @@ const AdminSettings: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label htmlFor="firstName" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">First Name</label>
-                                <input id="firstName" type="text" defaultValue="Admin" className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20" />
+                                <input id="firstName" type="text" defaultValue="Admin" className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Last Name</label>
-                                <input type="text" defaultValue="User" className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20" />
+                                <input type="text" defaultValue="User" className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                             </div>
                             <div className="space-y-2 md:col-span-2">
                                 <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Email Address</label>
-                                <input type="email" defaultValue="admin@debo.org" className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20" />
+                                <input type="email" defaultValue="admin@debo.org" className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                             </div>
                             <div className="space-y-2 md:col-span-2">
                                 <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Bio</label>
-                                <textarea className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20 min-h-[100px]" defaultValue="Managing the DEBO platform operations." />
+                                <textarea className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 min-h-[100px]" defaultValue="Managing the DEBO platform operations." />
                             </div>
                         </div>
 
                         <div className="pt-4 flex justify-end">
-                            <button className="flex items-center gap-2 bg-[--color-primary-600] text-white px-6 py-2.5 rounded-xl font-medium hover:bg-[--color-primary-700] transition-colors shadow-lg shadow-[--color-primary-500]/20">
+                            <button className="flex items-center gap-2 bg-primary-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20">
                                 <Save className="w-4 h-4" /> Save Changes
                             </button>
                         </div>
@@ -99,15 +99,15 @@ const AdminSettings: React.FC = () => {
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Current Password</label>
-                                <input type="password" className="w-full max-w-md px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20" />
+                                <input type="password" className="w-full max-w-md px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">New Password</label>
-                                <input type="password" className="w-full max-w-md px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20" />
+                                <input type="password" className="w-full max-w-md px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Confirm New Password</label>
-                                <input type="password" className="w-full max-w-md px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-[--color-primary-500]/20" />
+                                <input type="password" className="w-full max-w-md px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20" />
                             </div>
                         </div>
 
@@ -118,7 +118,7 @@ const AdminSettings: React.FC = () => {
                                     <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Secure your account</p>
                                     <p className="text-xs text-zinc-500 dark:text-zinc-400">Add an extra layer of security.</p>
                                 </div>
-                                <button className="text-sm font-medium text-[--color-primary-600]">Enable</button>
+                                <button className="text-sm font-medium text-primary-600">Enable</button>
                             </div>
                         </div>
                     </motion.div>
