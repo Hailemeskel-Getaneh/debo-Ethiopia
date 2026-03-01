@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     BellRing,
     Send,
@@ -10,42 +10,63 @@ import {
     Filter,
     Clock,
     CheckCircle2,
-    AlertCircle
+    AlertCircle,
+    Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface NotificationLog {
-    id: string;
-    type: 'News' | 'Event' | 'Broadcast' | 'Update';
-    title: string;
-    recipientCount: number;
-    status: 'Sent' | 'Failed' | 'Draft';
-    timestamp: string;
-}
+import { notificationsService } from '../services/notifications.service';
+import type { NotificationLog, NotificationStatus, NotificationType } from '../types/admin';
 
 const NotificationHub: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isBroadcastOpen, setIsBroadcastOpen] = useState(false);
+    const [history, setHistory] = useState<NotificationLog[]>([]);
+    const [stats, setStats] = useState({
+        total_subscribers: 0,
+        sent_this_month: 0,
+        avg_open_rate: '0%'
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [saving, setSaving] = useState(false);
 
-    // Mock Notification History
-    const [history, setHistory] = useState<NotificationLog[]>([
-        { id: '1', type: 'News', title: 'New Clean Water Initiative Launch', recipientCount: 1250, status: 'Sent', timestamp: '2026-02-15T10:05:00' },
-        { id: '2', type: 'Event', title: 'Annual Charity Gala Invitation', recipientCount: 1250, status: 'Sent', timestamp: '2026-02-10T14:30:00' },
-        { id: '3', type: 'Broadcast', title: 'Monthly impact Report - January', recipientCount: 1245, status: 'Sent', timestamp: '2026-02-01T09:00:00' },
-        { id: '4', type: 'News', title: 'Youth Coding Bootcamp Graduation', recipientCount: 1240, status: 'Sent', timestamp: '2026-01-25T11:15:00' },
-    ]);
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const [historyRes, statsRes] = await Promise.all([
+                notificationsService.list({ search: searchTerm }),
+                notificationsService.getStats()
+            ]);
+            setHistory(historyRes.results);
+            setStats(statsRes);
+        } catch (err) {
+            setError('Failed to load notification data.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }, [searchTerm]);
 
-    const filteredHistory = history.filter(h =>
-        h.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        h.type.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
-    const getTypeIcon = (type: string) => {
+    const getTypeIcon = (type: NotificationType) => {
         switch (type) {
             case 'News': return <Mail className="w-4 h-4" />;
             case 'Event': return <Clock className="w-4 h-4" />;
             case 'Broadcast': return <Send className="w-4 h-4" />;
             default: return <BellRing className="w-4 h-4" />;
+        }
+    };
+
+    const getStatusStyle = (status: NotificationStatus) => {
+        switch (status) {
+            case 'Sent': return 'bg-green-50 text-green-600 border-green-100 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800/50';
+            case 'Failed': return 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800/50';
+            case 'Pending': return 'bg-yellow-50 text-yellow-600 border-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800/50';
+            default: return 'bg-zinc-50 text-zinc-600 border-zinc-100 dark:bg-zinc-800/20 dark:text-zinc-400 dark:border-zinc-700/50';
         }
     };
 
@@ -72,9 +93,9 @@ const NotificationHub: React.FC = () => {
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                    { label: 'Total Subscribers', value: '1,250', icon: Users, color: 'text-blue-600 bg-blue-50' },
-                    { label: 'Sent This Month', value: '12', icon: Send, color: 'text-green-600 bg-green-50' },
-                    { label: 'Avg Open Rate', value: '64%', icon: CheckCircle2, color: 'text-purple-600 bg-purple-50' },
+                    { label: 'Total Subscribers', value: stats.total_subscribers.toLocaleString(), icon: Users, color: 'text-blue-600 bg-blue-50' },
+                    { label: 'Sent This Month', value: stats.sent_this_month.toString(), icon: Send, color: 'text-green-600 bg-green-50' },
+                    { label: 'Avg Open Rate', value: stats.avg_open_rate, icon: CheckCircle2, color: 'text-purple-600 bg-purple-50' },
                 ].map((stat, idx) => (
                     <div key={idx} className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 flex items-center gap-4">
                         <div className={`p-3 rounded-xl ${stat.color} dark:bg-zinc-800`}>
@@ -87,6 +108,14 @@ const NotificationHub: React.FC = () => {
                     </div>
                 ))}
             </div>
+
+            {error && (
+                <div className="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 rounded-xl text-red-700 dark:text-red-300">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <p className="text-sm">{error}</p>
+                    <button onClick={fetchData} className="ml-auto text-xs underline">Retry</button>
+                </div>
+            )}
 
             {/* History Table */}
             <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-zinc-100 dark:border-zinc-800 overflow-hidden">
@@ -103,10 +132,10 @@ const NotificationHub: React.FC = () => {
                                 placeholder="Search history..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 outline-none transition-all"
+                                className="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 outline-none transition-all"
                             />
                         </div>
-                        <button className="p-2 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-zinc-400 hover:text-zinc-600 transition-colors">
+                        <button className="p-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-400 hover:text-zinc-600 transition-colors">
                             <Filter className="w-4 h-4" />
                         </button>
                     </div>
@@ -124,7 +153,19 @@ const NotificationHub: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-medium">
-                            {filteredHistory.map((log, index) => (
+                            {loading ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-12 text-center">
+                                        <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto" />
+                                    </td>
+                                </tr>
+                            ) : history.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
+                                        No notification history found.
+                                    </td>
+                                </tr>
+                            ) : history.map((log, index) => (
                                 <motion.tr
                                     key={log.id}
                                     initial={{ opacity: 0, x: -10 }}
@@ -145,12 +186,14 @@ const NotificationHub: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                                            {log.recipientCount.toLocaleString()} Subscribers
+                                            {log.recipient_count.toLocaleString()} Subscribers
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs font-bold border border-green-100 dark:border-green-800/50">
-                                            <CheckCircle2 className="w-3.5 h-3.5" />
+                                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${getStatusStyle(log.status)}`}>
+                                            {log.status === 'Sent' && <CheckCircle2 className="w-3.5 h-3.5" />}
+                                            {log.status === 'Failed' && <AlertCircle className="w-3.5 h-3.5" />}
+                                            {log.status === 'Pending' && <Clock className="w-3.5 h-3.5" />}
                                             {log.status}
                                         </div>
                                     </td>
@@ -196,19 +239,22 @@ const NotificationHub: React.FC = () => {
                                 </div>
                             </div>
 
-                            <form className="space-y-6" onSubmit={(e) => {
+                            <form className="space-y-6" onSubmit={async (e) => {
                                 e.preventDefault();
+                                setSaving(true);
                                 const formData = new FormData(e.currentTarget);
-                                const newLog: NotificationLog = {
-                                    id: (history.length + 1).toString(),
-                                    type: 'Broadcast',
-                                    title: formData.get('subject') as string,
-                                    recipientCount: 1250,
-                                    status: 'Sent',
-                                    timestamp: new Date().toISOString()
-                                };
-                                setHistory([newLog, ...history]);
-                                setIsBroadcastOpen(false);
+                                try {
+                                    await notificationsService.broadcast({
+                                        subject: formData.get('subject') as string,
+                                        message: formData.get('message') as string
+                                    });
+                                    setIsBroadcastOpen(false);
+                                    fetchData();
+                                } catch {
+                                    alert('Failed to send broadcast.');
+                                } finally {
+                                    setSaving(false);
+                                }
                             }}>
                                 <div className="space-y-4">
                                     <div className="space-y-2">
@@ -233,7 +279,7 @@ const NotificationHub: React.FC = () => {
                                     <div className="p-4 bg-primary-50 dark:bg-primary-900/10 rounded-2xl flex gap-3">
                                         <AlertCircle className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
                                         <p className="text-xs text-primary-800 dark:text-primary-300 leading-relaxed">
-                                            This message will be sent to <strong>1,250 subscribers</strong>. Please review carefully before broadcasting.
+                                            This message will be sent to <strong>{stats.total_subscribers.toLocaleString()} subscribers</strong>. Please review carefully before broadcasting.
                                         </p>
                                     </div>
                                 </div>
@@ -248,10 +294,11 @@ const NotificationHub: React.FC = () => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-1 px-6 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 shadow-lg shadow-primary-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+                                        disabled={saving}
+                                        className="flex-1 px-6 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 shadow-lg shadow-primary-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
                                     >
-                                        <Send className="w-4 h-4" />
-                                        Send Now
+                                        {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                                        {saving ? 'Sending...' : 'Send Now'}
                                     </button>
                                 </div>
                             </form>
@@ -264,4 +311,3 @@ const NotificationHub: React.FC = () => {
 };
 
 export default NotificationHub;
-

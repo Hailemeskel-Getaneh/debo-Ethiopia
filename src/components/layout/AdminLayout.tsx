@@ -22,11 +22,12 @@ import {
   BellRing,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import logo from "@/assets/images/image copy.png";
 
 const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
@@ -57,18 +58,15 @@ const AdminLayout: React.FC = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-30 w-72 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 transform transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:relative lg:translate-x-0 flex flex-col shadow-xl lg:shadow-none`}
+        className={`fixed inset-y-0 left-0 z-30 w-72 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:relative lg:translate-x-0 flex flex-col shadow-xl lg:shadow-none`}
       >
         {/* Logo Area */}
         <div className="h-20 flex items-center px-8 border-b border-zinc-100 dark:border-zinc-800/50">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-900 to-secondary-900 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-primary-500/20">
-              D
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent">
-              DEBO Admin
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="DEBO" className="h-8 w-auto object-contain" />
+            <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              DEBO
             </span>
           </div>
           <button
@@ -90,18 +88,16 @@ const AdminLayout: React.FC = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
-                  isActive
-                    ? "bg-[--color-primary-50] text-[--color-primary-700] dark:bg-[--color-primary-500]/10 dark:text-[--color-primary-400] shadow-sm ring-1 ring-[--color-primary-500]/10"
-                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100"
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
+                  ? "bg-[--color-primary-50] text-[--color-primary-700] dark:bg-[--color-primary-500]/10 dark:text-[--color-primary-400] shadow-sm ring-1 ring-[--color-primary-500]/10"
+                  : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100"
+                  }`}
               >
                 <item.icon
-                  className={`w-5 h-5 transition-colors duration-200 ${
-                    isActive
-                      ? "text-[--color-primary-600] dark:text-[--color-primary-400]"
-                      : "text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
-                  }`}
+                  className={`w-5 h-5 transition-colors duration-200 ${isActive
+                    ? "text-[--color-primary-600] dark:text-[--color-primary-400]"
+                    : "text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
+                    }`}
                 />
                 {item.name}
               </Link>
@@ -113,14 +109,20 @@ const AdminLayout: React.FC = () => {
         <div className="p-4 border-t border-zinc-100 dark:border-zinc-800/50 bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm">
           <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700 transition-all shadow-sm hover:shadow-md cursor-pointer group">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-zinc-200 to-zinc-100 dark:from-zinc-700 dark:to-zinc-800 flex items-center justify-center text-zinc-500 dark:text-zinc-300 font-bold border-2 border-white dark:border-zinc-700 shadow-sm relative overflow-hidden">
-              <span className="text-sm">AD</span>
+              {user?.image ? (
+                <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-sm">
+                  {user?.first_name?.[0]}{user?.last_name?.[0]}
+                </span>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                Admin User
+                {user?.first_name} {user?.last_name}
               </p>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
-                admin@debo.org
+                {user?.email}
               </p>
             </div>
             <button
