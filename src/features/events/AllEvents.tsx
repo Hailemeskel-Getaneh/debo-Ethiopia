@@ -1,15 +1,8 @@
 import { useState } from "react";
-import {
-  Search,
-  MapPin,
-  Clock,
-  ArrowRight,
-  Sparkles,
-  ChevronRight,
-  Users,
-} from "lucide-react";
+import { Search, MapPin, Clock, Sparkles, ChevronRight } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
+import { useEvents } from "@/hooks/useEvents";
 
 const filters = [
   { id: "all", label: "All Events" },
@@ -17,167 +10,88 @@ const filters = [
   { id: "past", label: "Past" },
 ];
 
-const typeColors: Record<string, string> = {
-  Fundraiser: "bg-[#009639]/10 text-[#009639]",
-  Conference: "bg-[#009639]/10 text-[#009639]",
-  Workshop: "bg-[#009639]/10 text-[#009639]",
-  Ceremony: "bg-[#009639]/10 text-[#009639]",
-  Community: "bg-[#009639]/10 text-[#009639]",
-  Gala: "bg-[#009639]/10 text-[#009639]",
+// Backend schema: { program_id, title, description, location, start_date, end_date }
+interface Event {
+  program_id: number;
+  title: string;
+  description: string;
+  location: string;
+  start_date: string;
+  end_date: string;
+}
+
+// Helper to determine if event is upcoming or past
+const getEventType = (startDate: string): "upcoming" | "past" => {
+  return new Date(startDate) > new Date() ? "upcoming" : "past";
 };
 
-const events = [
-  {
-    id: 1,
-    type: "upcoming",
-    title: "Annual Education Gala 2025",
-    category: "Gala",
-    description:
-      "Our flagship annual fundraising gala celebrating education heroes and raising funds for the next year's scholarships and programs.",
-    date: "Jun 14, 2025",
-    time: "6:00 PM – 10:00 PM",
-    location: "Sheraton Addis Ababa",
-    city: "Addis Ababa",
-    seats: 300,
-    seatsLeft: 45,
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&h=480&fit=crop",
-    registration: true,
-  },
-  {
-    id: 2,
-    type: "upcoming",
-    title: "STEM Summer Camp Registration Day",
-    category: "Community",
-    description:
-      "Open registration day for our 3-week summer STEM camp for students aged 10–17. Meet mentors, tour the facilities, and sign up your child.",
-    date: "May 10, 2025",
-    time: "9:00 AM – 3:00 PM",
-    location: "DeboEthiopia Learning Center",
-    city: "Addis Ababa",
-    seats: 120,
-    seatsLeft: 32,
-    image:
-      "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=700&h=480&fit=crop",
-    registration: true,
-  },
-  {
-    id: 3,
-    type: "upcoming",
-    title: "Girls in Tech Workshop",
-    category: "Workshop",
-    description:
-      "A one-day interactive workshop empowering girls aged 13–18 with coding, design, and tech entrepreneurship skills led by women in tech.",
-    date: "May 24, 2025",
-    time: "8:30 AM – 4:00 PM",
-    location: "Gondar Community Hall",
-    city: "Gondar",
-    seats: 80,
-    seatsLeft: 20,
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&h=480&fit=crop",
-    registration: true,
-  },
-  {
-    id: 4,
-    type: "upcoming",
-    title: "Education Policy Symposium",
-    category: "Conference",
-    description:
-      "A multi-stakeholder conference bringing together policymakers, educators, and NGOs to discuss the future of education in Ethiopia.",
-    date: "Jul 8, 2025",
-    time: "8:00 AM – 5:00 PM",
-    location: "Addis Ababa University",
-    city: "Addis Ababa",
-    seats: 500,
-    seatsLeft: 180,
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&h=480&fit=crop",
-    registration: true,
-  },
-  {
-    id: 5,
-    type: "past",
-    title: "Year-End Scholarship Ceremony 2024",
-    category: "Ceremony",
-    description:
-      "Celebrated 50 scholarship recipients from the Gondar Girls' Initiative with their families, mentors, and school principals.",
-    date: "Dec 12, 2024",
-    time: "10:00 AM – 1:00 PM",
-    location: "Gondar City Hall",
-    city: "Gondar",
-    seats: 250,
-    seatsLeft: 0,
-    image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=700&h=480&fit=crop",
-    registration: false,
-  },
-  {
-    id: 6,
-    type: "past",
-    title: "Community Health Fair 2024",
-    category: "Community",
-    description:
-      "Free health screenings, nutrition workshops, and hygiene education for 2,000+ community members across 3 neighborhoods in Hawassa.",
-    date: "Nov 5, 2024",
-    time: "8:00 AM – 4:00 PM",
-    location: "Hawassa Stadium Grounds",
-    city: "Hawassa",
-    seats: 2000,
-    seatsLeft: 0,
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=700&h=480&fit=crop",
-    registration: false,
-  },
-  {
-    id: 7,
-    type: "past",
-    title: "Teachers Innovation Hackathon",
-    category: "Workshop",
-    description:
-      "48-hour hackathon where 80 teachers co-designed new classroom teaching tools and digital lesson plans now used in 15 schools.",
-    date: "Oct 18, 2024",
-    time: "9:00 AM (2 days)",
-    location: "Mekelle University",
-    city: "Mekelle",
-    seats: 100,
-    seatsLeft: 0,
-    image:
-      "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=700&h=480&fit=crop",
-    registration: false,
-  },
-  {
-    id: 8,
-    type: "past",
-    title: "Annual Fundraising Gala 2024",
-    category: "Gala",
-    description:
-      "Raised over $120,000 in a single evening to fund the Bole Library Expansion and Hawassa Water Initiative. 400 guests attended.",
-    date: "Jun 8, 2024",
-    time: "6:00 PM – 11:00 PM",
-    location: "Hilton Addis Ababa",
-    city: "Addis Ababa",
-    seats: 400,
-    seatsLeft: 0,
-    image:
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700&h=480&fit=crop",
-    registration: false,
-  },
-];
+// Format date for display
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+// Format time for display
+const formatTime = (startDate: string, endDate: string): string => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  };
+  return `${start.toLocaleTimeString("en-US", timeOptions)} - ${end.toLocaleTimeString("en-US", timeOptions)}`;
+};
 
 export function AllEvents() {
+  const { events, loading, error } = useEvents();
   const [activeFilter, setActiveFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  const filtered = events.filter((e) => {
+  // Add type property to events for filtering
+  const eventsWithType: (Event & { type: "upcoming" | "past" })[] = events.map(
+    (event: Event) => ({
+      ...event,
+      type: getEventType(event.start_date),
+    }),
+  );
+
+  const filtered = eventsWithType.filter((e) => {
     const matchType = activeFilter === "all" || e.type === activeFilter;
     const matchSearch =
       search === "" ||
       e.title.toLowerCase().includes(search.toLowerCase()) ||
-      e.city.toLowerCase().includes(search.toLowerCase()) ||
-      e.category.toLowerCase().includes(search.toLowerCase());
+      e.location.toLowerCase().includes(search.toLowerCase());
     return matchType && matchSearch;
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#009639] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-[#009639] text-white rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -208,7 +122,7 @@ export function AllEvents() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search events by name, city, or type..."
+                placeholder="Search events by name or location..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/95 text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#00b359]"
@@ -223,11 +137,11 @@ export function AllEvents() {
             <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
               {[
                 {
-                  value: `${events.filter((e) => e.type === "upcoming").length}`,
+                  value: `${eventsWithType.filter((e) => e.type === "upcoming").length}`,
                   label: "Upcoming Events",
                 },
                 {
-                  value: `${events.filter((e) => e.type === "past").length}`,
+                  value: `${eventsWithType.filter((e) => e.type === "past").length}`,
                   label: "Past Events",
                 },
                 { value: "6+", label: "Cities Reached" },
@@ -278,31 +192,25 @@ export function AllEvents() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
                 {filtered.map((event) => (
                   <div
-                    key={event.id}
+                    key={event.program_id}
                     className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col cursor-pointer"
                   >
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={event.image}
-                        alt={event.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                    <div className="relative h-56 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#003d1a] to-[#009639] flex items-center justify-center">
+                        <Sparkles className="w-16 h-16 text-white/20" />
+                      </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                       {/* Date badge */}
                       <div className="absolute top-4 left-4 bg-white rounded-xl p-2 text-center shadow-md min-w-[48px]">
                         <p className="text-xs font-bold text-[#009639] uppercase leading-tight">
-                          {event.date.split(" ")[0]}
+                          {formatDate(event.start_date).split(" ")[0]}
                         </p>
                         <p className="text-xl font-black text-gray-900 leading-tight">
-                          {event.date.split(" ")[1].replace(",", "")}
+                          {formatDate(event.start_date)
+                            .split(" ")[1]
+                            .replace(",", "")}
                         </p>
                       </div>
-                      {/* Type badge */}
-                      <span
-                        className={`absolute top-4 right-4 text-xs font-bold px-3 py-1.5 rounded-full ${typeColors[event.category] ?? "bg-gray-100 text-gray-600"}`}
-                      >
-                        {event.category}
-                      </span>
                       {event.type === "past" && (
                         <span className="absolute bottom-4 left-4 bg-black/60 text-white text-xs font-bold px-3 py-1 rounded-full">
                           Past Event
@@ -311,6 +219,13 @@ export function AllEvents() {
                     </div>
 
                     <div className="p-6 flex flex-col flex-1">
+                      <div className="flex items-center gap-2 text-[#009639] mb-3">
+                        <Sparkles className="w-5 h-5" />
+                        <span className="text-xs font-bold uppercase tracking-wide">
+                          {event.type === "past" ? "Completed" : "Upcoming"}
+                        </span>
+                      </div>
+
                       <h3 className="text-lg font-bold text-gray-900 mb-2">
                         {event.title}
                       </h3>
@@ -320,21 +235,16 @@ export function AllEvents() {
 
                       <div className="space-y-1.5 mb-4 text-xs text-gray-400">
                         <span className="flex items-center gap-2">
-                          <Clock className="w-3.5 h-3.5" /> {event.date} ·{" "}
-                          {event.time}
+                          <Clock className="w-3.5 h-3.5" />{" "}
+                          {formatDate(event.start_date)} ·{" "}
+                          {formatTime(event.start_date, event.end_date)}
                         </span>
                         <span className="flex items-center gap-2">
                           <MapPin className="w-3.5 h-3.5" /> {event.location}
                         </span>
-                        <span className="flex items-center gap-2">
-                          <Users className="w-3.5 h-3.5" />
-                          {event.type === "upcoming"
-                            ? `${event.seatsLeft} seats remaining`
-                            : `${event.seats} attended`}
-                        </span>
                       </div>
 
-                      {event.registration ? (
+                      {event.type === "upcoming" ? (
                         <a
                           href="/contact"
                           className="inline-flex items-center justify-center gap-1.5 bg-[#009639] text-white font-semibold text-sm py-2.5 rounded-xl hover:bg-[#007a2e] transition-colors"
@@ -351,25 +261,6 @@ export function AllEvents() {
                 ))}
               </div>
             )}
-          </div>
-        </section>
-
-        {/* ── CTA ── */}
-        <section className="py-20 bg-gradient-to-br from-[#003d1a] to-[#009639] text-white">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-4xl font-extrabold mb-4">
-              Want to Partner on an Event?
-            </h2>
-            <p className="text-xl text-white/75 mb-8">
-              We welcome sponsors, volunteers, and community partners who want
-              to help make our events impactful.
-            </p>
-            <a
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 hover:shadow-2xl transition-all duration-300"
-            >
-              Get in Touch <ArrowRight className="w-5 h-5" />
-            </a>
           </div>
         </section>
       </main>

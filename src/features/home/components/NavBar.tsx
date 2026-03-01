@@ -78,21 +78,7 @@ const NavBar = () => {
             </li>
 
             <li>
-              <a>Programs</a>
-              <ul className="p-2">
-                <li>
-                  <a href="/programs">All Programs</a>
-                </li>
-                <li>
-                  <a href="/programs?type=education">Education</a>
-                </li>
-                <li>
-                  <a href="/programs?type=health">Health</a>
-                </li>
-                <li>
-                  <a href="/programs?type=social">Social Support</a>
-                </li>
-              </ul>
+              <a href="/programs">Programs</a>
             </li>
 
             <li>
@@ -193,49 +179,9 @@ const NavBar = () => {
           </li>
 
           <li>
-            <details open={openMenu === "programs"}>
-              <summary
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleMenu("programs");
-                }}
-                aria-expanded={openMenu === "programs"}
-                aria-haspopup="true"
-              >
-                Programs
-              </summary>
-              <ul className="p-2 bg-base-100 w-52 shadow">
-                <li>
-                  <a href="/programs" onClick={() => setOpenMenu(null)}>
-                    All Programs
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/programs?type=education"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    Education
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/programs?type=health"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    Health
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/programs?type=social"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    Social Support
-                  </a>
-                </li>
-              </ul>
-            </details>
+            <a href="/programs" onClick={() => setOpenMenu(null)}>
+              Programs
+            </a>
           </li>
 
           <li>

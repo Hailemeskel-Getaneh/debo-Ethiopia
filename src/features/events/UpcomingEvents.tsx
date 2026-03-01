@@ -1,296 +1,163 @@
-import {
-  Calendar,
-  MapPin,
-  Clock,
-  Users,
-  ArrowRight,
-  ChevronRight,
-  Sparkles,
-} from "lucide-react";
+import { Calendar, MapPin, Clock, ChevronRight, Sparkles } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
+import { useEvents } from "@/hooks/useEvents";
 
-const typeColors: Record<string, string> = {
-  Fundraiser: "bg-[#009639]/10 text-[#009639]",
-  Conference: "bg-[#009639]/10 text-[#009639]",
-  Workshop: "bg-[#009639]/10 text-[#009639]",
-  Ceremony: "bg-[#009639]/10 text-[#009639]",
-  Community: "bg-[#009639]/10 text-[#009639]",
-  Gala: "bg-[#009639]/10 text-[#009639]",
+// Backend schema: { program_id, title, description, location, start_date, end_date }
+interface Event {
+  program_id: number;
+  title: string;
+  description: string;
+  location: string;
+  start_date: string;
+  end_date: string;
+}
+
+// Format date for display
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 };
 
-const upcomingEvents = [
-  {
-    title: "Annual Education Gala 2025",
-    category: "Gala",
-    description:
-      "Our flagship fundraising gala celebrating education heroes and raising funds for next year's scholarships, libraries, and tech programs. Black-tie optional.",
-    date: "Jun 14, 2025",
-    month: "JUN",
-    day: "14",
-    time: "6:00 PM – 10:00 PM",
-    location: "Sheraton Addis Ababa",
-    city: "Addis Ababa",
-    seats: 300,
-    seatsLeft: 45,
-    image:
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700&h=480&fit=crop",
-    highlights: [
-      "Awards ceremony for 10 education champions",
-      "Live music and cultural performances",
-      "Silent auction with exclusive lots",
-      "3-course dinner included",
-    ],
-  },
-  {
-    title: "STEM Summer Camp Registration Day",
-    category: "Community",
-    description:
-      "Open day for parents and students to register for our 3-week summer STEM camp. Meet mentors, tour labs, and get your child enrolled for an unforgettable summer.",
-    date: "May 10, 2025",
-    month: "MAY",
-    day: "10",
-    time: "9:00 AM – 3:00 PM",
-    location: "DeboEthiopia Learning Center",
-    city: "Addis Ababa",
-    seats: 120,
-    seatsLeft: 32,
-    image:
-      "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=700&h=480&fit=crop",
-    highlights: [
-      "Meet STEM mentors and program leaders",
-      "Tour of computer labs and maker space",
-      "Demo coding and robotics sessions",
-      "Early bird registration discounts available",
-    ],
-  },
-  {
-    title: "Girls in Tech Workshop",
-    category: "Workshop",
-    description:
-      "A full-day interactive workshop empowering girls aged 13–18 with hands-on coding, UI design, and entrepreneurship sessions led by Ethiopia's leading women in tech.",
-    date: "May 24, 2025",
-    month: "MAY",
-    day: "24",
-    time: "8:30 AM – 4:00 PM",
-    location: "Gondar Community Hall",
-    city: "Gondar",
-    seats: 80,
-    seatsLeft: 20,
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&h=480&fit=crop",
-    highlights: [
-      "Hands-on web design & coding lab",
-      "Panel with 5 women tech leaders",
-      "Pitch competition with prizes",
-      "Lunch and networking included",
-    ],
-  },
-  {
-    title: "Education Policy Symposium",
-    category: "Conference",
-    description:
-      "A multi-stakeholder conference bringing together policymakers, educators, NGOs, and funders to chart the future of education access in Ethiopia.",
-    date: "Jul 8, 2025",
-    month: "JUL",
-    day: "8",
-    time: "8:00 AM – 5:00 PM",
-    location: "Addis Ababa University",
-    city: "Addis Ababa",
-    seats: 500,
-    seatsLeft: 180,
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&h=480&fit=crop",
-    highlights: [
-      "Keynote by Ministry of Education",
-      "4 panel discussions & breakout sessions",
-      "Policy brief release & Q&A",
-      "Networking lunch for all delegates",
-    ],
-  },
-];
+// Format time for display
+const formatTime = (startDate: string, endDate: string): string => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  };
+  return `${start.toLocaleTimeString("en-US", timeOptions)} - ${end.toLocaleTimeString("en-US", timeOptions)}`;
+};
 
 export function UpcomingEvents() {
+  const { events, loading, error } = useEvents();
+
+  // Filter only upcoming events
+  const upcomingEvents: Event[] = events.filter(
+    (event: Event) => new Date(event.start_date) > new Date(),
+  );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#009639] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-[#009639] text-white rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
       <main id="main-content">
         {/* ── HERO ── */}
-        <section className="relative min-h-[52vh] flex items-center overflow-hidden pt-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#003d1a] via-[#005c28] to-[#009639]" />
-          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-purple-300/10 blur-3xl" />
+        <section className="relative pt-32 pb-20 bg-[#003d1a] overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#009639]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-            <a
-              href="/events"
-              className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm mb-6 transition-colors"
-            >
-              ← All Events
-            </a>
-            <div className="inline-flex items-center gap-2 bg-[#009639]/20 border border-[#009639]/30 text-[#009639]/80 text-sm px-4 py-2 rounded-full mb-6">
-              <Sparkles className="w-4 h-4" /> Coming Up
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
+              <Sparkles className="w-4 h-4 text-[#00b359]" /> Upcoming Events
             </div>
-            <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-5 max-w-2xl leading-tight">
-              Upcoming{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00b359] to-[#00b359]">
-                Events
-              </span>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6">
+              Join Our <span className="text-[#00b359]">Upcoming Events</span>
             </h1>
-            <p className="text-xl text-white/75 max-w-xl">
-              Don't miss out — register for our upcoming events and be part of
-              the change you want to see.
+            <p className="text-lg text-white/80 max-w-2xl mx-auto">
+              Be part of transformative events that bring together communities,
+              educators, and change-makers across Ethiopia.
             </p>
           </div>
         </section>
 
-        {/* ── STATS ── */}
-        <section className="bg-white border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
-              {[
-                { value: "4", label: "Upcoming Events" },
-                { value: "277", label: "Seats Available" },
-                { value: "4", label: "Cities" },
-                { value: "Free–Ticketed", label: "Entry Types" },
-              ].map((s, i) => (
-                <div key={i} className="py-8 text-center">
-                  <p className="text-3xl font-black text-[#009639]">
-                    {s.value}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── EVENT LIST ── */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-            {upcomingEvents.map((event, i) => (
-              <div
-                key={i}
-                className={`flex flex-col ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden`}
-              >
-                {/* Image + date */}
-                <div className="lg:w-2/5 h-64 lg:h-auto overflow-hidden flex-shrink-0 relative">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <div className="absolute top-4 left-4 bg-white rounded-xl p-3 text-center shadow-lg">
-                    <p className="text-xs font-black text-[#009639] uppercase">
-                      {event.month}
-                    </p>
-                    <p className="text-2xl font-black text-gray-900 leading-none">
-                      {event.day}
-                    </p>
-                  </div>
-                  <span
-                    className={`absolute top-4 right-4 text-xs font-bold px-3 py-1.5 rounded-full ${typeColors[event.category] ?? "bg-gray-100 text-gray-600"}`}
-                  >
-                    {event.category}
-                  </span>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 p-8 lg:p-10">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                    {event.title}
-                  </h2>
-                  <p className="text-gray-500 leading-relaxed mb-5">
-                    {event.description}
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-3 mb-6 text-sm text-gray-500">
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4 text-[#009639]" /> {event.time}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-[#009639]" />{" "}
-                      {event.date}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-[#009639]" />{" "}
-                      {event.location}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-[#009639]" />
-                      <span className="font-semibold text-[#009639]">
-                        {event.seatsLeft} seats left
-                      </span>
-                    </span>
-                  </div>
-
-                  {/* Highlights */}
-                  <div className="bg-[#009639]/5 rounded-2xl p-4 mb-6">
-                    <p className="text-xs font-bold text-[#009639] uppercase tracking-widest mb-3">
-                      Event Highlights
-                    </p>
-                    <ul className="grid grid-cols-2 gap-2">
-                      {event.highlights.map((h, j) => (
-                        <li
-                          key={j}
-                          className="text-xs text-gray-600 flex items-start gap-1.5"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#009639] mt-1.5 flex-shrink-0" />
-                          {h}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Seats progress */}
-                  <div className="mb-6">
-                    <div className="flex justify-between text-xs text-gray-400 mb-1.5">
-                      <span>{event.seats - event.seatsLeft} registered</span>
-                      <span>
-                        {Math.round(
-                          ((event.seats - event.seatsLeft) / event.seats) * 100,
-                        )}
-                        % full
-                      </span>
-                    </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-[#009639] to-[#007a2e] rounded-full"
-                        style={{
-                          width: `${Math.round(((event.seats - event.seatsLeft) / event.seats) * 100)}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <a
-                    href="/contact"
-                    className="inline-flex items-center gap-2 bg-[#009639] text-white font-bold px-6 py-3 rounded-full hover:bg-[#007a2e] hover:shadow-lg transition-all duration-300"
-                  >
-                    Register Now <ChevronRight className="w-4 h-4" />
-                  </a>
-                </div>
+        {/* ── EVENTS LIST ── */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {upcomingEvents.length === 0 ? (
+              <div className="text-center py-24">
+                <Calendar className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                <p className="text-xl text-gray-500 font-medium">
+                  No upcoming events at the moment.
+                </p>
+                <p className="text-gray-400 mt-2">
+                  Check back soon for new events!
+                </p>
               </div>
-            ))}
-          </div>
-        </section>
+            ) : (
+              <div className="space-y-8">
+                {upcomingEvents.map((event) => (
+                  <div
+                    key={event.program_id}
+                    className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
+                  >
+                    <div className="md:flex">
+                      {/* Date Box */}
+                      <div className="md:w-32 bg-[#009639] text-white p-4 flex flex-col items-center justify-center">
+                        <span className="text-sm font-semibold uppercase">
+                          {formatDate(event.start_date).split(" ")[0]}
+                        </span>
+                        <span className="text-4xl font-black">
+                          {formatDate(event.start_date)
+                            .split(" ")[1]
+                            .replace(",", "")}
+                        </span>
+                        <span className="text-sm">
+                          {formatDate(event.start_date).split(" ")[2]}
+                        </span>
+                      </div>
 
-        {/* ── CTA ── */}
-        <section className="py-20 bg-gradient-to-br from-[#003d1a] to-[#009639] text-white">
-          <div className="max-w-3xl mx-auto px-4 text-center">
-            <h2 className="text-4xl font-extrabold mb-4">
-              Can't Attend? Still Make a Difference
-            </h2>
-            <p className="text-white/75 text-lg mb-8">
-              Your donation supports the work behind every event and program we
-              run.
-            </p>
-            <a
-              href="/donate"
-              className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 transition-all duration-300"
-            >
-              Donate Now <ArrowRight className="w-5 h-5" />
-            </a>
+                      {/* Content */}
+                      <div className="p-6 flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                          {event.title}
+                        </h3>
+                        <p className="text-gray-600 mb-4 line-clamp-2">
+                          {event.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-4">
+                          <span className="flex items-center gap-2">
+                            <Clock className="w-4 h-4" />
+                            {formatTime(event.start_date, event.end_date)}
+                          </span>
+                          <span className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4" />
+                            {event.location}
+                          </span>
+                        </div>
+
+                        <a
+                          href="/contact"
+                          className="inline-flex items-center gap-2 text-[#009639] font-semibold hover:gap-3 transition-all"
+                        >
+                          Register Now <ChevronRight className="w-4 h-4" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

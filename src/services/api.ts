@@ -37,6 +37,10 @@ export const api = {
         const response = await axiosInstance.put<T>(endpoint, data);
         return response.data;
     },
+    patch: async <T>(endpoint: string, data?: unknown): Promise<T> => {
+        const response = await axiosInstance.patch<T>(endpoint, data);
+        return response.data;
+    },
     delete: async (endpoint: string): Promise<void> => {
         await axiosInstance.delete(endpoint);
     }
