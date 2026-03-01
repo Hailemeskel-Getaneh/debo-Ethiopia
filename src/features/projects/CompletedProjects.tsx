@@ -1,246 +1,152 @@
-import {
-  MapPin,
-  Calendar,
-  CheckCircle2,
-  ArrowRight,
-  Star,
-  Users,
-} from "lucide-react";
+import { MapPin, Calendar, CheckCircle2, ChevronRight } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
+import { useProjects } from "@/hooks/useProjects";
 
-const completedProjects = [
-  {
-    title: "Jimma School Nutrition Program",
-    description:
-      "Delivered 180,000 nutritious meals to 1,200 students over 18 months, reducing absenteeism by 40%.",
-    location: "Jimma",
-    region: "Oromia",
-    startDate: "Jan 2023",
-    endDate: "Jun 2024",
-    budget: "$60,000",
-    category: "Health",
-    impact: "1,200 students",
-    image:
-      "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=700&h=480&fit=crop",
-    outcomes: [
-      "180,000 meals served over 18 months",
-      "40% reduction in school absenteeism",
-      "Program replicated in 3 additional schools",
-    ],
-    quote: {
-      text: "The meal program changed everything. My children stay in school the whole day.",
-      author: "Aster Bekele, Parent – Jimma",
-    },
-  },
-  {
-    title: "Mekelle Teachers Training Program",
-    description:
-      "Trained 200 teachers across 15 schools in modern pedagogy, digital tools, and inclusive classroom practices.",
-    location: "Mekelle",
-    region: "Tigray",
-    startDate: "Mar 2023",
-    endDate: "Dec 2023",
-    budget: "$28,000",
-    category: "Education",
-    impact: "200 teachers",
-    image:
-      "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=700&h=480&fit=crop",
-    outcomes: [
-      "200 teachers completed 80-hour training",
-      "90% reported improved classroom confidence",
-      "Digital tools integrated in 15 schools",
-    ],
-    quote: {
-      text: "I now use creative methods I never learned in college. My students are excited to learn.",
-      author: "Mulugeta Haile, Teacher – Mekelle",
-    },
-  },
-  {
-    title: "Adama Women's Empowerment Project",
-    description:
-      "Supported 150 women to form savings groups, complete skills training, and launch micro-enterprises.",
-    location: "Adama",
-    region: "Oromia",
-    startDate: "Jan 2023",
-    endDate: "Dec 2023",
-    budget: "$35,000",
-    category: "Social",
-    impact: "150 women",
-    image:
-      "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=700&h=480&fit=crop",
-    outcomes: [
-      "150 women trained in vocational skills",
-      "120+ women launched their own businesses",
-      "Average monthly income increased by 65%",
-    ],
-    quote: {
-      text: "The training gave me skills and the group gave me courage. Now I run my own tailoring shop.",
-      author: "Frehiwot Alemu – Adama",
-    },
-  },
-];
+// Backend schema: { name, description, location, status, budget, currency, progress_percent, start_date, end_date }
+interface Project {
+  name: string;
+  description: string;
+  location: string;
+  status: "active" | "completed" | "planned";
+  budget: number;
+  currency: string;
+  progress_percent: number;
+  start_date: string;
+  end_date: string;
+}
+
+// Format date for display
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+};
+
+// Format budget
+const formatBudget = (budget: number, currency: string): string => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency || "USD",
+    maximumFractionDigits: 0,
+  }).format(budget);
+};
 
 export function CompletedProjects() {
+  const { projects, loading, error } = useProjects();
+
+  // Filter only completed projects
+  const completedProjects: Project[] = projects.filter(
+    (p: Project) => p.status === "completed",
+  );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#009639] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-[#009639] text-white rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
       <main id="main-content">
-        <section className="relative min-h-[52vh] flex items-center overflow-hidden pt-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#003d1a] via-[#005c28] to-[#009639]" />
+        {/* ── HERO ── */}
+        <section className="relative pt-32 pb-20 bg-[#003d1a] overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#009639]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-            <a
-              href="/projects"
-              className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-bold mb-6 transition-colors"
-            >
-              ← All Projects
-            </a>
-            <div className="inline-flex items-center gap-2 bg-[#009639]/20 border border-[#009639]/30 text-[#009639]/80 text-sm px-4 py-2 rounded-full mb-6">
-              <CheckCircle2 className="w-4 h-4" /> Successfully Delivered
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
+              <CheckCircle2 className="w-4 h-4 text-[#00b359]" /> Completed
+              Projects
             </div>
-            <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-5 max-w-2xl leading-tight">
-              Completed{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00b359] to-[#00b359]">
-                Projects
-              </span>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6">
+              Our <span className="text-[#00b359]">Completed Projects</span>
             </h1>
-            <p className="text-xl text-white/75 max-w-xl">
-              Every completed project is a promise kept — to a child, a family,
-              or a community.
+            <p className="text-lg text-white/80 max-w-2xl mx-auto">
+              Explore the successful projects we've completed and the
+              communities we've transformed across Ethiopia.
             </p>
           </div>
         </section>
 
-        <section className="bg-white border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
-              {[
-                { value: "3", label: "Completed" },
-                { value: "1,550+", label: "Beneficiaries" },
-                { value: "$123,000", label: "Invested" },
-                { value: "100%", label: "Goals Met" },
-              ].map((s, i) => (
-                <div key={i} className="py-8 text-center">
-                  <p className="text-3xl font-black text-[#009639]">
-                    {s.value}
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
-            {completedProjects.map((project, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden"
-              >
-                <div
-                  className={`flex flex-col ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"}`}
-                >
-                  <div className="lg:w-2/5 h-64 lg:h-auto overflow-hidden flex-shrink-0 relative">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-4 left-4 bg-[#009639] text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Completed
-                    </div>
-                  </div>
-                  <div className="flex-1 p-8 lg:p-10">
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      <span className="bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full">
-                        {project.category}
-                      </span>
-                      <span className="bg-[#009639]/10 text-[#009639] text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1">
-                        <Users className="w-3 h-3" /> {project.impact}
-                      </span>
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                      {project.title}
-                    </h2>
-                    <p className="text-gray-500 leading-relaxed mb-5">
-                      {project.description}
-                    </p>
-                    <div className="flex items-center gap-5 text-sm text-gray-400 mb-6">
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4" /> {project.location},{" "}
-                        {project.region}
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="w-4 h-4" /> {project.startDate} –{" "}
-                        {project.endDate}
-                      </span>
-                    </div>
-                    <div className="mb-6">
-                      <div className="flex justify-between text-sm mb-2">
-                        <span className="font-bold text-gray-800">
-                          {project.budget} — Fully Funded
-                        </span>
-                        <span className="font-bold text-[#009639]">100%</span>
-                      </div>
-                      <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full w-full bg-gradient-to-r from-blue-500 to-blue-700 rounded-full" />
-                      </div>
-                    </div>
-                    <div className="bg-[#009639]/5 rounded-2xl p-5 mb-6">
-                      <p className="text-xs font-bold text-[#009639] uppercase tracking-widest mb-3">
-                        Key Outcomes
-                      </p>
-                      <ul className="space-y-2">
-                        {project.outcomes.map((o, j) => (
-                          <li
-                            key={j}
-                            className="text-sm text-gray-700 flex items-start gap-2"
-                          >
-                            <CheckCircle2 className="w-4 h-4 text-[#009639] mt-0.5 flex-shrink-0" />{" "}
-                            {o}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <blockquote className="border-l-4 border-[#00b359] pl-4 italic text-gray-600 text-sm">
-                      <p className="mb-1">"{project.quote.text}"</p>
-                      <footer className="text-xs text-gray-400 not-italic font-semibold flex items-center gap-1">
-                        <Star className="w-3 h-3 text-[#00b359]" />{" "}
-                        {project.quote.author}
-                      </footer>
-                    </blockquote>
-                  </div>
-                </div>
+        {/* ── PROJECTS LIST ── */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {completedProjects.length === 0 ? (
+              <div className="text-center py-24">
+                <CheckCircle2 className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                <p className="text-xl text-gray-500 font-medium">
+                  No completed projects to show.
+                </p>
               </div>
-            ))}
-          </div>
-        </section>
+            ) : (
+              <div className="space-y-8">
+                {completedProjects.map((project, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden opacity-75 hover:opacity-100"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          Completed
+                        </span>
+                      </div>
 
-        <section className="py-20 bg-gradient-to-br from-[#003d1a] to-[#009639] text-white">
-          <div className="max-w-3xl mx-auto px-4 text-center">
-            <h2 className="text-4xl font-extrabold mb-4">
-              Help Us Write the Next Story
-            </h2>
-            <p className="text-white/75 text-lg mb-8">
-              Your contribution starts the next chapter for a community in
-              Ethiopia.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href="/donate"
-                className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 transition-all duration-300"
-              >
-                Donate Now <ArrowRight className="w-5 h-5" />
-              </a>
-              <a
-                href="/projects?status=upcoming"
-                className="inline-flex items-center gap-2 border-2 border-white/40 text-white font-semibold px-8 py-4 rounded-full hover:bg-white/10 transition-all"
-              >
-                See Upcoming Projects
-              </a>
-            </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {project.name}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-4">
+                        <span className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4" />
+                          {project.location}
+                        </span>
+                        <span className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4" />
+                          {formatDate(project.start_date)} -{" "}
+                          {formatDate(project.end_date)}
+                        </span>
+                        <span className="flex items-center gap-2">
+                          Budget:{" "}
+                          {formatBudget(project.budget, project.currency)}
+                        </span>
+                      </div>
+
+                      <a
+                        href="/donate"
+                        className="inline-flex items-center gap-2 text-[#009639] font-semibold hover:gap-3 transition-all"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        View Details <ChevronRight className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>
