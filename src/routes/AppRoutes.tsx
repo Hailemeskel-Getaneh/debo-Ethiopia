@@ -3,11 +3,10 @@ import { useAuth } from "../hooks/useAuth";
 
 // Layouts
 import AuthLayout from "../components/layout/AuthLayout";
-import UserLayout from "../components/layout/UserLayout";
 import AdminLayout from "../components/layout/AdminLayout";
 
 // Features
-import { Login, Register, ForgotPassword } from "../features/auth/pages";
+import { Login, ForgotPassword } from "../features/auth/pages";
 import { AdminDashboard } from "../admin/dashboard";
 import ManageUsers from "../admin/ManageUsers";
 import ManageProjects from "../admin/ManageProjects";
@@ -54,34 +53,17 @@ const AppRoutes: React.FC = () => {
 
       {/* Auth Routes */}
       <Route element={<AuthLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/abc/login" element={<Login />} />
+        <Route path="/login" element={<Navigate to="/abc/login" replace />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
-      {/* User Routes */}
-      <Route element={<ProtectedRoute isAllowed={isAuthenticated} />}>
-        <Route element={<UserLayout />}>
-          <Route
-            path="/dashboard"
-            element={
-              userRole === "admin" ? (
-                <Navigate to="/admin/dashboard" replace />
-              ) : (
-                <AdminDashboard />
-              )
-            }
-          />
-          <Route path="/profile" element={<div>Profile Placeholder</div>} />
-        </Route>
-      </Route>
-
-      {/* Admin Routes */}
+      {/* Admin Specific Routes */}
       <Route
         element={
           <ProtectedRoute
             isAllowed={isAuthenticated && userRole === "admin"}
-            redirectTo="/dashboard"
+            redirectTo="/abc/login"
           />
         }
       >
@@ -100,6 +82,9 @@ const AppRoutes: React.FC = () => {
           <Route path="/admin/metrics" element={<ManageMetrics />} />
           <Route path="/admin/notifications" element={<NotificationHub />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+
+          {/* Legacy Redirect for /dashboard */}
+          <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />
         </Route>
       </Route>
 

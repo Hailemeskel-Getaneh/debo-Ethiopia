@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -200,12 +200,14 @@ export function Gallery() {
 
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
-  const prevImage = () =>
+
+  const prevImage = useCallback(() =>
     setLightboxIndex((i) =>
       i !== null ? (i - 1 + filtered.length) % filtered.length : null,
-    );
-  const nextImage = () =>
-    setLightboxIndex((i) => (i !== null ? (i + 1) % filtered.length : null));
+    ), [filtered.length]);
+
+  const nextImage = useCallback(() =>
+    setLightboxIndex((i) => (i !== null ? (i + 1) % filtered.length : null)), [filtered.length]);
 
   // Keyboard support for lightbox
   useEffect(() => {
@@ -217,7 +219,7 @@ export function Gallery() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lightboxIndex, filtered.length]);
+  }, [lightboxIndex, nextImage, prevImage]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -262,11 +264,10 @@ export function Gallery() {
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      activeCategory === cat.id
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.id
                         ? "bg-[#059669] text-white shadow-md"
                         : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
-                    }`}
+                      }`}
                   >
                     {cat.label}
                   </button>
