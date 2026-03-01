@@ -22,53 +22,61 @@ import imgAbout from "@/assets/images/IMG_20231104_083345.jpg";
 import imgHero3 from "@/assets/images/teachers.jpg";
 import imgHero4 from "@/assets/images/G 12.jpg";
 
+// Hooks for API data
+import { useStats } from "@/hooks/useStats";
+import { usePrograms } from "@/hooks/usePrograms";
+import { useProjects } from "@/hooks/useProjects";
+import { useNews } from "@/hooks/useNews";
+
 const heroBg = heroImg;
 
-const stats = [
+// Static fallback data (used if API fails)
+const fallbackStats = [
   { value: "200+", label: "Scholarship Students Supported" },
   { value: "150+", label: "Students Achieved Graduation" },
   { value: "10+", label: "Projects Successfully Completed" },
   { value: "4", label: "Active Programs Running" },
 ];
 
-const programs = [
+const fallbackPrograms = [
   {
     icon: BookOpen,
     title: "Education for All",
-    desc: "Providing quality education through scholarships for 200+ students, 8 kindergarten classrooms, and fully equipped libraries and science labs in rural villages.",
+    desc: "Providing quality education through scholarships for 200+ students.",
     color: "bg-brand-secondary/10 text-brand-secondary",
-    href: "/programs/1",
+    href: "/programs",
   },
   {
     icon: Stethoscope,
     title: "Community Health",
-    desc: "Building health infrastructure and delivering essential healthcare services to remote communities.",
+    desc: "Building health infrastructure and delivering essential healthcare services.",
     color: "bg-brand-main/10 text-brand-main",
-    href: "/programs/2",
+    href: "/programs",
   },
   {
     icon: Sprout,
     title: "Sustainable Agriculture",
-    desc: "Empowering farmers with modern techniques, tools, and market access to end food insecurity.",
+    desc: "Empowering farmers with modern techniques and market access.",
     color: "bg-brand-action/10 text-brand-action",
-    href: "/programs/3",
+    href: "/programs",
   },
   {
     icon: Users,
     title: "Women Empowerment",
-    desc: "Supporting women entrepreneurs through microfinance, training, and community networks.",
+    desc: "Supporting women entrepreneurs through microfinance and training.",
     color: "bg-brand-secondary/10 text-brand-secondary",
-    href: "/programs/4",
+    href: "/programs",
   },
 ];
 
-const projects = [
+// Fallback data for projects
+const fallbackProjects = [
   {
     title: "School Building Construction Project",
     category: "Education",
     status: "Active",
     progress: 45,
-    location: "mehalmeda",
+    location: "Mehalmeda",
   },
   {
     title: "Buy Books for Rural Students",
@@ -84,23 +92,10 @@ const projects = [
     progress: 65,
     location: "",
   },
-  {
-    title: "Digital Library Setup",
-    category: "Education",
-    status: "Active",
-    progress: 0,
-    location: "MM",
-  },
-  {
-    title: "Classroom Furniture Supply",
-    category: "Education",
-    status: "Completed",
-    progress: 100,
-    location: "MM",
-  },
 ];
 
-const news = [
+// Fallback data for news
+const fallbackNews = [
   {
     date: "Jan 15, 2026",
     title: "Debo Ethiopia Opens New Learning Center in Jimma",
@@ -112,14 +107,14 @@ const news = [
     date: "Dec 28, 2025",
     title: "Annual Impact Report 2025: 12,000 New Beneficiaries",
     excerpt:
-      "Our 2025 annual report highlights remarkable growth and community transformation across all programs.",
+      "Our 2025 annual report highlights remarkable growth and community transformation.",
     category: "Impact",
   },
   {
     date: "Dec 10, 2025",
     title: "Partnership with UN FAO to Expand Agricultural Programs",
     excerpt:
-      "A landmark partnership will triple our agricultural support to smallholder farmers in southern Ethiopia.",
+      "A landmark partnership will triple our agricultural support to smallholder farmers.",
     category: "Partnership",
   },
 ];
@@ -136,6 +131,26 @@ const stagger = {
 export default function Index() {
   const [currentImage, setCurrentImage] = useState(0);
   const heroImages = [heroBg, imgAbout, imgHero3, imgHero4];
+
+  // Fetch data from API
+  const { stats } = useStats();
+  const { programs: programsData } = usePrograms();
+  const { projects: projectsData } = useProjects();
+  const { news: newsData } = useNews();
+
+  // Use API data or fallback
+  const displayStats =
+    stats && stats.length > 0
+      ? stats.map((s: { name: string; value: number }) => ({
+          value: String(s.value),
+          label: s.name,
+        }))
+      : fallbackStats;
+  const displayPrograms =
+    programsData && programsData.length > 0 ? programsData : fallbackPrograms;
+  const displayProjects =
+    projectsData && projectsData.length > 0 ? projectsData : fallbackProjects;
+  const displayNews = newsData && newsData.length > 0 ? newsData : fallbackNews;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -243,20 +258,22 @@ export default function Index() {
               variants={stagger}
               className="grid grid-cols-2 md:grid-cols-4 gap-8"
             >
-              {stats.map(({ value, label }) => (
-                <motion.div
-                  key={label}
-                  variants={fadeUp}
-                  className="text-center"
-                >
-                  <div className="font-display text-4xl md:text-5xl font-bold text-white mb-1">
-                    {value}
-                  </div>
-                  <div className="font-body text-sm text-white/70 uppercase tracking-wider">
-                    {label}
-                  </div>
-                </motion.div>
-              ))}
+              {displayStats.map(
+                ({ value, label }: { value: string; label: string }) => (
+                  <motion.div
+                    key={label}
+                    variants={fadeUp}
+                    className="text-center"
+                  >
+                    <div className="font-display text-4xl md:text-5xl font-bold text-white mb-1">
+                      {value}
+                    </div>
+                    <div className="font-body text-sm text-white/70 uppercase tracking-wider">
+                      {label}
+                    </div>
+                  </motion.div>
+                ),
+              )}
             </motion.div>
           </div>
         </section>
@@ -442,35 +459,48 @@ export default function Index() {
               variants={stagger}
               className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
             >
-              {programs.map(({ icon: Icon, title, desc, color, href }) => (
-                <motion.div key={title} variants={fadeUp}>
-                  <Link
-                    to={href}
-                    className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer"
-                  >
-                    <div
-                      className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center mb-4`}
-                    >
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="font-display text-lg font-semibold text-zinc-900 mb-2">
-                      {title}
-                    </h3>
-                    <p className="font-body text-sm text-zinc-600 leading-relaxed flex-1">
-                      {desc}
-                    </p>
-                    <div className="mt-4 flex items-center gap-1 text-brand-main text-sm font-medium group-hover:gap-2 transition-all">
-                      Learn more <ArrowRight className="w-4 h-4" />
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
+              {displayPrograms
+                .slice(0, 4)
+                .map((program: any, index: number) => {
+                  // Get icon from program data or fallback
+                  const icons = [BookOpen, Stethoscope, Sprout, Users];
+                  const Icon = program.icon || icons[index % icons.length];
+                  const colors = [
+                    "bg-brand-secondary/10 text-brand-secondary",
+                    "bg-brand-main/10 text-brand-main",
+                    "bg-brand-action/10 text-brand-action",
+                    "bg-brand-secondary/10 text-brand-secondary",
+                  ];
+                  return (
+                    <motion.div key={program.id || index} variants={fadeUp}>
+                      <Link
+                        to="/programs"
+                        className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer"
+                      >
+                        <div
+                          className={`w-12 h-12 rounded-xl ${colors[index % colors.length]} flex items-center justify-center mb-4`}
+                        >
+                          <Icon className="w-6 h-6" />
+                        </div>
+                        <h3 className="font-display text-lg font-semibold text-zinc-900 mb-2">
+                          {program.name}
+                        </h3>
+                        <p className="font-body text-sm text-zinc-600 leading-relaxed flex-1">
+                          {program.description?.substring(0, 100)}...
+                        </p>
+                        <div className="mt-4 flex items-center gap-1 text-brand-main text-sm font-medium group-hover:gap-2 transition-all">
+                          Learn more <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
             </motion.div>
             <div className="text-center mt-10">
               <Link to="/programs">
                 <Button
                   variant="outline"
-                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-body"
+                  className="border-green-700 hover:bg-green-700 hover:text-white font-body transition-all duration-300"
                 >
                   View All Programs
                 </Button>
@@ -503,8 +533,9 @@ export default function Index() {
               variants={stagger}
               className="grid md:grid-cols-3 gap-6"
             >
-              {projects.map(
-                ({ title, category, status, progress, location }) => (
+              {displayProjects
+                .slice(0, 3)
+                .map(({ title, category, status, progress, location }: any) => (
                   <motion.div
                     key={title}
                     variants={fadeUp}
@@ -536,14 +567,13 @@ export default function Index() {
                       {progress}% Complete
                     </p>
                   </motion.div>
-                ),
-              )}
+                ))}
             </motion.div>
             <div className="text-center mt-10">
               <Link to="/projects">
                 <Button
                   variant="outline"
-                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-body"
+                  className="border-green-700 hover:bg-green-700 hover:text-white font-body transition-all duration-300"
                 >
                   View All Projects
                 </Button>
@@ -622,9 +652,9 @@ export default function Index() {
               <Link to="/news" className="mt-4 sm:mt-0">
                 <Button
                   variant="outline"
-                  className="border-primary text-primary font-body gap-2"
+                  className="border-green-700 hover:bg-green-700 hover:text-white font-body gap-2"
                 >
-                  All Articles <ArrowRight className="w-4 h-4" />
+                  All News <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </motion.div>
@@ -635,33 +665,35 @@ export default function Index() {
               variants={stagger}
               className="grid md:grid-cols-3 gap-6"
             >
-              {news.map(({ date, title, excerpt, category }) => (
-                <motion.div
-                  key={title}
-                  variants={fadeUp}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-                >
-                  <div className="h-48 bg-linear-to-br from-brand-main to-primary-700 flex items-center justify-center">
-                    <BookOpen className="w-12 h-12 text-white/40" />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="px-2 py-0.5 rounded-full text-xs bg-brand-action/10 text-brand-action font-body font-medium">
-                        {category}
-                      </span>
-                      <span className="text-xs text-zinc-500 font-body">
-                        {date}
-                      </span>
+              {displayNews
+                .slice(0, 3)
+                .map(({ date, title, excerpt, category }: any) => (
+                  <motion.div
+                    key={title}
+                    variants={fadeUp}
+                    className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                  >
+                    <div className="h-48 bg-linear-to-br from-brand-main to-primary-700 flex items-center justify-center">
+                      <BookOpen className="w-12 h-12 text-white/40" />
                     </div>
-                    <h3 className="font-display font-semibold text-zinc-900 mb-2 leading-snug group-hover:text-brand-main transition-colors">
-                      {title}
-                    </h3>
-                    <p className="font-body text-sm text-zinc-600 leading-relaxed">
-                      {excerpt}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="px-2 py-0.5 rounded-full text-xs bg-brand-action/10 text-brand-action font-body font-medium">
+                          {category}
+                        </span>
+                        <span className="text-xs text-zinc-500 font-body">
+                          {date}
+                        </span>
+                      </div>
+                      <h3 className="font-display font-semibold text-zinc-900 mb-2 leading-snug group-hover:text-brand-main transition-colors">
+                        {title}
+                      </h3>
+                      <p className="font-body text-sm text-zinc-600 leading-relaxed">
+                        {excerpt}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
             </motion.div>
           </div>
         </section>
