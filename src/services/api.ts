@@ -1,6 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://debo-ethiopia-api.onrender.com/api';
+const rawBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://debo-ethiopia-api.onrender.com';
+export const API_BASE_URL = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl}/api`;
 
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,

@@ -12,8 +12,8 @@ export interface Subscriber {
 }
 
 export const subscriptionService = {
-  subscribe: (data: any) => api.post<any>('/api/subscribers/subscribe/', data),
-  getAll: () => api.get<any>('/api/subscribers/'),
+  subscribe: (data: any) => api.post<any>('/subscribers/subscribe/', data),
+  getAll: () => api.get<any>('/subscribers/'),
 };
 
 export default subscriptionService;

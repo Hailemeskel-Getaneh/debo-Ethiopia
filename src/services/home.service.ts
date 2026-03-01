@@ -44,10 +44,10 @@ export interface Event {
 }
 
 export const homeService = {
-  getStatsSummary: () => api.get<any>('/api/stats/summary/'),
-  getProjects: () => api.get<any>('/api/projects/'),
-  getPrograms: () => api.get<any>('/api/programs/'),
-  getEvents: () => api.get<any>('/api/events/'),
+  getStatsSummary: () => api.get<any>('/stats/summary/'),
+  getProjects: () => api.get<any>('/projects/'),
+  getPrograms: () => api.get<any>('/programs/'),
+  getEvents: () => api.get<any>('/events/'),
 };
 
 export default homeService;
