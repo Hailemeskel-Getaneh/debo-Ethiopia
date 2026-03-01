@@ -29,6 +29,10 @@ export const achievementsService = {
 
     delete: (id: number) =>
         api.delete(`/achievements/${id}/`),
+
+    // Aliases for compatibility with user-api-integration
+    getAll: () => api.get<PaginatedResponse<Achievement>>('/achievements/'),
+    getById: (id: number) => api.get<Achievement>(`/achievements/${id}/`),
 };
 
 export default achievementsService;
