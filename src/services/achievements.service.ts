@@ -30,3 +30,6 @@ export const achievementsService = {
     delete: (id: number) =>
         api.delete(`/achievements/${id}/`),
 };
+
+export default achievementsService;
+

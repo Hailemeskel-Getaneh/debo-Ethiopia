@@ -27,4 +27,11 @@ export const programsService = {
 
     delete: (id: number) =>
         api.delete(`/programs/${id}/`),
+
+    // Aliases for compatibility with user-api-integration
+    getAll: () => api.get<PaginatedResponse<Program>>('/programs/'),
+    getById: (id: number) => api.get<Program>(`/programs/${id}/`),
 };
+
+export default programsService;
+

@@ -74,7 +74,6 @@ export const api = {
         const response: AxiosResponse<T> = await axiosInstance.put(endpoint, data);
         return response.data;
     },
-
     patch: async <T>(endpoint: string, data?: unknown): Promise<T> => {
         const response: AxiosResponse<T> = await axiosInstance.patch(endpoint, data);
         return response.data;

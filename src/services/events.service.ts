@@ -36,5 +36,12 @@ export const eventsService = {
         const formData = new FormData();
         formData.append('image', image);
         return api.postMultipart<unknown>(`/events/${eventId}/images/`, formData);
-    }
+    },
+
+    // Aliases for compatibility with user-api-integration
+    getAll: () => api.get<PaginatedResponse<Event>>('/events/'),
+    getById: (id: number) => api.get<Event>(`/events/${id}/`),
 };
+
+export default eventsService;
+

@@ -43,5 +43,12 @@ export const newsService = {
         const formData = new FormData();
         formData.append('image', image);
         return api.postMultipart<unknown>(`/news/${newsId}/images/`, formData);
-    }
+    },
+
+    // Aliases for compatibility with user-api-integration
+    getAll: () => api.get<PaginatedResponse<NewsArticle>>('/news/'),
+    getById: (id: number) => api.get<NewsArticle>(`/news/${id}/`),
 };
+
+export default newsService;
+

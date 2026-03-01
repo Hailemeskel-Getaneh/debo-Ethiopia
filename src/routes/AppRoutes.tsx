@@ -29,6 +29,7 @@ import { Newsletter } from "../features/newsletter/Newsletter";
 import { Donate } from "../features/donate/Donate";
 import { Contact } from "../features/contact/Contact";
 import Achievements from "../features/achievements/Achievements";
+import { News } from "../features/news/News";
 import ManagePrograms from "../admin/ManagePrograms";
 import NotificationHub from "../admin/NotificationHub";
 import ManageSubscribers from "../admin/ManageSubscribers";
@@ -50,6 +51,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/donate" element={<Donate />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/achievements" element={<Achievements />} />
+      <Route path="/news" element={<News />} />
 
       {/* Auth Routes */}
       <Route element={<AuthLayout />}>

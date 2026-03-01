@@ -35,4 +35,11 @@ export const projectsService = {
 
     delete: (id: number) =>
         api.delete(`/projects/${id}/`),
+
+    // Aliases for compatibility with user-api-integration
+    getAll: () => api.get<PaginatedResponse<Project>>('/projects/'),
+    getById: (id: number) => api.get<Project>(`/projects/${id}/`),
 };
+
+export default projectsService;
+
