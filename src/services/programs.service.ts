@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from './api';
 
 // Backend schema: { id, name, description, created_at, updated_at }

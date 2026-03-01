@@ -7,7 +7,6 @@ import { contactService } from "@/services";
 export function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
