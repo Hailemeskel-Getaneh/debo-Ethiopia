@@ -5,7 +5,6 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   Play,
   Image,
 } from "lucide-react";

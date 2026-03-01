@@ -19,14 +19,12 @@ export function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       await contactService.submit(form);
       setSubmitted(true);
     } catch (err) {
       console.error("Failed to submit contact form:", err);
-      setError("Failed to send message. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -459,42 +459,40 @@ export default function Index() {
               variants={stagger}
               className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
             >
-              {displayPrograms
-                .slice(0, 4)
-                .map((program: any, index: number) => {
-                  // Get icon from program data or fallback
-                  const icons = [BookOpen, Stethoscope, Sprout, Users];
-                  const Icon = program.icon || icons[index % icons.length];
-                  const colors = [
-                    "bg-brand-secondary/10 text-brand-secondary",
-                    "bg-brand-main/10 text-brand-main",
-                    "bg-brand-action/10 text-brand-action",
-                    "bg-brand-secondary/10 text-brand-secondary",
-                  ];
-                  return (
-                    <motion.div key={program.id || index} variants={fadeUp}>
-                      <Link
-                        to="/programs"
-                        className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer"
+              {displayPrograms.slice(0, 4).map((program, index: number) => {
+                // Get icon from program data or fallback
+                const icons = [BookOpen, Stethoscope, Sprout, Users];
+                const Icon = program.icon || icons[index % icons.length];
+                const colors = [
+                  "bg-brand-secondary/10 text-brand-secondary",
+                  "bg-brand-main/10 text-brand-main",
+                  "bg-brand-action/10 text-brand-action",
+                  "bg-brand-secondary/10 text-brand-secondary",
+                ];
+                return (
+                  <motion.div key={program.id || index} variants={fadeUp}>
+                    <Link
+                      to="/programs"
+                      className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer"
+                    >
+                      <div
+                        className={`w-12 h-12 rounded-xl ${colors[index % colors.length]} flex items-center justify-center mb-4`}
                       >
-                        <div
-                          className={`w-12 h-12 rounded-xl ${colors[index % colors.length]} flex items-center justify-center mb-4`}
-                        >
-                          <Icon className="w-6 h-6" />
-                        </div>
-                        <h3 className="font-display text-lg font-semibold text-zinc-900 mb-2">
-                          {program.name}
-                        </h3>
-                        <p className="font-body text-sm text-zinc-600 leading-relaxed flex-1">
-                          {program.description?.substring(0, 100)}...
-                        </p>
-                        <div className="mt-4 flex items-center gap-1 text-brand-main text-sm font-medium group-hover:gap-2 transition-all">
-                          Learn more <ArrowRight className="w-4 h-4" />
-                        </div>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <h3 className="font-display text-lg font-semibold text-zinc-900 mb-2">
+                        {program.name}
+                      </h3>
+                      <p className="font-body text-sm text-zinc-600 leading-relaxed flex-1">
+                        {program.description?.substring(0, 100)}...
+                      </p>
+                      <div className="mt-4 flex items-center gap-1 text-brand-main text-sm font-medium group-hover:gap-2 transition-all">
+                        Learn more <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </motion.div>
             <div className="text-center mt-10">
               <Link to="/programs">
@@ -535,7 +533,7 @@ export default function Index() {
             >
               {displayProjects
                 .slice(0, 3)
-                .map(({ title, category, status, progress, location }: any) => (
+                .map(({ title, category, status, progress, location }) => (
                   <motion.div
                     key={title}
                     variants={fadeUp}
@@ -667,7 +665,7 @@ export default function Index() {
             >
               {displayNews
                 .slice(0, 3)
-                .map(({ date, title, excerpt, category }: any) => (
+                .map(({ date, title, excerpt, category }) => (
                   <motion.div
                     key={title}
                     variants={fadeUp}

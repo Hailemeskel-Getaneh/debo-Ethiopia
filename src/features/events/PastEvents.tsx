@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Clock, CheckCircle2, Sparkles } from "lucide-react";
+import { Calendar, MapPin, Clock, CheckCircle2 } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 import { useEvents } from "@/hooks/useEvents";

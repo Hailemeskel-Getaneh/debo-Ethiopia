@@ -80,20 +80,17 @@ export function Newsletter() {
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setLoading(true);
-    setError(null);
 
     try {
       await subscriptionService.subscribe({ email });
       setSubmitted(true);
     } catch (err) {
       console.error("Failed to subscribe:", err);
-      setError("Failed to subscribe. Please try again.");
     } finally {
       setLoading(false);
     }

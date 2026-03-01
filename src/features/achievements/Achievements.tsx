@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Award, Calendar, Sparkles, Target } from "lucide-react";
+import { Award, Calendar } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 import { useAchievements } from "@/hooks/useAchievements";
