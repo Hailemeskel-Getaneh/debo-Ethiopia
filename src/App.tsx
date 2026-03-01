@@ -2,6 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext";
 import AppRoutes from "./routes/AppRoutes";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 function App() {
   return (
@@ -10,7 +11,9 @@ function App() {
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <AppRoutes />
+        <ErrorBoundary>
+          <AppRoutes />
+        </ErrorBoundary>
       </BrowserRouter>
     </AuthProvider>
   );
