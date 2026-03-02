@@ -216,7 +216,7 @@ export default function HomePage() {
                     {stat.value}
                   </div>
                   <div className="text-zinc-500 uppercase tracking-widest text-[10px] font-bold">
-                    {'label' in stat ? stat.label : (stat as any).name}
+                    {'label' in stat ? stat.label : (stat as { name: string }).name}
                   </div>
                 </motion.div>
               ))}
