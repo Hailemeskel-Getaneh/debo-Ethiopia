@@ -26,18 +26,34 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+// ── Request Deduplication ──────────────────────────────────────────────────
+const pendingRequests = new Map<string, Promise<any>>();
+
+const getDeduplicatedKey = (endpoint: string, params?: Record<string, unknown>) => {
+    return `${endpoint}?${JSON.stringify(params || {})}`;
+};
+
 // ── Response Interceptor: Handle 401 & Token Refresh ──────────────────────
 axiosInstance.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        // Clean up pending request map on success
+        const key = getDeduplicatedKey(response.config.url || '', response.config.params);
+        pendingRequests.delete(key);
+        return response;
+    },
     async (error) => {
         const originalRequest = error.config;
+        const key = getDeduplicatedKey(originalRequest.url || '', originalRequest.params);
+
+        // Clean up pending request map on error
+        pendingRequests.delete(key);
 
         // Redirect to login on 401 if it's NOT a retry and NOT a login request
         if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/auth/jwt/create')) {
             originalRequest._retry = true;
 
             try {
-                // Refresh token – explicitly send the token from localStorage
+                // Refresh token
                 const refresh = localStorage.getItem('refresh_token');
                 const res = await axiosInstance.post('/auth/jwt/refresh', { refresh });
 
@@ -48,10 +64,26 @@ axiosInstance.interceptors.response.use(
                     return axiosInstance(originalRequest);
                 }
             } catch (refreshError) {
-                // Refresh failed – clear access token and redirect
                 localStorage.removeItem('access_token');
                 window.location.href = '/abc/login';
                 return Promise.reject(refreshError);
+            }
+        }
+
+        // Handle 429 Rate Limiting with Deduplication and Jittered Retry
+        if (error.response?.status === 429) {
+            console.error(`[429 Rate Limit] Blocked: ${originalRequest.url}. Time: ${new Date().toLocaleTimeString()}`);
+
+            const retryCount = (originalRequest._retryCount || 0);
+            if (retryCount < 2) { // Allow up to 2 retries
+                originalRequest._retryCount = retryCount + 1;
+
+                // Jittered delay: 2000ms to 3000ms
+                const delay = 2000 + (Math.random() * 1000);
+                console.warn(`[429 Rate Limit] Retry #${originalRequest._retryCount} in ${Math.round(delay)}ms...`);
+
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return axiosInstance(originalRequest);
             }
         }
 
@@ -62,8 +94,21 @@ axiosInstance.interceptors.response.use(
 // ── API Methods ────────────────────────────────────────────────────────────
 export const api = {
     get: async <T>(endpoint: string, params?: Record<string, unknown>): Promise<T> => {
-        const response: AxiosResponse<T> = await axiosInstance.get(endpoint, { params });
-        return response.data;
+        const key = getDeduplicatedKey(endpoint, params);
+
+        // If a request for this exact endpoint+params is already in flight, return it
+        if (pendingRequests.has(key)) {
+            console.log(`[Deduplication] Sharing in-flight request for: ${endpoint}`);
+            return pendingRequests.get(key);
+        }
+
+        const fetchPromise = (async () => {
+            const response: AxiosResponse<T> = await axiosInstance.get(endpoint, { params });
+            return response.data;
+        })();
+
+        pendingRequests.set(key, fetchPromise);
+        return fetchPromise;
     },
 
     post: async <T>(endpoint: string, data?: unknown): Promise<T> => {

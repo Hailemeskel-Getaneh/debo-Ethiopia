@@ -14,10 +14,19 @@ export const statsService = {
   get: (id: number) =>
     api.get<StatMetric>(`/stats/${id}/`),
 
-  update: (id: number, value: number) =>
-    api.patch<StatMetric>(`/stats/${id}/`, { value }),
+  create: (data: { name: string; value: number }) =>
+    api.post<StatMetric>('/stats/', data),
 
-  // Aliases for compatibility with user-api-integration
+  update: (id: number, data: Partial<Omit<StatMetric, 'id' | 'created_at' | 'updated_at'>>) =>
+    api.patch<StatMetric>(`/stats/${id}/`, data),
+
+  delete: (id: number) =>
+    api.delete(`/stats/${id}/`),
+
+  getSummary: () =>
+    api.get<StatMetric>('/stats/summary/'),
+
+  // Aliases for compatibility
   getAll: () => api.get<PaginatedResponse<StatMetric>>('/stats/'),
 };
 

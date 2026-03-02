@@ -16,5 +16,6 @@ export { type Achievement } from '../types/admin';
 export { default as projectsService } from './projects.service';
 export { type Project as ProjectType } from '../types/admin';
 export { default as contactService, type ContactMessage, type ContactSubmitData } from './contact.service';
-export { default as subscriptionService, type SubscribeData, type Subscriber } from './subscription.service';
+export { subscribersService, type SubscriberListParams } from './subscribers.service';
+export { type Subscriber } from '../types/admin';
 export { default as authService } from './auth.service';
