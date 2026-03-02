@@ -229,7 +229,7 @@ const AdminDashboard: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
-          className="lg:col-span-2 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800"
+          className="lg:col-span-2 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 h-full min-h-[400px]"
         >
           <div className="flex justify-between items-center mb-6">
             <div>
@@ -240,8 +240,8 @@ const AdminDashboard: React.FC = () => {
               <MoreHorizontal className="w-5 h-5 text-zinc-400" />
             </button>
           </div>
-          <div className="h-80 w-full">
-            <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={100}>
+          <div className="h-[320px] w-full relative">
+            <ResponsiveContainer width="99%" height="100%" minWidth={0}>
               <AreaChart data={donationData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
@@ -308,9 +308,9 @@ const AdminDashboard: React.FC = () => {
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Current Initiatives</h3>
           <button className="text-sm text-primary-600 font-medium hover:underline">Track All Projects</button>
         </div>
-        <div className="h-64 w-full text-zinc-900 dark:text-zinc-100">
+        <div className="h-64 w-full text-zinc-900 dark:text-zinc-100 relative">
           {projectStatusData.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={100}>
+            <ResponsiveContainer width="99%" height="100%" minWidth={0}>
               <BarChart data={projectStatusData} layout="vertical" margin={{ left: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#e4e4e7" />
                 <XAxis type="number" hide />

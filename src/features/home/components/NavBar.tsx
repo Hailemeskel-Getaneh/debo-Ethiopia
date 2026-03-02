@@ -1,305 +1,223 @@
 import { useState, useEffect, useRef } from "react";
-import logo from "@/assets/images/image copy.png";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronDown, Heart, Globe, Search } from "lucide-react";
+import { Link } from "react-router-dom";
+import logo from "@/assets/images/logo.png";
+
+
+
+const navLinks = [
+  { name: "Home", href: "/" },
+  {
+    name: "About",
+    href: "#",
+    dropdown: [
+      { name: "About Us", href: "/about" },
+      { name: "Achievements", href: "/achievements" },
+      { name: "Board Leadership", href: "/BoardLeadership" },
+    ],
+  },
+  { name: "Programs", href: "/programs" },
+  {
+    name: "Work",
+    href: "#",
+    dropdown: [
+      { name: "Active Projects", href: "/projects?status=active" },
+      { name: "Completed Projects", href: "/projects?status=completed" },
+      { name: "Upcoming Projects", href: "/projects?status=upcoming" },
+    ],
+  },
+  {
+    name: "Media",
+    href: "#",
+    dropdown: [
+      { name: "Latest News", href: "/news" },
+      { name: "Photo Gallery", href: "/gallery" },
+    ],
+  },
+];
 
 const NavBar = () => {
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
 
-  // Close menus when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
-        setOpenMenu(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const toggleMenu = (menuId: string) => {
-    setOpenMenu((prev) => (prev === menuId ? null : menuId));
-  };
 
   return (
     <nav
       ref={navRef}
-      className="navbar bg-base-100 shadow-sm fixed top-0 left-0 w-full z-50"
-      aria-label="Main Navigation"
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled
+        ? "py-3 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-white/20 dark:border-zinc-800/20 shadow-lg"
+        : "py-6 bg-transparent"
+        }`}
     >
-      {/* Left Section */}
-      <div className="navbar-start">
-        {/* Mobile Dropdown */}
-        <div className="dropdown">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost lg:hidden"
-            aria-label="Open Mobile Menu"
-            aria-haspopup="true"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="relative z-50 flex items-center gap-2 group">
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
+              <img src={logo} alt="Debo Logo" className="w-full h-full object-contain" />
+            </div>
+            <span className={`font-heading text-xl font-bold tracking-tight transition-colors duration-300 ${isScrolled ? 'text-zinc-900 dark:text-white' : 'text-white'}`}>
+              Debo <span className="text-brand-main">Ethiopia</span>
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <div
+                key={link.name}
+                className="relative group"
+                onMouseEnter={() => setActiveDropdown(link.name)}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                {link.dropdown ? (
+                  <button
+                    className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isScrolled
+                      ? "text-zinc-600 hover:text-brand-main hover:bg-brand-main/5 dark:text-zinc-400"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
+                      }`}
+                  >
+                    {link.name}
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${activeDropdown === link.name ? 'rotate-180' : ''}`} />
+                  </button>
+                ) : (
+                  <Link
+                    to={link.href}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isScrolled
+                      ? "text-zinc-600 hover:text-brand-main hover:bg-brand-main/5 dark:text-zinc-400"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
+                      }`}
+                  >
+                    {link.name}
+                  </Link>
+                )}
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {link.dropdown && activeDropdown === link.name && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-0 mt-2 w-56 p-2 rounded-2xl bg-white dark:bg-zinc-900 shadow-premium border border-zinc-100 dark:border-zinc-800"
+                    >
+                      {link.dropdown.map((subItem) => (
+                        <Link
+                          key={subItem.name}
+                          to={subItem.href}
+                          className="flex items-center px-4 py-3 rounded-xl text-sm text-zinc-600 dark:text-zinc-400 hover:bg-brand-main/5 hover:text-brand-main transition-all group"
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
 
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-56 p-2 shadow"
+          {/* Actions */}
+          <div className="hidden lg:flex items-center gap-4">
+            <button className={`p-2 rounded-full transition-colors ${isScrolled ? 'text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800' : 'text-white/80 hover:bg-white/10'}`}>
+              <Search className="w-5 h-5" />
+            </button>
+            <Link to="/donate">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="btn-action px-6 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2"
+              >
+                <Heart className="w-4 h-4 fill-current" />
+                Donate
+              </motion.button>
+            </Link>
+          </div>
+
+          {/* Mobile Toggle */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className={`lg:hidden relative z-50 p-2 rounded-xl transition-all ${mobileMenuOpen
+              ? "bg-brand-main text-white"
+              : isScrolled
+                ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white"
+                : "bg-white/10 text-white backdrop-blur-sm"
+              }`}
           >
-            <li>
-              <a href="/">Home</a>
-            </li>
-
-            <li>
-              <a role="button">About</a>
-              <ul className="p-2">
-                <li>
-                  <a href="/about">About Us</a>
-                </li>
-                <li>
-                  <a href="/BoardLeadership">BoardLeadership</a>
-                </li>
-
-                <li>
-                  <a href="/achievements">Achievements</a>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <a href="/programs">Programs</a>
-            </li>
-
-            <li>
-              <a>Projects</a>
-              <ul className="p-2">
-                <li>
-                  <a href="/projects?status=active">Active Projects</a>
-                </li>
-                <li>
-                  <a href="/projects?status=completed">Completed Projects</a>
-                </li>
-                <li>
-                  <a href="/projects?status=upcoming">Upcoming Projects</a>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <a>Events</a>
-              <ul className="p-2">
-                <li>
-                  <a href="/events?type=upcoming">Upcoming Events</a>
-                </li>
-                <li>
-                  <a href="/events?type=past">Past Events</a>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <a>Media</a>
-              <ul className="p-2">
-                <li>
-                  <a href="/news">News</a>
-                </li>
-                <li>
-                  <a href="/gallery">Gallery</a>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <a href="/donate">Donate</a>
-            </li>
-            <li>
-              <a href="/contact">Contact</a>
-            </li>
-          </ul>
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
-
-        {/* Logo */}
-        <a href="/" className="btn btn-ghost px-2 hover:bg-transparent">
-          <img
-            src={logo}
-            alt="Debo Ethiopia"
-            className="h-10 w-auto object-contain"
-          />
-        </a>
       </div>
 
-      {/* Desktop Menu */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 gap-1">
-          <li>
-            <a href="/">Home</a>
-          </li>
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-40 bg-white dark:bg-zinc-950 lg:hidden flex flex-col pt-24 px-6 overflow-y-auto"
+          >
+            <div className="flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <div key={link.name} className="flex flex-col">
+                  {link.dropdown ? (
+                    <div className="py-2">
+                      <div className="text-zinc-400 text-xs font-semibold uppercase tracking-widest px-4 mb-2">
+                        {link.name}
+                      </div>
+                      <div className="flex flex-col gap-1 pl-4">
+                        {link.dropdown.map((sub) => (
+                          <Link
+                            key={sub.name}
+                            to={sub.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="py-3 px-4 rounded-xl text-lg font-medium text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="py-4 px-4 rounded-xl text-2xl font-semibold text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                    >
+                      {link.name}
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
 
-          <li>
-            <details open={openMenu === "about"}>
-              <summary
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleMenu("about");
-                }}
-                aria-expanded={openMenu === "about"}
-                aria-haspopup="true"
-              >
-                About
-              </summary>
-              <ul className="p-2 bg-base-100 w-44 shadow">
-                <li>
-                  <a href="/about" onClick={() => setOpenMenu(null)}>
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="/achievements" onClick={() => setOpenMenu(null)}>
-                    Achievements
-                  </a>
-                </li>
-                <li>
-                  <a href="/BoardLeadership" onClick={() => setOpenMenu(null)}>
-                    Board Leadership
-                  </a>
-                </li>
-              </ul>
-            </details>
-          </li>
-
-          <li>
-            <a href="/programs" onClick={() => setOpenMenu(null)}>
-              Programs
-            </a>
-          </li>
-
-          <li>
-            <details open={openMenu === "projects"}>
-              <summary
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleMenu("projects");
-                }}
-                aria-expanded={openMenu === "projects"}
-                aria-haspopup="true"
-              >
-                Projects
-              </summary>
-              <ul className="p-2 bg-base-100 w-52 shadow">
-                <li>
-                  <a
-                    href="/projects?status=active"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    Active Projects
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/projects?status=completed"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    Completed Projects
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/projects?status=upcoming"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    Upcoming Projects
-                  </a>
-                </li>
-              </ul>
-            </details>
-          </li>
-
-          <li>
-            <details open={openMenu === "events"}>
-              <summary
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleMenu("events");
-                }}
-                aria-expanded={openMenu === "events"}
-                aria-haspopup="true"
-              >
-                Events
-              </summary>
-              <ul className="p-2 bg-base-100 w-52 shadow">
-                <li>
-                  <a
-                    href="/events?type=upcoming"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    Upcoming Events
-                  </a>
-                </li>
-                <li>
-                  <a href="/events?type=past" onClick={() => setOpenMenu(null)}>
-                    Past Events
-                  </a>
-                </li>
-              </ul>
-            </details>
-          </li>
-
-          <li>
-            <details open={openMenu === "media"}>
-              <summary
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleMenu("media");
-                }}
-                aria-expanded={openMenu === "media"}
-                aria-haspopup="true"
-              >
-                Media
-              </summary>
-              <ul className="p-2 bg-base-100 w-44 shadow">
-                <li>
-                  <a href="/newsletter" onClick={() => setOpenMenu(null)}>
-                    News
-                  </a>
-                </li>
-                <li>
-                  <a href="/gallery" onClick={() => setOpenMenu(null)}>
-                    Gallery
-                  </a>
-                </li>
-              </ul>
-            </details>
-          </li>
-
-          <li>
-            <a href="/donate" className="font-semibold text-primary">
-              Donate
-            </a>
-          </li>
-
-          <li>
-            <a href="/contact">Contact</a>
-          </li>
-        </ul>
-      </div>
-
-      {/* Right Section */}
-      <div className="navbar-end">
-        {/* Login button removed as requested */}
-      </div>
+            <div className="mt-auto py-10 flex flex-col gap-4">
+              <Link to="/donate" className="btn-action w-full py-4 rounded-2xl text-center font-bold text-lg flex items-center justify-center gap-2">
+                <Heart className="w-6 h-6 fill-current" />
+                Donate Now
+              </Link>
+              <div className="flex justify-center gap-6">
+                {/* Social placeholders */}
+                <div className="text-zinc-400 p-2 hover:text-brand-main transition-colors"><Globe className="w-6 h-6" /></div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
 
 export default NavBar;
+

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { programsService } from '../services';
+import { cachedFetch } from './apiCache';
 
 interface UseProgramsResult {
   programs: any[];
@@ -18,9 +19,8 @@ export const usePrograms = (): UseProgramsResult => {
       try {
         setLoading(true);
         setError(null);
-        const response = await programsService.getAll();
-        // Handle paginated response - extract results array
-        const programsData = response.results || response;
+        const response = await cachedFetch('programs', () => programsService.getAll());
+        const programsData = (response as any).results || response;
         setPrograms(programsData);
       } catch (err) {
         console.error('Error fetching programs:', err);

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { statsService } from '../services';
 import type { StatItem } from '../services';
+import { cachedFetch } from './apiCache';
 
 interface UseStatsResult {
   stats: StatItem[];
@@ -19,8 +20,7 @@ export const useStats = (): UseStatsResult => {
       try {
         setLoading(true);
         setError(null);
-        const response = await statsService.getAll();
-        // Handle both paginated and non-paginated responses
+        const response = await cachedFetch('stats', () => statsService.getAll());
         const statsData = (response as any).results || response || [];
         setStats(statsData);
       } catch (err) {

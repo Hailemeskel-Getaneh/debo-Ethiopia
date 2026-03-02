@@ -3,6 +3,7 @@ import { Mail, Search, Trash2, Download, Users, Loader2, AlertCircle } from 'luc
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle } from 'lucide-react';
 import { subscribersService } from '../services/subscribers.service';
+import { useDebounce } from '../hooks/useDebounce';
 import type { Subscriber } from '../types/admin';
 
 const ManageSubscribers: React.FC = () => {
@@ -10,6 +11,7 @@ const ManageSubscribers: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearch = useDebounce(searchTerm, 500);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -21,13 +23,18 @@ const ManageSubscribers: React.FC = () => {
         try {
             const data = await subscribersService.list({
                 page, page_size: PAGE_SIZE,
-                ...(searchTerm && { search: searchTerm })
+                ...(debouncedSearch && { search: debouncedSearch })
             });
-            setSubscribers(data.results);
-            setTotalCount(data.count);
+            if (data && data.results) {
+                setSubscribers(data.results);
+                setTotalCount(data.count);
+            } else {
+                setSubscribers([]);
+                setTotalCount(0);
+            }
         } catch { setError('Failed to load subscribers.'); }
         finally { setLoading(false); }
-    }, [page, searchTerm]);
+    }, [page, debouncedSearch]);
 
     useEffect(() => { fetchSubscribers(); }, [fetchSubscribers]);
 

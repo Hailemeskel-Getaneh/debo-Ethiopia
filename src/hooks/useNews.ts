@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { newsService } from '../services';
+import { cachedFetch } from './apiCache';
 
 interface UseNewsResult {
   news: any[];
@@ -19,8 +20,8 @@ export const useNews = (): UseNewsResult => {
       try {
         setLoading(true);
         setError(null);
-        const response = await newsService.getAll();
-        const newsData = response.results || response || [];
+        const response = await cachedFetch('news', () => newsService.getAll());
+        const newsData = (response as any).results || response || [];
         setNews(newsData);
       } catch (err) {
         console.error('Error fetching news:', err);

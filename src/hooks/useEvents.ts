@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { eventsService } from '../services';
+import { cachedFetch } from './apiCache';
 
 interface UseEventsResult {
   events: any[];
@@ -20,8 +21,8 @@ export const useEvents = (): UseEventsResult => {
       try {
         setLoading(true);
         setError(null);
-        const response = await eventsService.getAll();
-        const eventsData = response.results || response || [];
+        const response = await cachedFetch('events', () => eventsService.getAll());
+        const eventsData = (response as any).results || response || [];
         setEvents(eventsData);
       } catch (err) {
         console.error('Error fetching events:', err);
