@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { achievementsService } from '../services';
+import { cachedFetch } from './apiCache';
 
 interface UseAchievementsResult {
   achievements: any[];
@@ -18,8 +19,10 @@ export const useAchievements = (): UseAchievementsResult => {
       try {
         setLoading(true);
         setError(null);
-        const response = await achievementsService.getAll();
-        const achievementsData = response.results || response || [];
+        const response = await cachedFetch('achievements', () =>
+          achievementsService.getAll()
+        );
+        const achievementsData = (response as any).results || response || [];
         setAchievements(achievementsData);
       } catch (err) {
         console.error('Error fetching achievements:', err);
