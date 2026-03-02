@@ -7,21 +7,54 @@ Manage public newsletter subscriptions and mailing lists.
 
 ## Endpoints
 
-### 1. Subscribe (Public)
+### 1. List Subscribers (Admin Only)
+`GET /api/subscribers/`
+- **Query Params**:
+  - `email` (string): Filter by exact email.
+  - `ordering` (string): Field to order by (e.g., `subscribed_at`).
+  - `page` (integer): Page number.
+  - `page_size` (integer): Results per page.
+  - `search` (string): Search term.
+  - `subscribed_after` (datetime): Filter by subscription date.
+  - `subscribed_before` (datetime): Filter by subscription date.
+- **Success (200 OK)**:
+```json
+{
+  "count": 123,
+  "next": "...",
+  "previous": "...",
+  "results": [
+    {
+      "id": 0,
+      "email": "user@example.com",
+      "subscribed_at": "2026-03-02T05:22:40.375Z"
+    }
+  ]
+}
+```
+
+### 2. Subscribe (Public)
 `POST /api/subscribers/subscribe/`
 - User-facing endpoint for newsletter signup.
 - **Request Body**: `{ "email": "user@example.com" }`
-- **Success (200 OK)**: Added to mailing list.
-
-### 2. List Subscribers (Admin Only)
-`GET /api/subscribers/`
-- **Pagination**: Results are paged.
-- **Filtering**: Support filtering by `subscribed_after` and `subscribed_before`.
-- **Success (200 OK)**: Returns the list of subscriber emails.
+- **Success (200 OK)**:
+```json
+{
+  "email": "user@example.com"
+}
+```
 
 ### 3. Subscriber Detail (Admin Only)
 `GET /api/subscribers/{id}/`
 - Retrieve details for a specific subscriber record.
+- **Success (200 OK)**:
+```json
+{
+  "id": 0,
+  "email": "user@example.com",
+  "subscribed_at": "2026-03-02T05:22:40.388Z"
+}
+```
 
 ### 4. Delete Subscriber (Admin Only)
 `DELETE /api/subscribers/{id}/`

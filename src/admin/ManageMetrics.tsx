@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Edit2, BarChart3, TrendingUp, Users, GraduationCap, CheckCircle2, Clock, X, Save, Loader2, AlertCircle } from 'lucide-react';
+import { Search, Edit2, BarChart3, TrendingUp, Users, GraduationCap, CheckCircle2, Clock, X, Save, Loader2, AlertCircle, Plus, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { statsService } from '../services/stats.service';
 import type { StatMetric } from '../types/admin';
@@ -27,6 +27,7 @@ const ManageMetrics: React.FC = () => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [selectedMetric, setSelectedMetric] = useState<StatMetric | null>(null);
     const [saving, setSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<number | null>(null);
 
     const fetchMetrics = useCallback(async () => {
         setLoading(true); setError(null);
@@ -46,14 +47,38 @@ const ManageMetrics: React.FC = () => {
     });
 
     const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); if (!selectedMetric) return;
+        e.preventDefault();
         setSaving(true);
         const formData = new FormData(e.currentTarget);
+        const name = formData.get('name') as string;
+        const value = Number(formData.get('value'));
+
         try {
-            await statsService.update(selectedMetric.id, Number(formData.get('value')));
-            setIsEditOpen(false); fetchMetrics();
-        } catch { alert('Failed to update metric.'); }
-        finally { setSaving(false); }
+            if (selectedMetric) {
+                await statsService.update(selectedMetric.id, { name, value });
+            } else {
+                await statsService.create({ name, value });
+            }
+            setIsEditOpen(false);
+            fetchMetrics();
+        } catch {
+            alert('Failed to save metric.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        if (!window.confirm('Are you sure you want to delete this metric?')) return;
+        setIsDeleting(id);
+        try {
+            await statsService.delete(id);
+            fetchMetrics();
+        } catch {
+            alert('Failed to delete metric.');
+        } finally {
+            setIsDeleting(null);
+        }
     };
 
     const totalReach = metrics.reduce((s, m) => s + m.value, 0);
@@ -62,9 +87,21 @@ const ManageMetrics: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2"><BarChart3 className="w-7 h-7 text-primary-600" />Impact Metrics</h2>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Manage and update key statistics for NGO transparency and reporting.</p>
+            <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                        <BarChart3 className="w-7 h-7 text-primary-600" />
+                        Impact Metrics
+                    </h2>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Manage and update key statistics for NGO transparency and reporting.</p>
+                </div>
+                <button
+                    onClick={() => { setSelectedMetric(null); setIsEditOpen(true); }}
+                    className="btn-gradient px-6 py-3 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap"
+                >
+                    <Plus className="w-5 h-5" />
+                    Add Metric
+                </button>
             </div>
 
             {/* Stats overview */}
@@ -141,10 +178,23 @@ const ManageMetrics: React.FC = () => {
                                         </td>
                                         <td className="px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400">{new Date(metric.updated_at).toLocaleDateString()}</td>
                                         <td className="px-6 py-4 text-right">
-                                            <button onClick={() => { setSelectedMetric(metric); setIsEditOpen(true); }}
-                                                className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-all">
-                                                <Edit2 className="w-4 h-4" />
-                                            </button>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button onClick={() => { setSelectedMetric(metric); setIsEditOpen(true); }}
+                                                    className="p-2 text-zinc-400 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-all">
+                                                    <Edit2 className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(metric.id)}
+                                                    disabled={isDeleting === metric.id}
+                                                    className="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all disabled:opacity-50"
+                                                >
+                                                    {isDeleting === metric.id ? (
+                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                    ) : (
+                                                        <Trash2 className="w-4 h-4" />
+                                                    )}
+                                                </button>
+                                            </div>
                                         </td>
                                     </motion.tr>
                                 );
@@ -163,8 +213,17 @@ const ManageMetrics: React.FC = () => {
                             className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800">
                             <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center"><TrendingUp className="w-5 h-5 text-primary-600" /></div>
-                                    <div><h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Update Impact</h3><p className="text-xs text-zinc-500">Modify metric values for NGO reports.</p></div>
+                                    <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                                        {selectedMetric ? <Edit2 className="w-5 h-5 text-primary-600" /> : <Plus className="w-5 h-5 text-primary-600" />}
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                                            {selectedMetric ? 'Update Impact' : 'Add New Metric'}
+                                        </h3>
+                                        <p className="text-xs text-zinc-500">
+                                            {selectedMetric ? 'Modify existing metric values.' : 'Create a new indicator for NGO performance.'}
+                                        </p>
+                                    </div>
                                 </div>
                                 <button onClick={() => setIsEditOpen(false)} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-colors"><X className="w-5 h-5 text-zinc-500" /></button>
                             </div>
@@ -180,7 +239,8 @@ const ManageMetrics: React.FC = () => {
                                 <div className="flex gap-4 pt-2">
                                     <button type="button" onClick={() => setIsEditOpen(false)} className="flex-1 px-6 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 font-bold hover:bg-zinc-50 transition-colors">Cancel</button>
                                     <button type="submit" disabled={saving} className="flex-1 px-6 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 shadow-lg transition-all disabled:opacity-60 flex items-center justify-center gap-2">
-                                        {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-5 h-5" />}Update Data
+                                        {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-5 h-5" />}
+                                        {selectedMetric ? 'Update Data' : 'Create Metric'}
                                     </button>
                                 </div>
                             </form>

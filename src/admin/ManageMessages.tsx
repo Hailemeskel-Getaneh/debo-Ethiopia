@@ -4,6 +4,7 @@ import {
     CheckCircle2, Loader2, AlertCircle
 } from 'lucide-react';
 import { messagesService } from '../services/messages.service';
+import { useDebounce } from '../hooks/useDebounce';
 import type { ContactMessage } from '../types/admin';
 
 const ManageMessages: React.FC = () => {
@@ -11,6 +12,7 @@ const ManageMessages: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearch = useDebounce(searchTerm, 500);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [replyText, setReplyText] = useState('');
@@ -24,13 +26,13 @@ const ManageMessages: React.FC = () => {
         try {
             const data = await messagesService.list({
                 page, page_size: PAGE_SIZE,
-                ...(searchTerm && { search: searchTerm })
+                ...(debouncedSearch && { search: debouncedSearch })
             });
             setMessages(data.results);
             setTotalCount(data.count);
         } catch { setError('Failed to load messages.'); }
         finally { setLoading(false); }
-    }, [page, searchTerm]);
+    }, [page, debouncedSearch]);
 
     useEffect(() => { fetchMessages(); }, [fetchMessages]);
 

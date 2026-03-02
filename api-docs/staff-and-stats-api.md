@@ -23,10 +23,30 @@ Handles internal staff records and organizational performance metrics.
 ## 📊 Statistics API
 **Base URL**: `/api/stats/`
 
-### 1. Analytics & Metrics
-- `GET /`: List all tracked impact metrics (e.g., "Active Volunteers", "Cities Covered").
+Handles impact metrics and analytics data displayed across the public site.
 
-### 2. Dashboard Tracking
-- `POST /`: Add/Update a numeric metric.
-- `GET /summary/`: Quick dashboard view of core numbers for the frontend home page/hero section.
-- `DELETE /{id}/`: Remove a metric record (**204 No Content**).
+### 1. List Metrics
+`GET /`
+- Returns a list of all tracked metrics (Paginated).
+- **Query Params**: `name`, `min_value`, `max_value`, `search`, `ordering`, `page`, `page_size`.
+
+### 2. Create Metric (Admin Only)
+`POST /`
+- **Body**: `{ "name": "string", "value": number }`
+- Returns the created metric object.
+
+### 3. Retrieve Metric
+`GET /{id}/`
+- Returns details of a specific stat metric.
+
+### 4. Update Metric (Admin Only)
+`PUT/PATCH /{id}/`
+- **Body**: `{ "name": "string", "value": number }` (Partial updates supported via PATCH).
+
+### 5. Delete Metric (Admin Only)
+`DELETE /{id}/`
+- Removes a metric record (**204 No Content**).
+
+### 6. Analytics Summary
+`GET /summary/`
+- Returns dynamic impact highlights for the frontend home page.
