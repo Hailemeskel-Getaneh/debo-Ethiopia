@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search, ChevronRight, Sparkles, Calendar } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Sparkles, Calendar, ArrowRight, Grid, LayoutList } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 import { usePrograms } from "@/hooks/usePrograms";
 
-// Backend schema: { id, name, description, created_at, updated_at }
 interface Program {
   id: number;
   name: string;
@@ -14,21 +13,20 @@ interface Program {
   updated_at: string;
 }
 
-// Format date for display
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
-    month: "short",
+    month: "long",
     day: "numeric",
     year: "numeric",
   });
 };
 
 export function AllPrograms() {
-  const { programs, loading, error } = usePrograms();
+  const { programs, loading } = usePrograms();
   const [search, setSearch] = useState("");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Use API data directly
   const displayPrograms: Program[] = programs || [];
 
   const filtered = displayPrograms.filter(
@@ -40,122 +38,151 @@ export function AllPrograms() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[#009639] border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#009639] text-white rounded-lg"
-          >
-            Retry
-          </button>
-        </div>
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="w-12 h-12 border-4 border-brand-main border-t-transparent rounded-full"
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       <NavBar />
-      <main id="main-content">
-        {/* ── HERO ── */}
-        <section className="relative min-h-[52vh] flex items-center overflow-hidden pt-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#003d1a] via-[#005c28] to-[#009639]" />
-          <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-purple-400/10 blur-3xl" />
-          <div className="absolute bottom-20 -left-20 w-72 h-72 rounded-full bg-[#00b359]/10 blur-3xl" />
-
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center w-full">
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-[#00b359]" /> Our Programs
-            </div>
-            <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-5">
-              Our{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00b359] to-[#00b359]">
-                Programs
+      <main className="pt-20">
+        {/* Header Section */}
+        <section className="relative py-32 overflow-hidden mesh-gradient">
+          <div className="absolute inset-0 dot-pattern opacity-10" />
+          <div className="container relative z-10 mx-auto px-6 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-brand-main text-sm font-bold uppercase tracking-widest mb-8">
+                <Sparkles className="w-4 h-4" /> Transformative Impact
               </span>
-            </h1>
-            <p className="text-xl text-white/75 max-w-2xl mx-auto mb-10">
-              Explore our impactful programs transforming communities across
-              Ethiopia through education, health, and social development.
-            </p>
-            <div className="max-w-md mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search programs..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/95 text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#00b359]"
-              />
-            </div>
+              <h1 className="text-6xl md:text-7xl font-bold text-zinc-900 dark:text-white mb-8 tracking-tight">
+                Our <span className="text-brand-main">Programs</span>
+              </h1>
+              <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+                Discover how we're building sustainable futures through community-led initiatives in education, health, and economic empowerment.
+              </p>
+
+              <div className="max-w-2xl mx-auto relative group">
+                <div className="absolute inset-0 bg-brand-main/10 blur-2xl group-focus-within:bg-brand-main/20 transition-all rounded-[2rem]" />
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-400 group-focus-within:text-brand-main transition-colors" />
+                <input
+                  type="text"
+                  placeholder="Search by name or category..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-16 pr-6 py-6 rounded-[2rem] glass-card dark:bg-zinc-900/50 text-xl text-zinc-900 dark:text-white placeholder-zinc-400 border-white/20 focus:outline-none focus:ring-4 focus:ring-brand-main/20 transition-all shadow-premium"
+                />
+              </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── PROGRAMS GRID ── */}
-        <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p className="text-sm text-gray-400 mb-8">
-              Showing {filtered.length} program
-              {filtered.length !== 1 ? "s" : ""}
-            </p>
+        {/* Content Section */}
+        <section className="py-24 container mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
+            <div className="flex items-center gap-4">
+              <h2 className="text-2xl font-bold dark:text-white">Active Programs</h2>
+              <span className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-sm font-bold">
+                {filtered.length}
+              </span>
+            </div>
 
+            <div className="flex items-center gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-zinc-800 shadow-sm text-brand-main' : 'text-zinc-400 hover:text-zinc-600'}`}
+              >
+                <Grid className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white dark:bg-zinc-800 shadow-sm text-brand-main' : 'text-zinc-400 hover:text-zinc-600'}`}
+              >
+                <LayoutList className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <AnimatePresence mode="popLayout">
             {filtered.length === 0 ? (
-              <div className="text-center py-24 text-gray-400">
-                <Search className="w-12 h-12 mx-auto mb-4 opacity-40" />
-                <p className="text-lg font-medium">
-                  No programs match your search.
-                </p>
-              </div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-40 bg-white dark:bg-zinc-900/30 rounded-[3rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800"
+              >
+                <div className="w-20 h-20 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-6">
+                  <Search className="w-10 h-10 text-zinc-300" />
+                </div>
+                <h3 className="text-2xl font-bold dark:text-white mb-2">No matching programs</h3>
+                <p className="text-zinc-500">Try adjusting your search criteria</p>
+              </motion.div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-                {filtered.map((program: Program, index: number) => (
+              <motion.div
+                layout
+                className={viewMode === 'grid'
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                  : "flex flex-col gap-6"
+                }
+              >
+                {filtered.map((program, index) => (
                   <motion.div
                     key={program.id}
+                    layout
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    transition={{ delay: index * 0.05 }}
+                    className={`group relative overflow-hidden bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-premium transition-all duration-500 ${viewMode === 'list' ? 'flex flex-row items-center p-6' : 'p-10'}`}
                   >
-                    {/* Header with gradient */}
-                    <div className="h-2 bg-gradient-to-r from-[#003d1a] to-[#009639]" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-bl from-brand-main/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-bl-full" />
 
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    <div className={viewMode === 'list' ? 'flex-1' : ''}>
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="w-12 h-12 rounded-2xl bg-brand-main/10 flex items-center justify-center">
+                          <Sparkles className="text-brand-main w-6 h-6" />
+                        </div>
+                        <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {formatDate(program.created_at)}
+                        </div>
+                      </div>
+
+                      <h3 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white mb-4 tracking-tight group-hover:text-brand-main transition-colors">
                         {program.name}
                       </h3>
 
-                      <p className="text-gray-600 leading-relaxed mb-4">
+                      <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8 text-lg">
                         {program.description}
                       </p>
+                    </div>
 
-                      <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>Created: {formatDate(program.created_at)}</span>
-                      </div>
-
-                      <a
-                        href="/donate"
-                        className="inline-flex items-center justify-center gap-1.5 bg-[#009639] text-white font-semibold text-sm py-2.5 rounded-xl hover:bg-[#007a2e] transition-colors w-full"
+                    <div className={viewMode === 'list' ? 'ml-10 shrink-0' : 'mt-auto'}>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-4 rounded-2xl bg-zinc-950 dark:bg-brand-main text-white font-bold flex items-center justify-center gap-2 group/btn transition-colors hover:bg-brand-main"
                       >
-                        Learn More <ChevronRight className="w-4 h-4" />
-                      </a>
+                        Program Details
+                        <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                      </motion.button>
                     </div>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             )}
-          </div>
+          </AnimatePresence>
         </section>
       </main>
       <Footer />
     </div>
   );
 }
+
