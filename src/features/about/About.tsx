@@ -176,12 +176,12 @@ export function About() {
                 Array(4).fill(0).map((_, i) => (
                   <div key={i} className="h-40 rounded-[2rem] bg-zinc-200/50 dark:bg-zinc-800/50 animate-pulse" />
                 ))
-              ) : (stats && stats.length > 0 ? stats : fallbackStats).slice(0, 4).map((stat: any) => (
+              ) : (stats && stats.length > 0 ? stats : fallbackStats).slice(0, 4).map((stat) => (
                 <StatItem
-                  key={stat.label || stat.name}
+                  key={'label' in stat ? stat.label : stat.name}
                   value={stat.value}
-                  suffix={stat.suffix || ""}
-                  label={stat.label || stat.name}
+                  suffix={'suffix' in stat ? stat.suffix || "" : ""}
+                  label={'label' in stat ? stat.label : stat.name}
                   visible={impactVisible}
                 />
               ))}

@@ -95,7 +95,7 @@ export default function HomePage() {
       setActiveSlide((prev) => (prev + 1) % heroSlides.length);
     }, 7000);
     return () => clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans selection:bg-brand-main/20 selection:text-brand-main">
@@ -206,7 +206,7 @@ export default function HomePage() {
                 Array(4).fill(0).map((_, i) => (
                   <div key={i} className="p-8 rounded-3xl bg-zinc-200/20 dark:bg-zinc-800/20 animate-pulse h-32" />
                 ))
-              ) : (stats && stats.length > 0 ? stats : fallbackStats).slice(0, 4).map((stat: any, i) => (
+              ) : (stats && stats.length > 0 ? stats : fallbackStats).slice(0, 4).map((stat, i) => (
                 <motion.div
                   key={i}
                   variants={itemVariants}
@@ -216,7 +216,7 @@ export default function HomePage() {
                     {stat.value}
                   </div>
                   <div className="text-zinc-500 uppercase tracking-widest text-[10px] font-bold">
-                    {stat.label || stat.name}
+                    {'label' in stat ? stat.label : (stat as any).name}
                   </div>
                 </motion.div>
               ))}
@@ -313,7 +313,7 @@ export default function HomePage() {
               </div>
             ) : upcomingEvents?.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {upcomingEvents.slice(0, 3).map((event: any, i: number) => {
+                {upcomingEvents.slice(0, 3).map((event, i) => {
                   const eventImage = event.images?.[0]?.image;
 
                   return (
@@ -461,7 +461,7 @@ export default function HomePage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {(news || []).slice(0, 3).map((item: any, i: number) => (
+              {(news || []).slice(0, 3).map((item, i) => (
                 <motion.article
                   key={i}
                   whileHover={{ y: -8 }}

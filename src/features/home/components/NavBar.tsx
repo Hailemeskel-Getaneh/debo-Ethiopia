@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Heart, Globe, Search } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 
 
@@ -41,7 +41,6 @@ const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const location = useLocation();
   const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,11 +48,6 @@ const NavBar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    setMobileMenuOpen(false);
-    setActiveDropdown(null);
-  }, [location]);
 
   return (
     <nav
@@ -187,6 +181,7 @@ const NavBar = () => {
                           <Link
                             key={sub.name}
                             to={sub.href}
+                            onClick={() => setMobileMenuOpen(false)}
                             className="py-3 px-4 rounded-xl text-lg font-medium text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900"
                           >
                             {sub.name}
@@ -197,6 +192,7 @@ const NavBar = () => {
                   ) : (
                     <Link
                       to={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
                       className="py-4 px-4 rounded-xl text-2xl font-semibold text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900"
                     >
                       {link.name}

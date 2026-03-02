@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { Award, Calendar, Search, Sparkles, ArrowRight, Loader2 } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
@@ -70,7 +70,7 @@ const Achievements: React.FC = () => {
     }
   };
 
-  const itemVariants: any = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
   };
@@ -162,7 +162,7 @@ const Achievements: React.FC = () => {
                     <p className="text-zinc-500 mt-2 font-medium">Try refining your search term to find specific achievements.</p>
                   </motion.div>
                 ) : (
-                  filtered.map((achievement: Achievement, index: number) => (
+                  filtered.map((achievement, index) => (
                     <motion.div
                       key={index}
                       layout

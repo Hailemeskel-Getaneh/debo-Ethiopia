@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Linkedin, Users, Star, Globe, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
+import { Mail, Linkedin, Users, Star, Globe, ArrowRight, ShieldCheck } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 

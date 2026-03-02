@@ -20,6 +20,7 @@ interface Event {
   location: string;
   start_date: string;
   end_date: string;
+  images?: { id: number; image: string }[];
 }
 
 // Helper to determine if event is upcoming or past

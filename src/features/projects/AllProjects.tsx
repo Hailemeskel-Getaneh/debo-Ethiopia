@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Search,
@@ -80,17 +80,10 @@ const formatBudget = (budget: number, currency: string): string => {
 export function AllProjects() {
   const { projects, active, completed, upcoming, loading, error } = useProjects();
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialFilter = searchParams.get("status") || "all";
-  const [activeFilter, setActiveFilter] = useState(initialFilter);
+  const activeFilter = searchParams.get("status") || "all";
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    const status = searchParams.get("status") || "all";
-    setActiveFilter(status);
-  }, [searchParams]);
-
   const handleFilterChange = (id: string) => {
-    setActiveFilter(id);
     const newParams = new URLSearchParams(searchParams);
     if (id === "all") {
       newParams.delete("status");

@@ -27,7 +27,7 @@ axiosInstance.interceptors.request.use(
 );
 
 // ── Request Deduplication ──────────────────────────────────────────────────
-const pendingRequests = new Map<string, Promise<any>>();
+const pendingRequests = new Map<string, Promise<unknown>>();
 
 const getDeduplicatedKey = (endpoint: string, params?: Record<string, unknown>) => {
     return `${endpoint}?${JSON.stringify(params || {})}`;
@@ -99,7 +99,7 @@ export const api = {
         // If a request for this exact endpoint+params is already in flight, return it
         if (pendingRequests.has(key)) {
             console.log(`[Deduplication] Sharing in-flight request for: ${endpoint}`);
-            return pendingRequests.get(key);
+            return pendingRequests.get(key) as Promise<T>;
         }
 
         const fetchPromise = (async () => {
