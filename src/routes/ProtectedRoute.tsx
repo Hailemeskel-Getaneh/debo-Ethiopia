@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     isAllowed,
-    redirectTo = "/login"
+    redirectTo = "/abc/login"
 }) => {
     if (!isAllowed) {
         return <Navigate replace to={redirectTo} />;

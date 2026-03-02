@@ -19,8 +19,8 @@ export interface ContactSubmitData {
 }
 
 export const contactService = {
-  submit: (data: any) => api.post<any>('/api/contact-messages/submit/', data),
-  getAll: () => api.get<any>('/api/contact-messages/'),
+  submit: (data: any) => api.post<any>('/contact-messages/submit/', data),
+  getAll: () => api.get<any>('/contact-messages/'),
 };
 
 export default contactService;

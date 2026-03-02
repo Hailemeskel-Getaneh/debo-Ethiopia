@@ -1,31 +1,37 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from './api';
+import type { GalleryItem, PaginatedResponse } from '../types/admin';
 
-export interface Gallery {
-  id: number;
+export interface GalleryListParams {
+  page?: number;
+  page_size?: number;
+  search?: string;
+}
+
+export interface GalleryPayload {
   title: string;
-  description?: string;
-  category?: string;
-  images?: GalleryImage[];
-  videos?: GalleryVideo[];
-  created_at?: string;
-}
-
-export interface GalleryImage {
-  id: number;
-  image: string;
-  caption?: string;
-}
-
-export interface GalleryVideo {
-  id: number;
-  video_url: string;
-  caption?: string;
+  description?: string | null;
 }
 
 export const galleryService = {
-  getAll: () => api.get<any>('/api/gallery/'),
-  getById: (id: number) => api.get<any>(`/api/gallery/${id}/`),
+  list: (params?: GalleryListParams) =>
+    api.get<PaginatedResponse<GalleryItem>>('/gallery/', params as Record<string, unknown>),
+
+  get: (id: number) =>
+    api.get<GalleryItem>(`/gallery/${id}/`),
+
+  create: (data: GalleryPayload) =>
+    api.post<GalleryItem>('/gallery/', data),
+
+  update: (id: number, data: Partial<GalleryPayload>) =>
+    api.patch<GalleryItem>(`/gallery/${id}/`, data),
+
+  delete: (id: number) =>
+    api.delete(`/gallery/${id}/`),
+
+  // Aliases for user-api-integration
+  getAll: () => api.get<PaginatedResponse<GalleryItem>>('/gallery/'),
+  getById: (id: number) => api.get<GalleryItem>(`/gallery/${id}/`),
 };
 
 export default galleryService;
+

@@ -1,702 +1,504 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   Heart,
   ArrowRight,
-  BookOpen,
-  Stethoscope,
-  Sprout,
-  Users,
   ChevronDown,
   Target,
-  Leaf,
-  GraduationCap,
-  Users2,
+  Award,
+  Calendar,
+  MapPin,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+
+// Assets
 import heroImg from "@/assets/images/Grade_9.jpg";
 import imgAbout from "@/assets/images/IMG_20231104_083345.jpg";
 import imgHero3 from "@/assets/images/teachers.jpg";
 import imgHero4 from "@/assets/images/G 12.jpg";
+import loginBg from "@/assets/images/login-bg.png";
 
 // Hooks for API data
 import { useStats } from "@/hooks/useStats";
-import { usePrograms } from "@/hooks/usePrograms";
+// import { usePrograms } from "@/hooks/usePrograms";
 import { useProjects } from "@/hooks/useProjects";
 import { useNews } from "@/hooks/useNews";
+import { useEvents } from "@/hooks/useEvents";
 
-const heroBg = heroImg;
-
-// Static fallback data (used if API fails)
 const fallbackStats = [
-  { value: "200+", label: "Scholarship Students Supported" },
-  { value: "150+", label: "Students Achieved Graduation" },
-  { value: "10+", label: "Projects Successfully Completed" },
-  { value: "4", label: "Active Programs Running" },
+  { value: "200+", label: "Scholarship Students" },
+  { value: "150+", label: "Graduated Students" },
+  { value: "10+", label: "Active Project Sites" },
+  { value: "12k", label: "Lives Impacted" },
 ];
 
-const fallbackPrograms = [
-  {
-    icon: BookOpen,
-    title: "Education for All",
-    desc: "Providing quality education through scholarships for 200+ students.",
-    color: "bg-brand-secondary/10 text-brand-secondary",
-    href: "/programs",
-  },
-  {
-    icon: Stethoscope,
-    title: "Community Health",
-    desc: "Building health infrastructure and delivering essential healthcare services.",
-    color: "bg-brand-main/10 text-brand-main",
-    href: "/programs",
-  },
-  {
-    icon: Sprout,
-    title: "Sustainable Agriculture",
-    desc: "Empowering farmers with modern techniques and market access.",
-    color: "bg-brand-action/10 text-brand-action",
-    href: "/programs",
-  },
-  {
-    icon: Users,
-    title: "Women Empowerment",
-    desc: "Supporting women entrepreneurs through microfinance and training.",
-    color: "bg-brand-secondary/10 text-brand-secondary",
-    href: "/programs",
-  },
-];
 
-// Fallback data for projects
-const fallbackProjects = [
-  {
-    title: "School Building Construction Project",
-    category: "Education",
-    status: "Active",
-    progress: 45,
-    location: "Mehalmeda",
-  },
-  {
-    title: "Buy Books for Rural Students",
-    category: "Education",
-    status: "Active",
-    progress: 80,
-    location: "Multiple Districts",
-  },
-  {
-    title: "Student Scholarship Support Program",
-    category: "Education",
-    status: "Active",
-    progress: 65,
-    location: "",
-  },
-];
 
-// Fallback data for news
-const fallbackNews = [
-  {
-    date: "Jan 15, 2026",
-    title: "Debo Ethiopia Opens New Learning Center in Jimma",
-    excerpt:
-      "A state-of-the-art learning center serving 500 students opens its doors to the community.",
-    category: "Education",
-  },
-  {
-    date: "Dec 28, 2025",
-    title: "Annual Impact Report 2025: 12,000 New Beneficiaries",
-    excerpt:
-      "Our 2025 annual report highlights remarkable growth and community transformation.",
-    category: "Impact",
-  },
-  {
-    date: "Dec 10, 2025",
-    title: "Partnership with UN FAO to Expand Agricultural Programs",
-    excerpt:
-      "A landmark partnership will triple our agricultural support to smallholder farmers.",
-    category: "Partnership",
-  },
-];
 
-const fadeUp = {
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "circOut" as const },
+  },
 };
 
-const stagger = {
-  show: { transition: { staggerChildren: 0.12 } },
-};
+export default function HomePage() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const heroSlides = [
+    {
+      image: heroImg,
+      title: "Building Stronger Communities Together",
+      subtitle: "Join us in creating lasting change through sustainable education and health programs.",
+    },
+    {
+      image: imgAbout,
+      title: "Empowering Rural Ethiopia",
+      subtitle: "Harnessing the ancient tradition of 'Debo' to solve modern community challenges.",
+    },
+    {
+      image: imgHero3,
+      title: "The Future of Education",
+      subtitle: "More than 200 scholarship students are carving their path to success through your support.",
+    },
+    {
+      image: loginBg,
+      title: "Holistic Community Growth",
+      subtitle: "Advancing education, health, clean water, and environmental sustainability in rural Ethiopia.",
+    },
+  ];
 
-export default function Index() {
-  const [currentImage, setCurrentImage] = useState(0);
-  const heroImages = [heroBg, imgAbout, imgHero3, imgHero4];
-
-  // Fetch data from API
-  const { stats } = useStats();
-  const { programs: programsData } = usePrograms();
-  const { projects: projectsData } = useProjects();
-  const { news: newsData } = useNews();
-
-  // Use API data or fallback
-  const displayStats =
-    stats && stats.length > 0
-      ? stats.map((s: { name: string; value: number }) => ({
-          value: String(s.value),
-          label: s.name,
-        }))
-      : fallbackStats;
-  const displayPrograms =
-    programsData && programsData.length > 0 ? programsData : fallbackPrograms;
-  const displayProjects =
-    projectsData && projectsData.length > 0 ? projectsData : fallbackProjects;
-  const displayNews = newsData && newsData.length > 0 ? newsData : fallbackNews;
+  const { stats, loading: statsLoading } = useStats();
+  // useStats();
+  // usePrograms();
+  useProjects();
+  const { news } = useNews();
+  const { upcoming: upcomingEvents, loading: eventsLoading } = useEvents();
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % heroImages.length);
-    }, 6000);
+      setActiveSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 7000);
     return () => clearInterval(timer);
-  }, [heroImages.length]);
+  }, [heroSlides.length]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans selection:bg-brand-main/20 selection:text-brand-main">
       <NavBar />
-      <main id="main-content">
-        {/* HERO */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0">
-            <AnimatePresence initial={false}>
-              <motion.img
-                key={currentImage}
-                src={heroImages[currentImage]}
-                alt="Ethiopian community students and children engaged in educational and social activities"
-                initial={{ x: "100%", opacity: 1 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: "-100%", opacity: 1 }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
-                className="absolute inset-0 w-full h-full object-cover"
+
+      <main>
+        {/* HERO SECTION */}
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-zinc-950">
+          {/* All slides always mounted — pure CSS opacity crossfade, no white flash */}
+          {heroSlides.map((slide, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 transition-opacity duration-1000"
+              style={{ opacity: i === activeSlide ? 1 : 0 }}
+            >
+              <img
+                src={slide.image}
+                className="w-full h-full object-cover"
+                alt="Banner"
               />
-            </AnimatePresence>
-            <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
-          </div>
-          <div className="relative z-20 container mx-auto px-4 text-center">
+              <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/20 to-black/70" />
+            </div>
+          ))}
+
+          <div className="container relative z-10 mx-auto px-6 pt-32 pb-40">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="max-w-4xl"
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 text-white border border-white/40 text-sm font-body font-medium mb-6 backdrop-blur-sm">
-                Empowering Ethiopian Communities Since 2005
-              </span>
-              <h1 className="font-display text-5xl md:text-7xl font-bold text-white mb-6 text-balance leading-tight">
-                Building Stronger
-                <br />
-                <span className="text-[#009639]">Communities</span> Together
+              <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-white text-sm font-medium mb-8"
+              >
+                <div className="w-2 h-2 rounded-full bg-brand-main animate-pulse" />
+                Empowering Ethiopia Since 2005
+              </motion.span>
+
+              <h1 className="text-white text-6xl md:text-8xl font-bold leading-[1.1] tracking-tight mb-8 text-balance">
+                {heroSlides[activeSlide].title.split('Communities').map((t, i) => i === 0 ? t : <span key={i} className="text-brand-main">Communities</span>)}
               </h1>
-              <p className="font-body text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-                Debo Ethiopia works alongside communities to create lasting
-                change through education, health, agriculture, and sustainable
-                development programs.
+
+              <p className="text-white/80 text-xl md:text-2xl mb-12 max-w-2xl leading-relaxed">
+                {heroSlides[activeSlide].subtitle}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+              <div className="flex flex-col sm:flex-row gap-5">
                 <Link to="/donate">
-                  <Button
-                    size="lg"
-                    className="bg-linear-to-b from-[#009639] to-[#007a2e] text-white font-semibold font-body gap-2 hover:opacity-90 hover:scale-105 transition-all shadow-lg px-8"
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="btn-action px-10 py-5 rounded-2xl text-lg font-bold flex items-center gap-3"
                   >
-                    <Heart className="w-5 h-5" />
+                    <Heart className="w-6 h-6 fill-current" />
                     Donate Now
-                  </Button>
+                  </motion.button>
                 </Link>
                 <Link to="/programs">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-white/40 text-white hover:bg-white/10 font-body gap-2 backdrop-blur-sm px-8"
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="glass-panel px-10 py-5 rounded-2xl text-lg font-bold text-white border-white/20 hover:bg-white/10 flex items-center gap-2"
                   >
-                    Our Programs
-                    <ArrowRight className="w-5 h-5" />
-                  </Button>
+                    Explore Impact
+                    <ArrowRight className="w-6 h-6" />
+                  </motion.button>
                 </Link>
               </div>
             </motion.div>
           </div>
-          {/* Carousel Indicators */}
-          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex space-x-3 z-30">
-            {heroImages.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentImage(idx)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  idx === currentImage
-                    ? "bg-white scale-125"
-                    : "bg-white/40 hover:bg-white/80"
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
 
-          {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 1.8 }}
-          >
-            <ChevronDown className="w-6 h-6 text-white/60" />
-          </motion.div>
-        </section>
-
-        {/* STATS */}
-        <section className="py-14 bg-linear-to-r from-brand-main to-primary-800">
-          <div className="container mx-auto px-4">
+          <div className="absolute bottom-12 left-6 right-6 hidden md:flex items-end justify-between z-20">
+            <div className="flex gap-4">
+              {heroSlides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveSlide(i)}
+                  className={`h-1.5 rounded-full transition-all duration-500 ${activeSlide === i ? 'w-12 bg-brand-main' : 'w-6 bg-white/30 hover:bg-white/50'}`}
+                />
+              ))}
+            </div>
             <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={stagger}
-              className="grid grid-cols-2 md:grid-cols-4 gap-8"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="flex flex-col items-center gap-2 text-white/40"
             >
-              {displayStats.map(
-                ({ value, label }: { value: string; label: string }) => (
-                  <motion.div
-                    key={label}
-                    variants={fadeUp}
-                    className="text-center"
-                  >
-                    <div className="font-display text-4xl md:text-5xl font-bold text-white mb-1">
-                      {value}
-                    </div>
-                    <div className="font-body text-sm text-white/70 uppercase tracking-wider">
-                      {label}
-                    </div>
-                  </motion.div>
-                ),
-              )}
+              <span className="text-xs uppercase tracking-[0.2em] font-semibold">Scroll</span>
+              <ChevronDown className="w-5 h-5" />
             </motion.div>
           </div>
         </section>
 
-        {/* ABOUT SUMMARY */}
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-              <motion.div
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fadeUp}
-              >
-                <span className="inline-block text-xs font-body font-semibold text-brand-action uppercase tracking-widest mb-3">
-                  About Debo Ethiopia
-                </span>
-                <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
-                  The Spirit of{" "}
-                  <span className="text-brand-main">Collective Action</span>
-                </h2>
-                <p className="font-body text-muted-foreground leading-relaxed mb-4">
-                  Established in 2005, Debo Ethiopia is a non-profit,
-                  non-governmental organization (NGO) dedicated to improving the
-                  quality of life for communities in rural Ethiopia through
-                  holistic and sustainable development.
-                </p>
-                <p className="font-body text-muted-foreground leading-relaxed mb-8">
-                  We deliver essential services that address the root causes of
-                  poverty and inequality, guided by the ancient Ethiopian
-                  tradition of "Debo" — communal cooperation for the greater
-                  good.
-                </p>
-                <Link to="/about">
-                  <Button className="bg-linear-to-r from-brand-main to-primary-700 text-white font-body gap-2 hover:opacity-90">
-                    Learn Our Story
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="relative"
-              >
-                <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl">
-                  <img
-                    src={imgAbout}
-                    alt="Community members"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-8 -left-8 bg-linear-to-br from-brand-main to-primary-700 p-8 rounded-3xl shadow-xl shadow-primary-700/20 hidden lg:block hover:scale-105 transition-transform">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                      <Target className="w-5 h-5 text-white" />
-                    </div>
-                    <p className="text-white font-display text-2xl font-bold">
-                      Impact First
-                    </p>
-                  </div>
-                  <p className="text-white/80 text-sm">
-                    Community-led development
-                  </p>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Importance Section */}
-        <section className="py-24 bg-zinc-50 overflow-hidden">
-          <div className="container mx-auto px-4">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <motion.span
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                className="inline-block text-xs font-body font-semibold text-brand-action uppercase tracking-widest mb-3"
-              >
-                Our Purpose
-              </motion.span>
-              <motion.h2
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                className="font-display text-4xl md:text-5xl font-bold text-zinc-900 mb-6"
-              >
-                Why Our Work <span className="text-brand-main">Matters</span>
-              </motion.h2>
-              <motion.p
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                className="font-body text-zinc-600 text-lg leading-relaxed"
-              >
-                We operate with a community-centered participatory model. By
-                respecting local knowledge and priorities, we ensure local
-                people are actively involved in identifying challenges and
-                planning solutions.
-              </motion.p>
-            </div>
-
+        {/* IMPACT STATS */}
+        <section className="relative -mt-24 z-30 pb-20">
+          <div className="container mx-auto px-6">
             <motion.div
+              variants={containerVariants}
               initial="hidden"
-              whileInView="show"
+              whileInView="visible"
               viewport={{ once: true }}
-              variants={stagger}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 glass-panel rounded-[2.5rem]"
             >
-              {[
-                {
-                  icon: Target,
-                  title: "Empowerment",
-                  desc: "We don't just provide aid; we empower individuals to lead their own communities through knowledge and skills.",
-                },
-                {
-                  icon: Leaf,
-                  title: "Sustainability",
-                  desc: "Our focus is on infrastructure and systems that last for generations, ensuring long-term self-reliance.",
-                },
-                {
-                  icon: GraduationCap,
-                  title: "Education",
-                  desc: "We believe education is the primary tool to break the cycle of poverty and open doors to a better life.",
-                },
-                {
-                  icon: Users2,
-                  title: "Collective Action",
-                  desc: "By harnessing the power of community, we solve local challenges with locally-led, evidence-based solutions.",
-                },
-              ].map((item) => (
+              {statsLoading ? (
+                // Skeleton loading for stats
+                Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="p-8 rounded-3xl bg-zinc-200/20 dark:bg-zinc-800/20 animate-pulse h-32" />
+                ))
+              ) : (stats && stats.length > 0 ? stats : fallbackStats).slice(0, 4).map((stat, i) => (
                 <motion.div
-                  key={item.title}
-                  variants={fadeUp}
-                  className="bg-white p-8 rounded-2xl shadow-sm border border-zinc-100 hover:shadow-md transition-shadow cursor-pointer"
+                  key={i}
+                  variants={itemVariants}
+                  className="p-8 rounded-3xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-white/40 dark:border-zinc-800/40 text-center group"
                 >
-                  <div className="w-12 h-12 bg-white flex items-center justify-center mb-6">
-                    <item.icon className="w-8 h-8 text-brand-main" />
+                  <div className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white mb-2 font-heading tracking-tight group-hover:text-brand-main transition-colors">
+                    {stat.value}
                   </div>
-                  <h3 className="font-display text-xl font-bold text-zinc-900 mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="font-body text-sm text-zinc-600 leading-relaxed">
-                    {item.desc}
-                  </p>
+                  <div className="text-zinc-500 uppercase tracking-widest text-[10px] font-bold">
+                    {'label' in stat ? stat.label : (stat as { name: string }).name}
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
           </div>
         </section>
 
-        {/* PROGRAMS */}
-        <section className="py-20 section-gradient">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="text-center mb-14"
-            >
-              <span className="inline-block text-xs font-body font-semibold text-brand-action uppercase tracking-widest mb-3">
-                What We Do
-              </span>
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Our Core Programs
-              </h2>
-              <p className="font-body text-muted-foreground max-w-xl mx-auto">
-                Four pillars of community transformation designed for lasting,
-                measurable impact.
-              </p>
-            </motion.div>
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={stagger}
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {displayPrograms.slice(0, 4).map((program, index: number) => {
-                // Get icon from program data or fallback
-                const icons = [BookOpen, Stethoscope, Sprout, Users];
-                const Icon = program.icon || icons[index % icons.length];
-                const colors = [
-                  "bg-brand-secondary/10 text-brand-secondary",
-                  "bg-brand-main/10 text-brand-main",
-                  "bg-brand-action/10 text-brand-action",
-                  "bg-brand-secondary/10 text-brand-secondary",
-                ];
-                return (
-                  <motion.div key={program.id || index} variants={fadeUp}>
-                    <Link
-                      to="/programs"
-                      className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full cursor-pointer"
-                    >
-                      <div
-                        className={`w-12 h-12 rounded-xl ${colors[index % colors.length]} flex items-center justify-center mb-4`}
-                      >
-                        <Icon className="w-6 h-6" />
+        {/* MISSION SECTION */}
+        <section className="py-32 relative overflow-hidden mesh-gradient">
+          <div className="container mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-20 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+              >
+                <span className="text-brand-action font-bold uppercase tracking-widest text-sm mb-6 block">Our Heart & Mission</span>
+                <h2 className="text-5xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-8 leading-[1.1] tracking-tight">
+                  Driven by <span className="text-brand-main italic">Ancient Traditions,</span> Focused on Tomorrow.
+                </h2>
+                <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-8 leading-relaxed">
+                  Established in 2005, Debo Ethiopia is a non-profit dedicated to improving life in rural Ethiopia. We are guided by "Debo" — the communal culture of working together for the greater good.
+                </p>
+                <div className="space-y-6 mb-12">
+                  {[
+                    { title: "Locally Led", desc: "Our projects originate from and are managed by the communities themselves." },
+                    { title: "Sustainable Growth", desc: "We focus on long-term infrastructure and self-reliant systems." }
+                  ].map((item, i) => (
+                    <div key={i} className="flex gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-brand-main/10 flex items-center justify-center shrink-0">
+                        <Target className="text-brand-main w-6 h-6" />
                       </div>
-                      <h3 className="font-display text-lg font-semibold text-zinc-900 mb-2">
-                        {program.name}
-                      </h3>
-                      <p className="font-body text-sm text-zinc-600 leading-relaxed flex-1">
-                        {program.description?.substring(0, 100)}...
-                      </p>
-                      <div className="mt-4 flex items-center gap-1 text-brand-main text-sm font-medium group-hover:gap-2 transition-all">
-                        Learn more <ArrowRight className="w-4 h-4" />
+                      <div>
+                        <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-1 tracking-tight">{item.title}</h4>
+                        <p className="text-zinc-500">{item.desc}</p>
                       </div>
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-            <div className="text-center mt-10">
-              <Link to="/programs">
-                <Button
-                  variant="outline"
-                  className="border-green-700 hover:bg-green-700 hover:text-white font-body transition-all duration-300"
-                >
-                  View All Programs
-                </Button>
-              </Link>
+                    </div>
+                  ))}
+                </div>
+                <Link to="/about">
+                  <Button className="btn-gradient px-8 py-6 rounded-2xl text-lg font-bold group">
+                    Our Full Story
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="relative group"
+              >
+                <div className="absolute inset-0 bg-brand-main/20 rounded-[3rem] -rotate-3 transition-transform group-hover:rotate-0" />
+                <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-premium">
+                  <img src={imgAbout} className="w-full h-full object-cover" alt="About" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-10 left-10 text-white">
+                    <Award className="w-12 h-12 mb-4 text-brand-main" />
+                    <h5 className="text-3xl font-bold mb-2">Impact First</h5>
+                    <p className="opacity-80">Serving 12+ Districts in rural Ethiopia</p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* PROJECTS */}
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="text-center mb-14"
-            >
-              <span className="inline-block text-xs font-body font-semibold text-brand-action uppercase tracking-widest mb-3">
-                Active Work
-              </span>
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Featured Projects
-              </h2>
-            </motion.div>
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={stagger}
-              className="grid md:grid-cols-3 gap-6"
-            >
-              {displayProjects
-                .slice(0, 3)
-                .map(({ title, category, status, progress, location }) => (
-                  <motion.div
-                    key={title}
-                    variants={fadeUp}
-                    className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-body font-medium bg-brand-main/10 text-brand-main">
-                        {category}
-                      </span>
-                      <span
-                        className={`text-xs font-body font-medium ${status === "Completed" ? "text-brand-action" : "text-brand-secondary"}`}
-                      >
-                        ● {status}
-                      </span>
-                    </div>
-                    <h3 className="font-display font-semibold text-zinc-900 mb-1">
-                      {title}
-                    </h3>
-                    <p className="font-body text-xs text-zinc-500 mb-4">
-                      {location}
-                    </p>
-                    <div className="w-full bg-zinc-100 rounded-full h-2 mb-1">
-                      <div
-                        className="bg-linear-to-r from-brand-main to-primary-700 h-2 rounded-full transition-all duration-1000"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                    <p className="font-body text-xs text-zinc-500 text-right">
-                      {progress}% Complete
-                    </p>
-                  </motion.div>
+        {/* UPCOMING EVENTS */}
+        <section className="py-32 bg-zinc-50 dark:bg-zinc-950/50 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-brand-main/5 blur-[120px] rounded-full" />
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
+              <div className="max-w-2xl">
+                <span className="text-brand-main font-bold uppercase tracking-widest text-sm mb-6 block">Join Us In Person</span>
+                <h2 className="text-5xl md:text-6xl font-bold text-zinc-900 dark:text-white tracking-tight text-balance">
+                  Upcoming Community <br /> Events
+                </h2>
+              </div>
+              <Link to="/events">
+                <Button variant="outline" className="px-8 py-6 rounded-2xl border-zinc-200 dark:border-zinc-800 font-bold hover:bg-zinc-50 dark:hover:bg-zinc-900">
+                  View All Events
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </div>
+
+            {eventsLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-[450px] rounded-[3rem] bg-zinc-200/50 dark:bg-zinc-800/50 animate-pulse" />
                 ))}
-            </motion.div>
-            <div className="text-center mt-10">
-              <Link to="/projects">
-                <Button
-                  variant="outline"
-                  className="border-green-700 hover:bg-green-700 hover:text-white font-body transition-all duration-300"
-                >
-                  View All Projects
-                </Button>
-              </Link>
-            </div>
+              </div>
+            ) : upcomingEvents?.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {upcomingEvents.slice(0, 3).map((event, i) => {
+                  const eventImage = event.images?.[0]?.image;
+
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1, duration: 0.6 }}
+                      className="group relative h-[500px] rounded-[3.5rem] overflow-hidden shadow-2xl hover:shadow-brand-main/20 transition-all duration-700"
+                    >
+                      {/* Background Layer */}
+                      <div className="absolute inset-0 bg-zinc-950">
+                        {eventImage ? (
+                          <img
+                            src={eventImage}
+                            alt={event.title}
+                            className="w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-40 transition-all duration-1000"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = ""; // Force fallback on error
+                              (e.target as HTMLImageElement).className = "hidden";
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full mesh-gradient opacity-30 group-hover:opacity-20 transition-opacity" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent z-10" />
+                      </div>
+
+                      {/* Floating Date Badge */}
+                      <div className="absolute top-10 left-10 z-30">
+                        <div className="glass-panel px-5 py-3 rounded-2xl border-white/20 flex flex-col items-center">
+                          <span className="text-[10px] font-black text-brand-main uppercase tracking-[0.3em] mb-1">
+                            {new Date(event.start_date).toLocaleDateString("en-US", { month: "short" })}
+                          </span>
+                          <span className="text-3xl font-black text-white leading-none">
+                            {new Date(event.start_date).getDate()}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content Overlay */}
+                      <div className="absolute inset-0 z-20 p-12 flex flex-col justify-end">
+                        <div className="space-y-6">
+                          <div className="flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-brand-main shadow-[0_0_10px_#009639]" />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                              {event.category || "Community Gathering"}
+                            </span>
+                          </div>
+
+                          <h3 className="text-4xl font-black text-white tracking-tight group-hover:text-brand-main transition-colors leading-[1.1]">
+                            {event.title}
+                          </h3>
+
+                          <div className="flex flex-col gap-3 text-white/50 text-sm font-medium">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                <Clock className="w-4 h-4 text-brand-main" />
+                              </div>
+                              {new Date(event.start_date).toLocaleTimeString("en-US", {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                              })}
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                                <MapPin className="w-4 h-4 text-brand-main" />
+                              </div>
+                              {event.location}
+                            </div>
+                          </div>
+
+                          <div className="pt-6 border-t border-white/10">
+                            <Link
+                              to="/events"
+                              className="inline-flex items-center gap-4 group/btn"
+                            >
+                              <span className="text-white font-black text-lg group-hover/btn:text-brand-main transition-colors">
+                                View Full Details
+                              </span>
+                              <div className="w-12 h-12 rounded-full bg-brand-main text-white flex items-center justify-center shadow-lg group-hover/btn:scale-110 transition-all">
+                                <ArrowRight className="w-6 h-6" />
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-zinc-100 dark:bg-zinc-900/40 rounded-[3rem] border border-dashed border-zinc-300 dark:border-zinc-800">
+                <Calendar className="w-16 h-16 text-zinc-300 dark:text-zinc-700 mx-auto mb-6" />
+                <h3 className="text-2xl font-bold text-zinc-400 dark:text-zinc-600">No upcoming events scheduled</h3>
+                <p className="text-zinc-500 mt-2">Check back soon for new community gatherings!</p>
+              </div>
+            )}
           </div>
         </section>
 
-        {/* DONATION CTA */}
-        <section className="py-20 bg-linear-to-r from-brand-main to-primary-800 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-5">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle, white 1px, transparent 1px)",
-                backgroundSize: "30px 30px",
-              }}
-            />
-          </div>
-          <div className="container mx-auto px-4 text-center relative z-10">
+
+        {/* DONATION BANNER */}
+        <section className="py-32 relative">
+          <div className="absolute inset-0 bg-linear-to-br from-primary-600 to-primary-900" />
+          <div className="absolute inset-0 dot-pattern" />
+          <div className="container relative z-10 mx-auto px-6 text-center">
             <motion.div
-              initial="hidden"
-              whileInView="show"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              variants={fadeUp}
+              className="max-w-4xl mx-auto"
             >
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
-                Your Gift Changes Lives
-              </h2>
-              <p className="font-body text-white/80 text-lg max-w-xl mx-auto mb-10">
-                Every birr, every dollar, every act of generosity creates real
-                change for Ethiopian families.
+              <Heart className="w-20 h-20 text-brand-action mx-auto mb-10 fill-current animate-pulse" />
+              <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 tracking-tight">Your Generosity, <br /> Their Opportunity</h2>
+              <p className="text-white/80 text-xl md:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed">
+                Every contribution, no matter the size, directly funds scholarship students, medical clinics, and agricultural tools in rural Ethiopia.
               </p>
-              <div className="flex flex-wrap justify-center gap-4 mb-10">
-                {["$25", "$50", "$100", "$250", "Custom"].map((amt) => (
-                  <button
-                    key={amt}
-                    className="px-6 py-3 rounded-xl border-2 border-white/40 text-white font-body font-semibold hover:bg-white/20 transition-colors"
-                  >
+              <div className="flex flex-wrap justify-center gap-4 mb-16">
+                {['$25', '$50', '$100', '$250'].map(amt => (
+                  <button key={amt} className="min-w-[100px] px-8 py-4 rounded-2xl border-2 border-white/20 text-white font-bold hover:bg-white/10 transition-all active:scale-95">
                     {amt}
                   </button>
                 ))}
               </div>
               <Link to="/donate">
-                <Button
-                  size="lg"
-                  className="bg-linear-to-b from-[#009639] to-[#007a2e] text-white font-semibold font-body gap-2 hover:opacity-90 hover:scale-105 transition-all shadow-lg px-10"
-                >
-                  <Heart className="w-5 h-5" />
-                  Donate Now
+                <Button size="lg" className="btn-action px-12 py-8 rounded-[2rem] text-2xl font-black shadow-2xl">
+                  Start Making Impact
                 </Button>
               </Link>
             </motion.div>
           </div>
         </section>
 
-        {/* NEWS */}
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12"
-            >
-              <div>
-                <span className="inline-block text-xs font-body font-semibold text-brand-action uppercase tracking-widest mb-2">
-                  Stay Informed
-                </span>
-                <h2 className="font-display text-4xl font-bold text-foreground">
-                  Latest News
-                </h2>
-              </div>
-              <Link to="/news" className="mt-4 sm:mt-0">
-                <Button
-                  variant="outline"
-                  className="border-green-700 hover:bg-green-700 hover:text-white font-body gap-2"
-                >
-                  All News <ArrowRight className="w-4 h-4" />
-                </Button>
+        {/* LATEST NEWS */}
+        <section className="py-32 bg-zinc-50 dark:bg-zinc-950">
+          <div className="container mx-auto px-6">
+            <div className="flex items-center justify-between mb-20">
+              <h2 className="text-5xl font-bold text-zinc-900 dark:text-white tracking-tight">Voices of Debo</h2>
+              <Link to="/news" className="text-brand-main font-bold flex items-center gap-2 hover:gap-3 transition-all">
+                The Newsroom <ArrowRight className="w-5 h-5" />
               </Link>
-            </motion.div>
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={stagger}
-              className="grid md:grid-cols-3 gap-6"
-            >
-              {displayNews
-                .slice(0, 3)
-                .map(({ date, title, excerpt, category }) => (
-                  <motion.div
-                    key={title}
-                    variants={fadeUp}
-                    className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-                  >
-                    <div className="h-48 bg-linear-to-br from-brand-main to-primary-700 flex items-center justify-center">
-                      <BookOpen className="w-12 h-12 text-white/40" />
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {(news || []).slice(0, 3).map((item, i) => (
+                <motion.article
+                  key={i}
+                  whileHover={{ y: -8 }}
+                  className="group bg-white dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-premium transition-all duration-500"
+                >
+                  <div className="aspect-[16/10] overflow-hidden relative">
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="px-4 py-1.5 rounded-full glass-card text-white text-xs font-bold uppercase tracking-widest">
+                        {item.category || "Updates"}
+                      </span>
                     </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="px-2 py-0.5 rounded-full text-xs bg-brand-action/10 text-brand-action font-body font-medium">
-                          {category}
-                        </span>
-                        <span className="text-xs text-zinc-500 font-body">
-                          {date}
-                        </span>
+                    <img src={imgHero4} className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110" alt="News" />
+                  </div>
+                  <div className="p-10">
+                    <span className="text-zinc-400 text-sm mb-4 block font-medium">{item.date || "March 1, 2026"}</span>
+                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-6 leading-snug group-hover:text-brand-main transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed mb-8">
+                      {item.excerpt || item.description?.substring(0, 100)}
+                    </p>
+                    <Link to={`/news/${item.id}`} className="inline-flex items-center gap-2 text-zinc-900 dark:text-white font-bold group/link">
+                      Read Story
+                      <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center group-hover/link:bg-brand-main group-hover/link:text-white transition-all">
+                        <ArrowRight className="w-4 h-4" />
                       </div>
-                      <h3 className="font-display font-semibold text-zinc-900 mb-2 leading-snug group-hover:text-brand-main transition-colors">
-                        {title}
-                      </h3>
-                      <p className="font-body text-sm text-zinc-600 leading-relaxed">
-                        {excerpt}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-            </motion.div>
+                    </Link>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
           </div>
         </section>
       </main>
+
       <Footer />
     </div>
   );
 }
+

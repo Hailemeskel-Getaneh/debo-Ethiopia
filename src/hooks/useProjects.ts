@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { projectsService } from '../services';
+import { cachedFetch } from './apiCache';
 
 interface UseProjectsResult {
   projects: any[];
@@ -21,8 +22,8 @@ export const useProjects = (): UseProjectsResult => {
       try {
         setLoading(true);
         setError(null);
-        const response = await projectsService.getAll();
-        const projectsData = response.results || response || [];
+        const response = await cachedFetch('projects', () => projectsService.getAll());
+        const projectsData = (response as any).results || response || [];
         setProjects(projectsData);
       } catch (err) {
         console.error('Error fetching projects:', err);

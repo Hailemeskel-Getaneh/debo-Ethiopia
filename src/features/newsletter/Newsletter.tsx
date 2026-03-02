@@ -1,17 +1,20 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Mail,
   CheckCircle2,
-  ArrowRight,
   Sparkles,
   Bell,
   BookOpen,
   Calendar,
   Heart,
+  Send,
+  Loader2,
+  ShieldCheck,
 } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
-import { subscriptionService } from "@/services";
+import { subscribersService } from "@/services";
 
 const pastIssues = [
   {
@@ -75,6 +78,23 @@ const benefits = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 }
+  }
+};
+
 export function Newsletter() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -87,7 +107,7 @@ export function Newsletter() {
     setLoading(true);
 
     try {
-      await subscriptionService.subscribe({ email });
+      await subscribersService.subscribe({ email });
       setSubmitted(true);
     } catch (err) {
       console.error("Failed to subscribe:", err);
@@ -97,215 +117,212 @@ export function Newsletter() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans selection:bg-brand-main/20 selection:text-brand-main">
       <NavBar />
       <main id="main-content">
         {/* ── HERO ── */}
-        <section className="relative min-h-[60vh] flex items-center overflow-hidden pt-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#003d1a] via-[#005c28] to-[#009639]" />
-          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-white/5 blur-3xl" />
-
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-            <div className="grid lg:grid-cols-2 gap-14 items-center">
+        <section className="relative min-h-[70vh] flex items-center overflow-hidden pt-32 pb-20 mesh-gradient">
+          <div className="container relative z-10 mx-auto px-6 pt-10">
+            <div className="grid lg:grid-cols-2 gap-20 items-center text-center lg:text-left">
               {/* Left: copy */}
-              <div>
-                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
-                  <Sparkles className="w-4 h-4 text-[#00b359]" /> Monthly
-                  Newsletter
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-8 uppercase tracking-widest font-bold">
+                  <Sparkles className="w-4 h-4 text-brand-main" />
+                  Monthly Dispatch
                 </div>
-                <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-6 leading-tight">
-                  Stay Connected to the{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00b359] to-[#00b359]">
-                    Mission
-                  </span>
+                <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-[1.05] tracking-tight">
+                  Stay Close to the <span className="text-brand-main italic">Impact.</span>
                 </h1>
-                <p className="text-xl text-white/75 mb-8 leading-relaxed">
-                  Every month we send one email packed with impact stories,
-                  program updates, upcoming events, and ways you can help. No
-                  spam, ever.
+                <p className="text-xl md:text-2xl text-white/70 mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                  Every month we share one deep-dive story of resilience, program milestones, and upcoming ways to engage. No clutter, just the heart of Debo.
                 </p>
-                <div className="flex items-center gap-6 text-sm text-white/60">
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Free,
-                    monthly
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />{" "}
-                    Unsubscribe anytime
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 2,400+
-                    readers
-                  </span>
+
+                <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-sm text-white/50 font-medium">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-brand-main/60" /> Spam-free Guaranteed
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-brand-main/60" /> 2,400+ Active Readers
+                  </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Right: form */}
-              <div className="bg-white rounded-3xl p-8 shadow-2xl">
-                {submitted ? (
-                  <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle2 className="w-8 h-8 text-emerald-600" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                      You're subscribed!
-                    </h2>
-                    <p className="text-gray-500">
-                      Welcome to the DeboEthiopia community, {name || "friend"}.
-                      Check your inbox for a welcome email from us.
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                      Subscribe for Free
-                    </h2>
-                    <p className="text-gray-500 text-sm mb-6">
-                      Join 2,400+ readers who follow our monthly impact stories.
-                    </p>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                          Your Name
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Tigist Alemu"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009639] text-gray-900"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                          Email Address *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          placeholder="you@example.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#009639] text-gray-900"
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full flex items-center justify-center gap-2 bg-[#009639] text-white font-bold py-3.5 rounded-xl hover:bg-[#007a2e] transition-all duration-300 hover:shadow-lg disabled:opacity-60"
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative"
+              >
+                <div className="absolute -inset-4 bg-brand-main/20 blur-3xl rounded-full" />
+                <div className="relative glass-panel bg-white/95 dark:bg-zinc-900/90 rounded-[3rem] p-10 md:p-14 shadow-premium border border-white/40 dark:border-zinc-800/40">
+                  <AnimatePresence mode="wait">
+                    {submitted ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center py-10"
                       >
-                        {loading ? (
-                          <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                        ) : (
-                          <>
-                            <Mail className="w-5 h-5" /> Subscribe Now
-                          </>
-                        )}
-                      </button>
-                      <p className="text-center text-xs text-gray-400">
-                        We respect your privacy. Unsubscribe at any time.
-                      </p>
-                    </form>
-                  </>
-                )}
-              </div>
+                        <div className="w-20 h-20 bg-brand-main/10 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+                          <CheckCircle2 className="w-10 h-10 text-brand-main" />
+                        </div>
+                        <h2 className="text-3xl font-black text-zinc-900 dark:text-white mb-4 tracking-tight">
+                          Welcome, Impact Maker!
+                        </h2>
+                        <p className="text-zinc-500 max-w-xs mx-auto leading-relaxed">
+                          Thank you for joining our community, {name || "friend"}. Check your inbox for our latest stories.
+                        </p>
+                      </motion.div>
+                    ) : (
+                      <div className="space-y-8">
+                        <div>
+                          <h2 className="text-3xl font-black text-zinc-900 dark:text-white mb-2 tracking-tight">Join the Mission</h2>
+                          <p className="text-zinc-500 text-sm">Fill in your details to start receiving monthly updates.</p>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                          <div className="space-y-2">
+                            <label className="text-xs font-black text-zinc-400 uppercase tracking-widest px-1">Your Full Name</label>
+                            <input
+                              type="text"
+                              placeholder="Tigist Alemu"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                              className="w-full bg-zinc-100 dark:bg-zinc-800/50 border border-transparent rounded-2xl px-6 py-5 focus:outline-none focus:ring-4 focus:ring-brand-main/20 focus:border-brand-main focus:bg-white dark:focus:bg-zinc-900 transition-all text-zinc-900 dark:text-white"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-xs font-black text-zinc-400 uppercase tracking-widest px-1">Email Address *</label>
+                            <input
+                              type="email"
+                              required
+                              placeholder="you@example.com"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className="w-full bg-zinc-100 dark:bg-zinc-800/50 border border-transparent rounded-2xl px-6 py-5 focus:outline-none focus:ring-4 focus:ring-brand-main/20 focus:border-brand-main focus:bg-white dark:focus:bg-zinc-900 transition-all text-zinc-900 dark:text-white"
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full flex items-center justify-center gap-3 bg-brand-main text-white font-black py-6 rounded-2xl text-xl hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-brand-main/20 disabled:opacity-50"
+                          >
+                            {loading ? (
+                              <Loader2 className="w-6 h-6 animate-spin" />
+                            ) : (
+                              <>
+                                <Send className="w-5 h-5" /> Start Receiving
+                              </>
+                            )}
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* ── WHY SUBSCRIBE ── */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-                What You'll Receive
-              </h2>
-              <p className="text-lg text-gray-500 max-w-xl mx-auto">
-                Every issue is crafted to keep you informed, inspired, and
-                connected to our mission.
-              </p>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* ── VALUES ── */}
+        <section className="py-32 bg-white dark:bg-zinc-950">
+          <div className="container mx-auto px-6">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            >
               {benefits.map((b, i) => (
-                <div
+                <motion.div
                   key={i}
-                  className="bg-white rounded-2xl p-7 shadow-sm hover:shadow-md transition-all duration-300 text-center group"
+                  variants={itemVariants}
+                  className="group bg-zinc-50 dark:bg-zinc-900/50 rounded-[2.5rem] p-10 border border-zinc-100 dark:border-zinc-800 hover:border-brand-main/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden relative"
                 >
-                  <div className="w-14 h-14 bg-[#009639]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <b.icon className="w-7 h-7 text-[#009639]" />
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-main/5 blur-3xl rounded-full group-hover:bg-brand-main/20 transition-all" />
+                  <div className="w-16 h-16 bg-brand-main/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-brand-main group-hover:text-white transition-all duration-500">
+                    <b.icon className="w-8 h-8" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">{b.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
+                  <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4 tracking-tight">{b.title}</h3>
+                  <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
                     {b.desc}
                   </p>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── PAST ISSUES ── */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-                Past Issues
-              </h2>
-              <p className="text-lg text-gray-500 max-w-xl mx-auto">
-                Browse previous newsletters to see what our readers receive each
-                month.
-              </p>
+        {/* ── ARCHIVE ── */}
+        <section className="py-32 bg-zinc-50 dark:bg-zinc-950">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-20">
+              <span className="text-brand-main font-bold uppercase tracking-widest text-sm mb-4 block underline underline-offset-8 decoration-brand-main/20">The Archive</span>
+              <h2 className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white tracking-tight">Step Into <span className="italic">History.</span></h2>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+            >
               {pastIssues.map((issue, i) => (
-                <div
+                <motion.div
                   key={i}
-                  className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  variants={itemVariants}
+                  className="group bg-white dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-premium transition-all duration-500 hover:-translate-y-2"
                 >
-                  <div className="h-44 overflow-hidden relative">
+                  <div className="aspect-[4/3] overflow-hidden relative">
                     <img
                       src={issue.image}
                       alt={issue.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     {issue.tag && (
-                      <span className="absolute top-3 left-3 bg-[#009639] text-white text-xs font-bold px-3 py-1 rounded-full">
+                      <span className="absolute top-6 left-6 bg-brand-main text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
                         {issue.tag}
                       </span>
                     )}
+                    <div className="absolute bottom-6 left-6 text-white/60 text-xs font-medium uppercase tracking-[0.2em]">
+                      {issue.date}
+                    </div>
                   </div>
-                  <div className="p-5">
-                    <p className="text-xs text-gray-400 mb-2">{issue.date}</p>
-                    <h3 className="font-bold text-gray-900 text-sm mb-2 leading-snug">
+                  <div className="p-8">
+                    <h3 className="font-bold text-zinc-900 dark:text-white text-lg mb-4 leading-tight group-hover:text-brand-main transition-colors">
                       {issue.title}
                     </h3>
-                    <p className="text-xs text-gray-500 leading-relaxed">
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-2">
                       {issue.summary}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* ── BOTTOM CTA ── */}
-        <section className="py-20 bg-gradient-to-br from-[#003d1a] to-[#009639] text-white">
-          <div className="max-w-3xl mx-auto px-4 text-center">
-            <h2 className="text-4xl font-extrabold mb-4">
-              Ready to Join 2,400+ Readers?
-            </h2>
-            <p className="text-white/75 text-lg mb-8">
-              Subscribe above or share this page with someone who cares about
-              Ethiopia's future.
-            </p>
-            <a
-              href="/donate"
-              className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 transition-all duration-300"
-            >
-              Also Consider Donating <ArrowRight className="w-5 h-5" />
-            </a>
+        {/* ── FOOTER CTA ── */}
+        <section className="py-32 relative overflow-hidden text-center bg-zinc-950">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-main/5 blur-[120px] rounded-full" />
+          <div className="container relative z-10 mx-auto px-6">
+            <h2 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tight">Can't get enough? <br /> Consider a <span className="text-brand-main">donation.</span></h2>
+            <Link to="/donate">
+              <button className="btn-action px-12 py-6 rounded-2xl text-xl font-bold flex items-center gap-3 mx-auto shadow-2xl">
+                <Heart className="w-6 h-6 fill-current" />
+                Support Our Vision
+              </button>
+            </Link>
           </div>
         </section>
       </main>
@@ -313,3 +330,4 @@ export function Newsletter() {
     </div>
   );
 }
+

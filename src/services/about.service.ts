@@ -13,8 +13,8 @@ export interface Staff {
 }
 
 export const aboutService = {
-  getStaffs: () => api.get<any>('/api/staffs/'),
-  getStaff: (id: number) => api.get<any>(`/api/staffs/${id}/`),
+  getStaffs: () => api.get<any>('/staffs/'),
+  getStaff: (id: number) => api.get<any>(`/staffs/${id}/`),
 };
 
 export default aboutService;

@@ -1,28 +1,47 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from './api';
+import type { Event, PaginatedResponse } from '../types/admin';
 
-export interface Event {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  end_date?: string;
-  location: string;
-  image?: string;
-  is_upcoming: boolean;
-  created_at?: string;
-  updated_at?: string;
+export interface EventListParams {
+    page?: number;
+    page_size?: number;
+    search?: string;
 }
 
-export interface EventImage {
-  id: number;
-  image: string;
-  caption?: string;
+export interface EventPayload {
+    title: string;
+    description: string;
+    location: string;
+    start_date: string;
+    end_date: string;
+    program_id?: number | null;
 }
 
 export const eventsService = {
-  getAll: () => api.get<any>('/api/events/'),
-  getById: (id: number) => api.get<any>(`/api/events/${id}/`),
+    list: (params?: EventListParams) =>
+        api.get<PaginatedResponse<Event>>('/events/', params as Record<string, unknown>),
+
+    get: (id: number) =>
+        api.get<Event>(`/events/${id}/`),
+
+    create: (data: EventPayload) =>
+        api.post<Event>('/events/', data),
+
+    update: (id: number, data: Partial<EventPayload>) =>
+        api.patch<Event>(`/events/${id}/`, data),
+
+    delete: (id: number) =>
+        api.delete(`/events/${id}/`),
+
+    addImage: (eventId: number, image: File) => {
+        const formData = new FormData();
+        formData.append('image', image);
+        return api.postMultipart<unknown>(`/events/${eventId}/images/`, formData);
+    },
+
+    // Aliases for compatibility with user-api-integration
+    getAll: () => api.get<PaginatedResponse<Event>>('/events/'),
+    getById: (id: number) => api.get<Event>(`/events/${id}/`),
 };
 
 export default eventsService;
+

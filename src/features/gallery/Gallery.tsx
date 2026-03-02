@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -92,25 +93,28 @@ export function Gallery() {
       item.description.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const openLightbox = (index: number) => {
-    setLightboxIndex(index);
-  };
+  const openLightbox = (index: number) => setLightboxIndex(index);
+  const closeLightbox = () => setLightboxIndex(null);
 
-  const closeLightbox = () => {
-    setLightboxIndex(null);
-  };
+  const prevImage = useCallback(() =>
+    setLightboxIndex((i) =>
+      i !== null ? (i - 1 + filtered.length) % filtered.length : null,
+    ), [filtered.length]);
 
-  const nextImage = () => {
-    if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex + 1) % filtered.length);
-    }
-  };
+  const nextImage = useCallback(() =>
+    setLightboxIndex((i) => (i !== null ? (i + 1) % filtered.length : null)), [filtered.length]);
 
-  const prevImage = () => {
-    if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex - 1 + filtered.length) % filtered.length);
-    }
-  };
+  // Keyboard support for lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (lightboxIndex === null) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") prevImage();
+      if (e.key === "ArrowRight") nextImage();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIndex, nextImage, prevImage]);
 
   if (loading) {
     return (
@@ -136,6 +140,7 @@ export function Gallery() {
     );
   }
 
+
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
@@ -160,15 +165,24 @@ export function Gallery() {
               Explore photos and videos capturing the moments of impact, hope,
               and transformation across Ethiopia.
             </p>
-            <div className="max-w-md mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search gallery by title..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/95 text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#00b359]"
-              />
+          </div>
+        </section>
+
+        {/* ── FILTERS & SEARCH ── */}
+        <section className="sticky top-16 z-40 bg-white/95 backdrop-blur-sm border-b border-zinc-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="max-w-md mx-auto relative w-full lg:w-80">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search gallery by title..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/95 text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#00b359]"
+                />
+              </div>
+
             </div>
           </div>
         </section>
