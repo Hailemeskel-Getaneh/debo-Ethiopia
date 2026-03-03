@@ -72,6 +72,9 @@ export function Gallery() {
       // Add videos
       if (gallery.videos && Array.isArray(gallery.videos)) {
         gallery.videos.forEach((vid: GalleryVideo) => {
+          // Skip videos without a valid URL
+          if (!vid.video_url) return;
+
           displayItems.push({
             galleryId: gallery.id,
             imageId: vid.id,
@@ -96,13 +99,19 @@ export function Gallery() {
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
 
-  const prevImage = useCallback(() =>
-    setLightboxIndex((i) =>
-      i !== null ? (i - 1 + filtered.length) % filtered.length : null,
-    ), [filtered.length]);
+  const prevImage = useCallback(
+    () =>
+      setLightboxIndex((i) =>
+        i !== null ? (i - 1 + filtered.length) % filtered.length : null,
+      ),
+    [filtered.length],
+  );
 
-  const nextImage = useCallback(() =>
-    setLightboxIndex((i) => (i !== null ? (i + 1) % filtered.length : null)), [filtered.length]);
+  const nextImage = useCallback(
+    () =>
+      setLightboxIndex((i) => (i !== null ? (i + 1) % filtered.length : null)),
+    [filtered.length],
+  );
 
   // Keyboard support for lightbox
   useEffect(() => {
@@ -140,24 +149,27 @@ export function Gallery() {
     );
   }
 
-
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
       <main id="main-content">
         {/* ── HERO ── */}
-        <section className="relative min-h-[52vh] flex items-center overflow-hidden pt-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#003d1a] via-[#005c28] to-[#009639]" />
-          <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-purple-400/10 blur-3xl" />
-          <div className="absolute bottom-20 -left-20 w-72 h-72 rounded-full bg-[#00b359]/10 blur-3xl" />
+        <section
+          className="relative min-h-[52vh] flex items-center overflow-hidden pt-20"
+          style={{
+            background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+          }}
+        >
+          <div className="absolute -top-20 right-0 w-96 h-96 rounded-full bg-[#16A34A]/10 blur-3xl" />
+          <div className="absolute bottom-20 -left-20 w-72 h-72 rounded-full bg-[#16A34A]/10 blur-3xl" />
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center w-full">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
-              <Image className="w-4 h-4 text-[#00b359]" /> Gallery
+              <Image className="w-4 h-4 text-[#16A34A]" /> Gallery
             </div>
             <h1 className="text-5xl sm:text-6xl font-extrabold text-white mb-5">
               Our{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00b359] to-[#00b359]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#16A34A] to-[#16A34A]">
                 Gallery
               </span>
             </h1>
@@ -179,10 +191,9 @@ export function Gallery() {
                   placeholder="Search gallery by title..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/95 text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#00b359]"
+                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/95 text-gray-800 placeholder-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#16A34A]"
                 />
               </div>
-
             </div>
           </div>
         </section>
@@ -215,8 +226,17 @@ export function Gallery() {
                   >
                     {item.type === "video" ? (
                       <>
-                        <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                        <div className="w-full h-full bg-gray-800 flex items-center justify-center relative">
                           <Play className="w-12 h-12 text-white/80" />
+                          {/* Video play indicator */}
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                              <Play
+                                className="w-8 h-8 text-white ml-1"
+                                fill="white"
+                              />
+                            </div>
+                          </div>
                         </div>
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
                       </>
@@ -305,12 +325,45 @@ export function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               {filtered[lightboxIndex].type === "video" ? (
-                <video
-                  src={filtered[lightboxIndex].videoUrl}
-                  controls
-                  className="max-w-full max-h-[90vh]"
-                  autoPlay
-                />
+                <div className="flex flex-col items-center">
+                  <video
+                    src={filtered[lightboxIndex].videoUrl}
+                    controls
+                    className="max-w-full max-h-[80vh] rounded-lg"
+                    autoPlay
+                    muted
+                    playsInline
+                    onError={(e) => {
+                      const video = e.currentTarget;
+                      video.poster = "";
+                      video.style.display = "none";
+                      const errorDiv = document.getElementById("video-error");
+                      if (errorDiv) errorDiv.style.display = "block";
+                    }}
+                  />
+                  <div
+                    id="video-error"
+                    className="hidden flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg text-white"
+                  >
+                    <Play className="w-16 h-16 mb-4 text-red-400" />
+                    <p className="text-lg font-semibold">
+                      Unable to play video
+                    </p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      Video URL: {filtered[lightboxIndex].videoUrl}
+                    </p>
+                    {filtered[lightboxIndex].videoUrl && (
+                      <a
+                        href={filtered[lightboxIndex].videoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 px-4 py-2 bg-[#16A34A] text-white rounded-lg hover:bg-[#15803d] transition-colors"
+                      >
+                        Open Video in New Tab
+                      </a>
+                    )}
+                  </div>
+                </div>
               ) : (
                 <img
                   src={filtered[lightboxIndex].imageUrl}

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mail, Linkedin, Users, Star, Globe, ArrowRight, ShieldCheck } from "lucide-react";
+import { Mail, Linkedin, ArrowRight } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 
@@ -91,57 +91,46 @@ const advisors = [
   },
 ];
 
-function MemberCard({
-  member,
-}: {
-  member: (typeof board)[0];
-}) {
+function MemberCard({ member }: { member: (typeof board)[0] }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group relative bg-white dark:bg-zinc-900 rounded-[3.5rem] overflow-hidden border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-premium transition-all duration-700 h-full flex flex-col"
+      className="group relative bg-white rounded-md overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer"
     >
-      {/* Image Container */}
-      <div className="aspect-[4/5] overflow-hidden relative shrink-0">
-        <div className="absolute inset-0 bg-zinc-950">
-          <img
-            src={member.image}
-            alt={member.name}
-            className="w-full h-full object-cover opacity-90 group-hover:scale-110 group-hover:opacity-70 transition-all duration-1000"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent z-10" />
-        </div>
+      <div className="aspect-[4/5] overflow-hidden relative bg-gray-900">
+        <img
+          src={member.image}
+          alt={member.name}
+          className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-60 transition-all duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-        {/* Social Links on Hover */}
-        <div className="absolute top-8 right-8 z-20 flex flex-col gap-3 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500">
+        <div className="absolute top-4 right-4 z-10 flex gap-2">
           <a
             href={`mailto:${member.email}`}
-            className="w-12 h-12 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md rounded-2xl flex items-center justify-center hover:bg-brand-main hover:text-white transition-all shadow-xl"
+            className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-[#16A34A] hover:text-white transition-all shadow"
           >
-            <Mail className="w-5 h-5" />
+            <Mail className="w-4 h-4" />
           </a>
-          <button
-            className="w-12 h-12 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md rounded-2xl flex items-center justify-center hover:bg-brand-main hover:text-white transition-all shadow-xl"
-          >
-            <Linkedin className="w-5 h-5" />
+          <button className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-[#16A34A] hover:text-white transition-all shadow">
+            <Linkedin className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Role Badge */}
-        <div className="absolute bottom-6 left-8 z-20">
-          <span className="px-5 py-2 rounded-full glass-card border border-white/20 text-[10px] font-black text-white uppercase tracking-widest">
+        <div className="absolute bottom-4 left-4 z-10">
+          <span className="px-3 py-1.5 rounded-sm bg-[#16A34A] text-white text-xs font-medium uppercase">
             {member.role}
           </span>
         </div>
       </div>
 
-      <div className="p-10 flex-col flex flex-1">
-        <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-4 leading-tight group-hover:text-brand-main transition-colors">
+      <div className="p-5">
+        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#16A34A] transition-colors">
           {member.name}
         </h3>
-        <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed line-clamp-4">
+        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
           {member.bio}
         </p>
       </div>
@@ -149,120 +138,116 @@ function MemberCard({
   );
 }
 
-export function BoardLeadership() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
+function LeadershipCard({ member }: { member: (typeof leadership)[0] }) {
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 selection:bg-brand-main/30">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="group bg-white rounded-md overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer"
+    >
+      <div className="aspect-square overflow-hidden relative bg-gray-900">
+        <img
+          src={member.image}
+          alt={member.name}
+          className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-60 transition-all duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute bottom-4 left-4 z-10">
+          <span className="px-3 py-1.5 rounded-sm bg-[#16A34A] text-white text-xs font-medium uppercase">
+            {member.role}
+          </span>
+        </div>
+      </div>
+      <div className="p-5">
+        <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#16A34A] transition-colors">
+          {member.name}
+        </h3>
+        <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+          {member.bio}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function BoardLeadership() {
+  return (
+    <div className="min-h-screen bg-gray-50">
       <NavBar />
 
-      <main id="main-content">
-        {/* ── HERO ── */}
-        <section className="relative pt-32 pb-24 overflow-hidden">
-          <div className="absolute inset-0 mesh-gradient opacity-30 dark:opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-50/50 to-zinc-50 dark:via-zinc-950/50 dark:to-zinc-950" />
-
-          <div className="relative container mx-auto px-6 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-card border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-black uppercase tracking-[0.3em] mb-10"
-            >
-              <Users className="w-3.5 h-3.5 text-brand-main" /> The Architects of Change
-            </motion.div>
-
+      <main>
+        {/* Hero */}
+        <section
+          className="relative pt-28 pb-16"
+          style={{
+            background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+          }}
+        >
+          <div className="container mx-auto px-6 text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-6xl md:text-8xl font-black text-zinc-950 dark:text-white mb-8 tracking-tighter"
+              className="text-5xl md:text-7xl font-bold text-white mb-4"
             >
-              Visionary <span className="text-brand-main">Leadership</span>
+              Board & <span className="text-[#16A34A]">Leadership</span>
             </motion.h1>
-
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg md:text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto font-medium leading-relaxed"
+              transition={{ delay: 0.1 }}
+              className="text-lg text-gray-300 max-w-2xl mx-auto"
             >
-              Our governance and executive teams bring decades of expertise and a shared commitment to building a more equitable Ethiopia.
+              Meet the dedicated individuals guiding Debo Ethiopia's mission to
+              empower rural communities through sustainable development.
             </motion.p>
           </div>
         </section>
 
-        {/* ── BOARD OF DIRECTORS ── */}
-        <section className="pb-32 relative">
+        {/* Board Members */}
+        <section className="py-16">
           <div className="container mx-auto px-6">
-            <div className="flex items-center justify-between mb-16 border-b border-zinc-100 dark:border-zinc-800 pb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-brand-main/10 flex items-center justify-center">
-                  <Star className="w-6 h-6 text-brand-main" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">Board of Directors</h2>
-                  <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest mt-1">Foundational Governance</p>
-                </div>
-              </div>
-            </div>
-
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-10"
-            >
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Board of Directors
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Strategic oversight and governance
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {board.map((member, i) => (
                 <MemberCard key={i} member={member} />
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
 
-        {/* ── LEADERSHIP TEAM ── */}
-        <section className="py-32 relative bg-zinc-100 dark:bg-zinc-900/40">
+        {/* Leadership Team */}
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-6">
-            <div className="flex items-center justify-between mb-16 border-b border-zinc-200 dark:border-zinc-800 pb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-brand-main/10 flex items-center justify-center">
-                  <ShieldCheck className="w-6 h-6 text-brand-main" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">Leadership Team</h2>
-                  <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest mt-1">Operational Excellence</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Leadership Team
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Day-to-day operations and program execution
+            </p>
+            <div className="grid md:grid-cols-3 gap-6">
               {leadership.map((member, i) => (
-                <MemberCard key={i} member={member} />
+                <LeadershipCard key={i} member={member} />
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── ADVISORY COUNCIL ── */}
-        <section className="py-32 relative">
+        {/* Advisors */}
+        <section className="py-16">
           <div className="container mx-auto px-6">
-            <div className="flex flex-col items-center text-center mb-24">
-              <div className="w-16 h-16 rounded-3xl bg-brand-main/10 flex items-center justify-center mb-8">
-                <Globe className="w-8 h-8 text-brand-main" />
-              </div>
-              <h2 className="text-5xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight">Advisory Council</h2>
-              <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl font-medium">
-                Global experts providing strategic insight and specialized guidance to amplify our impact across diverse domains.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Advisory Board
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Expert guidance from global leaders
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {advisors.map((advisor, i) => (
                 <motion.div
                   key={i}
@@ -270,20 +255,26 @@ export function BoardLeadership() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
-                  className="group p-8 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:shadow-premium hover:border-brand-main/30 transition-all duration-300"
+                  className="group p-5 rounded-md border border-gray-200 bg-white hover:shadow-md hover:border-[#16A34A]/30 transition-all cursor-pointer"
                 >
-                  <div className="flex items-center gap-6">
-                    <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-main/20 via-brand-main/10 to-transparent flex items-center justify-center text-brand-main font-black text-xl border border-brand-main/10 group-hover:scale-110 transition-transform">
-                      {advisor.name.split(" ").filter((_, i2) => i2 < 2).map((w) => w[0]).join("")}
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-md bg-[#16A34A]/10 flex items-center justify-center text-[#16A34A] font-bold text-lg border border-[#16A34A]/10">
+                      {advisor.name
+                        .split(" ")
+                        .filter((_, i2) => i2 < 2)
+                        .map((w) => w[0])
+                        .join("")}
                     </div>
                     <div>
-                      <h3 className="text-lg font-black text-zinc-900 dark:text-white mb-1 group-hover:text-brand-main transition-colors">
+                      <h3 className="text-base font-bold text-gray-900 group-hover:text-[#16A34A] transition-colors">
                         {advisor.name}
                       </h3>
-                      <p className="text-xs font-black text-brand-main uppercase tracking-widest mb-1.5 opacity-70">
+                      <p className="text-xs font-medium text-[#16A34A] uppercase tracking-wider">
                         {advisor.domain}
                       </p>
-                      <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">{advisor.org}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {advisor.org}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -292,29 +283,22 @@ export function BoardLeadership() {
           </div>
         </section>
 
-        {/* ── JOIN CTA ── */}
-        <section className="py-32 bg-brand-main relative overflow-hidden">
-          <div className="absolute inset-0 mesh-gradient opacity-20" />
-          <div className="container relative z-10 mx-auto px-6 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="max-w-3xl mx-auto"
+        {/* CTA */}
+        <section className="py-16 bg-[#16A34A]">
+          <div className="container mx-auto px-6 text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Join Our Mission
+            </h2>
+            <p className="text-white/80 mb-6 max-w-xl mx-auto">
+              Whether you want to volunteer, partner, or donate, your
+              contribution makes a difference in rural Ethiopia.
+            </p>
+            <a
+              href="/contact"
+              className="inline-flex items-center gap-2 bg-white text-[#16A34A] font-medium px-6 py-3 rounded-md hover:scale-105 active:scale-95 transition-transform shadow-md"
             >
-              <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter">Shape the Future Together</h2>
-              <p className="text-white/80 text-lg md:text-xl mb-16 font-medium leading-relaxed">
-                We are constantly looking for visionary leaders and passionate experts to join our ecosystem.
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-6">
-                <a
-                  href="/contact"
-                  className="bg-white text-zinc-950 font-black px-12 py-6 rounded-3xl text-lg hover:scale-105 active:scale-95 transition-all shadow-2xl flex items-center gap-3"
-                >
-                  Join Our Team <ArrowRight className="w-6 h-6" />
-                </a>
-              </div>
-            </motion.div>
+              Get Involved <ArrowRight className="w-5 h-5" />
+            </a>
           </div>
         </section>
       </main>
@@ -323,4 +307,3 @@ export function BoardLeadership() {
     </div>
   );
 }
-

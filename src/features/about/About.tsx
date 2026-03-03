@@ -41,12 +41,12 @@ function StatItem({
   }, [visible, value]);
 
   return (
-    <div className="text-center p-8 rounded-[2rem] bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 group hover:shadow-premium transition-all duration-500">
-      <div className="text-5xl font-black text-brand-main mb-2 tabular-nums tracking-tighter group-hover:scale-110 transition-transform">
+    <div className="text-center p-6 rounded-md bg-white shadow-sm border border-gray-200 group hover:shadow-md transition-all cursor-pointer">
+      <div className="text-4xl font-bold text-[#16A34A] mb-2 tabular-nums group-hover:scale-105 transition-transform">
         {count.toLocaleString()}
         {suffix}
       </div>
-      <div className="text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">
+      <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
         {label}
       </div>
     </div>
@@ -64,35 +64,61 @@ const values = [
   {
     icon: Heart,
     title: "Compassion",
-    description: "We care deeply about the communities we serve and approach our work with empathy and genuine concern.",
+    description:
+      "We care deeply about the communities we serve and approach our work with empathy and genuine concern.",
     gradient: "from-rose-500 to-pink-600",
   },
   {
     icon: Users,
     title: "Collaboration",
-    description: "We believe in the power of partnership and working together for greater, lasting impact.",
+    description:
+      "We believe in the power of partnership and working together for greater, lasting impact.",
     gradient: "from-brand-main to-primary-700",
   },
   {
     icon: ShieldCheck,
     title: "Accountability",
-    description: "We operate with honesty and complete transparency to our donors and the communities we serve.",
+    description:
+      "We operate with honesty and complete transparency to our donors and the communities we serve.",
     gradient: "from-amber-500 to-orange-600",
   },
   {
     icon: TrendingUp,
     title: "Sustainability",
-    description: "We focus on long-term infrastructure and systems that empower communities to be self-reliant.",
+    description:
+      "We focus on long-term infrastructure and systems that empower communities to be self-reliant.",
     gradient: "from-blue-500 to-indigo-600",
   },
 ];
 
 const timeline = [
-  { year: "2015", event: "Debo Ethiopia founded in Addis Ababa with a focus on local community development." },
-  { year: "2017", event: "Launched first education pilot program in 5 rural schools." },
-  { year: "2019", event: "Expanded to 3 regional offices; served 1,000+ students for the first time." },
-  { year: "2021", event: "Implemented the 'Debo' agricultural methodology at scale." },
-  { year: "2023", event: "Reached 5,000+ students across 25+ partner districts nationwide." },
+  {
+    year: "2015",
+    event:
+      "Debo Ethiopia founded in Addis Ababa with a focus on local community development.",
+    icon: "🏠",
+  },
+  {
+    year: "2017",
+    event: "Launched first education pilot program in 5 rural schools.",
+    icon: "📚",
+  },
+  {
+    year: "2019",
+    event:
+      "Expanded to 3 regional offices; served 1,000+ students for the first time.",
+    icon: "🌍",
+  },
+  {
+    year: "2021",
+    event: "Implemented the 'Debo' agricultural methodology at scale.",
+    icon: "🌾",
+  },
+  {
+    year: "2023",
+    event: "Reached 5,000+ students across 25+ partner districts nationwide.",
+    icon: "🎓",
+  },
 ];
 
 export function About() {
@@ -140,8 +166,14 @@ export function About() {
               transition={{ duration: 1.2 }}
               className="absolute inset-0"
             >
-              <img src={heroImages[currentImage]} className="w-full h-full object-cover" alt="Hero" />
-              <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/30 to-black/70" />
+              <img
+                src={heroImages[currentImage]}
+                className="w-full h-full object-cover"
+                alt="Hero"
+              />
+              {/* Semi-transparent dark overlay for text readability */}
+              <div className="absolute inset-0 bg-black/60" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/70" />
             </motion.div>
           </AnimatePresence>
 
@@ -152,74 +184,107 @@ export function About() {
               transition={{ duration: 1 }}
               className="max-w-4xl"
             >
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-brand-main text-sm font-bold uppercase tracking-widest mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-[#16A34A] text-sm font-bold uppercase tracking-widest mb-8">
                 <Sparkles className="w-4 h-4" /> Rooted in Tradition
               </span>
               <h1 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
                 Our Story: <span className="text-brand-main">The Debo Way</span>
               </h1>
-              <p className="text-xl md:text-2xl text-white/80 max-w-2xl leading-relaxed mb-12">
-                Empowering Ethiopian communities through collective action, sustainable development, and a commitment to the next generation.
+              <p className="text-xl md:text-2xl text-white max-w-2xl leading-relaxed mb-12">
+                Empowering Ethiopian communities through collective action,
+                sustainable development, and a commitment to the next
+                generation.
               </p>
               <div className="flex gap-4">
-                <a href="/donate" className="btn-action px-10 py-5 rounded-2xl text-lg font-bold">Support Our Case</a>
+                <a
+                  href="/donate"
+                  className="btn-action px-10 py-5 rounded-2xl text-lg font-bold"
+                >
+                  Support Our Case
+                </a>
               </div>
             </motion.div>
           </div>
         </section>
 
         {/* IMPACT STATS */}
-        <section ref={impactRef} className="py-24 bg-white dark:bg-zinc-900/30 border-y border-zinc-100 dark:border-zinc-800">
+        <section
+          ref={impactRef}
+          className="py-16 bg-white border-y border-gray-200"
+        >
           <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {statsLoading ? (
-                Array(4).fill(0).map((_, i) => (
-                  <div key={i} className="h-40 rounded-[2rem] bg-zinc-200/50 dark:bg-zinc-800/50 animate-pulse" />
-                ))
-              ) : (stats && stats.length > 0 ? stats : fallbackStats).slice(0, 4).map((stat) => (
-                <StatItem
-                  key={'label' in stat ? stat.label : stat.name}
-                  value={stat.value}
-                  suffix={'suffix' in stat ? stat.suffix || "" : ""}
-                  label={'label' in stat ? stat.label : stat.name}
-                  visible={impactVisible}
-                />
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {statsLoading
+                ? Array(4)
+                    .fill(0)
+                    .map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-32 rounded-md bg-gray-200 animate-pulse"
+                      />
+                    ))
+                : (stats && stats.length > 0 ? stats : fallbackStats)
+                    .slice(0, 4)
+                    .map((stat) => (
+                      <StatItem
+                        key={"label" in stat ? stat.label : stat.name}
+                        value={stat.value}
+                        suffix={"suffix" in stat ? stat.suffix || "" : ""}
+                        label={"label" in stat ? stat.label : stat.name}
+                        visible={impactVisible}
+                      />
+                    ))}
             </div>
           </div>
         </section>
 
         {/* CORE STORY */}
-        <section className="py-32 relative overflow-hidden mesh-gradient">
-          <div className="container mx-auto px-6">
+        <section className="py-32 relative overflow-hidden bg-zinc-900">
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900" />
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#16A34A]/20 via-transparent to-transparent" />
+            <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-[#16A34A]/10 via-transparent to-transparent" />
+          </div>
+
+          <div className="container mx-auto px-6 relative z-10">
             <div className="grid lg:grid-cols-2 gap-24 items-center">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="flex items-center gap-2 text-brand-main font-bold uppercase tracking-widest text-sm mb-6">
+                <div className="flex items-center gap-2 text-[#16A34A] font-bold uppercase tracking-widest text-sm mb-6">
                   <Award className="w-5 h-5" /> Who We Are
                 </div>
-                <h2 className="text-5xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-8 tracking-tight leading-[1.1]">
-                  A Mission Born from <span className="text-brand-main italic underline decoration-zinc-200">Collective Purpose</span>
+                <h2 className="text-5xl md:text-6xl font-bold text-white mb-8 tracking-tight leading-[1.1]">
+                  A Mission Born from{" "}
+                  <span className="text-[#16A34A] italic underline decoration-zinc-200">
+                    Collective Purpose
+                  </span>
                 </h2>
-                <div className="space-y-6 text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  <p>
-                    Established in 2005, Debo Ethiopia is a non-profit organization dedicated to improving the quality of life for rural Ethiopian communities through holistic development.
+                <div className="space-y-6 text-xl text-white leading-relaxed">
+                  <p className="text-white">
+                    Established in 2005, Debo Ethiopia is a non-profit
+                    organization dedicated to improving the quality of life for
+                    rural Ethiopian communities through holistic development.
                   </p>
-                  <p>
-                    We are guided by the ancient Ethiopian tradition of "Debo" — a culture of communal cooperation where neighbors gather to complete large tasks for the benefit of all.
+                  <p className="text-white">
+                    We are guided by the ancient Ethiopian tradition of "Debo" —
+                    a culture of communal cooperation where neighbors gather to
+                    complete large tasks for the benefit of all.
                   </p>
-                  <p>
-                    Today, we apply this philosophy to education, healthcare, and sustainable agriculture, ensuring that development is locally led and universally beneficial.
+                  <p className="text-white">
+                    Today, we apply this philosophy to education, healthcare,
+                    and sustainable agriculture, ensuring that development is
+                    locally led and universally beneficial.
                   </p>
                 </div>
               </motion.div>
 
               <div className="relative">
-                <div className="absolute left-8 top-0 bottom-0 w-px bg-linear-to-b from-brand-main to-transparent opacity-20" />
-                <div className="space-y-12">
+                <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-[#16A34A] via-[#16A34A] to-transparent opacity-30" />
+                <div className="space-y-6">
                   {timeline.map((item, i) => (
                     <motion.div
                       key={i}
@@ -227,13 +292,26 @@ export function About() {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
                       viewport={{ once: true }}
-                      className="relative pl-20"
+                      whileHover={{ x: 4 }}
+                      className="relative pl-16 group"
                     >
-                      <div className="absolute left-0 w-16 h-16 rounded-2xl bg-zinc-950 dark:bg-brand-main flex items-center justify-center shadow-xl z-10 group hover:scale-110 transition-transform">
-                        <span className="text-white font-bold text-sm tracking-tighter">{item.year}</span>
+                      {/* Timeline dot with icon */}
+                      <div className="absolute left-0 top-0 w-12 h-12 rounded-full bg-gradient-to-br from-[#16A34A] to-[#15803D] flex items-center justify-center shadow-lg z-10 group-hover:scale-110 group-hover:shadow-xl transition-all">
+                        <span className="text-lg">{item.icon}</span>
                       </div>
-                      <div className="p-8 rounded-[2rem] bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-premium transition-all">
-                        <p className="text-lg text-zinc-900 dark:text-white font-medium">{item.event}</p>
+                      {/* Year badge */}
+                      <div className="absolute left-14 top-1">
+                        <span className="text-xs font-bold text-[#16A34A] uppercase tracking-wider">
+                          {item.year}
+                        </span>
+                      </div>
+                      {/* Card */}
+                      <div className="pt-8">
+                        <div className="p-5 rounded-xl bg-white shadow-sm border-l-4 border-[#16A34A] hover:shadow-lg hover:border-[#16A34A] transition-all cursor-pointer">
+                          <p className="text-base text-gray-900 font-medium leading-relaxed">
+                            {item.event}
+                          </p>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
@@ -244,31 +322,37 @@ export function About() {
         </section>
 
         {/* MISSION & VISION */}
-        <section className="py-32 bg-zinc-900 dark:bg-zinc-950 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-5 dot-pattern" />
+        <section className="py-16 bg-gray-900 relative overflow-hidden">
           <div className="container mx-auto px-6 relative z-10">
-            <div className="grid md:grid-cols-2 gap-12">
+            <div className="grid md:grid-cols-2 gap-8">
               <motion.div
-                whileHover={{ y: -10 }}
-                className="group p-12 rounded-[3rem] bg-linear-to-br from-brand-main to-primary-900 text-white relative overflow-hidden"
+                whileHover={{ y: -5 }}
+                className="group p-8 rounded-md bg-gradient-to-br from-[#16A34A] to-green-800 text-white relative overflow-hidden cursor-pointer"
               >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl" />
-                <Target className="w-16 h-16 mb-10 text-brand-action opacity-80" />
-                <h3 className="text-4xl font-bold mb-6 tracking-tight">Our Mission</h3>
-                <p className="text-2xl text-white/80 leading-relaxed font-light">
-                  To empower rural communities through sustainable development that respects local traditions while harnessing modern innovation for a better tomorrow.
+                <Target className="w-12 h-12 mb-6 opacity-80" />
+                <h3 className="text-2xl font-bold mb-4 text-white">
+                  Our Mission
+                </h3>
+                <p className="text-white/80 leading-relaxed">
+                  To empower rural communities through sustainable development
+                  that respects local traditions while harnessing modern
+                  innovation for a better tomorrow.
                 </p>
               </motion.div>
 
               <motion.div
                 whileHover={{ y: -10 }}
-                className="group p-12 rounded-[3rem] bg-zinc-800 dark:bg-zinc-900 text-white relative overflow-hidden border border-zinc-700 dark:border-zinc-800"
+                className="group p-8 rounded-md bg-zinc-800 text-white relative overflow-hidden border border-zinc-700 hover:border-[#16A34A]/50 transition-all"
               >
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-brand-main/5 rounded-full -mr-32 -mb-32 blur-3xl" />
-                <Globe className="w-16 h-16 mb-10 text-brand-main opacity-80" />
-                <h3 className="text-4xl font-bold mb-6 tracking-tight">Our Vision</h3>
-                <p className="text-2xl text-white/70 leading-relaxed font-light">
-                  A resilient Ethiopia where every community has the resources, skills, and infrastructure to build its own flourishing future.
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-brand-main/10 rounded-full -mr-32 -mb-32 blur-3xl" />
+                <Globe className="w-12 h-12 mb-6 text-brand-main opacity-80" />
+                <h3 className="text-2xl font-bold mb-4 text-white">
+                  Our Vision
+                </h3>
+                <p className="text-white leading-relaxed">
+                  A resilient Ethiopia where every community has the resources,
+                  skills, and infrastructure to build its own flourishing
+                  future.
                 </p>
               </motion.div>
             </div>
@@ -278,21 +362,29 @@ export function About() {
         {/* VALUES */}
         <section className="py-32">
           <div className="container mx-auto px-6 text-center">
-            <span className="text-brand-main font-bold uppercase tracking-[0.3em] text-xs mb-6 block">Our DNA</span>
-            <h2 className="text-5xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-20 tracking-tight">What Drives Us</h2>
+            <span className="text-[#16A34A] font-bold uppercase tracking-wider text-xs mb-4 block">
+              Our DNA
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12">
+              What Drives Us
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {values.map((value, i) => (
                 <motion.div
                   key={i}
-                  whileHover={{ y: -10 }}
-                  className="group p-10 rounded-[2.5rem] bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-premium transition-all duration-500"
+                  whileHover={{ y: -4 }}
+                  className="group p-6 rounded-md bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer"
                 >
-                  <div className={`w-20 h-20 rounded-3xl bg-linear-to-br ${value.gradient} flex items-center justify-center text-white mx-auto mb-8 shadow-xl group-hover:rotate-6 transition-transform`}>
-                    <value.icon className="w-10 h-10" />
+                  <div
+                    className={`w-16 h-16 rounded-md ${value.gradient} flex items-center justify-center text-white mx-auto mb-4 shadow-md group-hover:scale-105 transition-transform`}
+                  >
+                    <value.icon className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4 tracking-tight">{value.title}</h3>
-                  <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
                     {value.description}
                   </p>
                 </motion.div>
@@ -303,16 +395,29 @@ export function About() {
 
         {/* FINAL CTA */}
         <section className="py-32 bg-brand-main relative overflow-hidden">
-          <div className="absolute inset-0 bg-linear-to-tr from-primary-900 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary-900 to-transparent" />
           <div className="container relative z-10 mx-auto px-6 text-center">
             <Heart className="w-20 h-20 text-brand-action mx-auto mb-10 animate-pulse fill-current" />
-            <h2 className="text-5xl md:text-7xl font-bold text-white mb-10 tracking-tighter">Become Part of the Story</h2>
+            <h2 className="text-5xl md:text-7xl font-bold text-white mb-10 tracking-tighter">
+              Become Part of the Story
+            </h2>
             <p className="text-2xl text-white/80 max-w-2xl mx-auto mb-12 font-medium">
-              Your support empowers thousands of families. Join our mission to build a more resilient Ethiopia today.
+              Your support empowers thousands of families. Join our mission to
+              build a more resilient Ethiopia today.
             </p>
             <div className="flex flex-wrap justify-center gap-6">
-              <a href="/donate" className="btn-action px-12 py-6 rounded-2xl text-2xl font-black">Support Now</a>
-              <a href="/contact" className="px-12 py-6 rounded-2xl border-2 border-white/20 text-white font-bold text-xl hover:bg-white/10 transition-all">Get in Touch</a>
+              <a
+                href="/donate"
+                className="btn-action px-12 py-6 rounded-2xl text-2xl font-black"
+              >
+                Support Now
+              </a>
+              <a
+                href="/contact"
+                className="px-12 py-6 rounded-2xl border-2 border-white/20 text-white font-bold text-xl hover:bg-white/10 transition-all"
+              >
+                Get in Touch
+              </a>
             </div>
           </div>
         </section>
@@ -321,4 +426,3 @@ export function About() {
     </div>
   );
 }
-

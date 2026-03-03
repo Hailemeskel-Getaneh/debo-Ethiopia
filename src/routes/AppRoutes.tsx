@@ -20,7 +20,7 @@ import AdminSettings from "../admin/AdminSettings";
 import ProtectedRoute from "./ProtectedRoute";
 import HomePage from "../features/home/HomePage";
 import { About } from "../features/about/About";
-import { BoardLeadership } from "../features/about/BoardLeadership";
+
 import { ProgramsRouter } from "../features/programs/ProgramsRouter";
 import { ProjectsRouter } from "../features/projects/ProjectsRouter";
 import { EventsRouter } from "../features/events/EventsRouter";
@@ -34,6 +34,7 @@ import ManagePrograms from "../admin/ManagePrograms";
 import NotificationHub from "../admin/NotificationHub";
 import ManageSubscribers from "../admin/ManageSubscribers";
 import ManageMetrics from "../admin/ManageMetrics";
+import BoardLeadership from "../features/about/BoardLeadership";
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated, userRole } = useAuth();
@@ -86,7 +87,10 @@ const AppRoutes: React.FC = () => {
           <Route path="/admin/settings" element={<AdminSettings />} />
 
           {/* Legacy Redirect for /dashboard */}
-          <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route
+            path="/dashboard"
+            element={<Navigate to="/admin/dashboard" replace />}
+          />
         </Route>
       </Route>
 
