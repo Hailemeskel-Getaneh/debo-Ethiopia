@@ -98,45 +98,6 @@ export default function HomePage() {
     >
       <NavBar />
 
-      {/* Theme Switcher
-      <div className="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/10 dark:bg-black/30 backdrop-blur-md p-3 rounded-2xl border border-white/20">
-        <button
-          onClick={() => setTheme("light")}
-          className={`p-2 rounded-xl transition-all ${theme === "light" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Light"
-        >
-          <Sun className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => setTheme("dark")}
-          className={`p-2 rounded-xl transition-all ${theme === "dark" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Dark"
-        >
-          <Moon className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => setTheme("green")}
-          className={`p-2 rounded-xl transition-all ${theme === "green" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Green"
-        >
-          <Palette className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => setTheme("blue")}
-          className={`p-2 rounded-xl transition-all ${theme === "blue" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Blue"
-        >
-          <span className="text-xs font-bold">B</span>
-        </button>
-        <button
-          onClick={() => setTheme("purple")}
-          className={`p-2 rounded-xl transition-all ${theme === "purple" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Purple"
-        >
-          <span className="text-xs font-bold">P</span>
-        </button>
-      </div> */}
-
       <main>
         {/* HERO SECTION */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-zinc-950">
