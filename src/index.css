@@ -1,2 +1,173 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* Global base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* All interactive elements should have pointer cursor */
+button,
+.btn,
+[role="button"],
+a,
+[role="link"],
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Cards should have pointer cursor on hover */
+.card-solid,
+.card,
+.glass-card {
+  cursor: pointer;
+}
+
+/* Global gradient background */
+.global-bg {
+  background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EC 100%);
+  min-height: 100vh;
+}
+
+/* Section styling */
+.section {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.section-light {
+  background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EC 100%);
+}
+
+.section-white {
+  background: #FFFFFF;
+}
+
+/* Content container */
+.content-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Card styles */
+.card-solid {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-radius: 4px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card-solid:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+/* Text contrast utilities */
+.text-primary-dark {
+  color: #1A1A1A;
+}
+
+.text-body {
+  color: #333333;
+}
+
+.text-muted {
+  color: #4B5563;
+}
+
+/* Button base */
+.btn-primary {
+  background-color: #16A34A;
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary:hover {
+  background-color: #15803D;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background-color: #15803D;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Input styles */
+.input-solid {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
+  padding: 12px 16px;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-solid:focus {
+  outline: none;
+  border-color: #16A34A;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+/* Hero section */
+.hero-section {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EC 100%);
+}
+
+.hero-overlay {
+  display: none;
+}
+
+/* Badge/Tag styles */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.badge-green {
+  background-color: #DCFCE7;
+  color: #15803D;
+}
+
+/* Focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid #16A34A;
+  outline-offset: 2px;
+}
+
+/* Remove default blur effects */
+.blur-overlay {
+  display: none;
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #16A34A 0%, #15803D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

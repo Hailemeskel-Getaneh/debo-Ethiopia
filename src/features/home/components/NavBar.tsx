@@ -4,8 +4,6 @@ import { Menu, X, ChevronDown, Heart, Globe, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 
-
-
 const navLinks = [
   { name: "Home", href: "/" },
   {
@@ -52,25 +50,32 @@ const NavBar = () => {
   return (
     <nav
       ref={navRef}
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled
-        ? "py-3 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-white/20 dark:border-zinc-800/20 shadow-lg"
-        : "py-6 bg-transparent"
-        }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        isScrolled
+          ? "py-3 bg-white border-b border-gray-200 shadow-[0_2px_10px_rgba(0,0,0,0.05)]"
+          : "py-4 bg-white border-b border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.05)]"
+      }`}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="relative z-50 flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
-              <img src={logo} alt="Debo Logo" className="w-full h-full object-contain" />
+            <div className="w-10 h-10 rounded-md bg-white flex items-center justify-center shadow-sm border border-gray-100 group-hover:scale-105 transition-transform overflow-hidden">
+              <img
+                src={logo}
+                alt="Debo Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
-            <span className={`font-heading text-xl font-bold tracking-tight transition-colors duration-300 ${isScrolled ? 'text-zinc-900 dark:text-white' : 'text-white'}`}>
-              Debo <span className="text-brand-main">Ethiopia</span>
+            <span
+              className={`font-heading text-xl font-bold tracking-tight text-gray-900`}
+            >
+              Debo <span className="text-[#16A34A]">Ethiopia</span>
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-2">
             {navLinks.map((link) => (
               <div
                 key={link.name}
@@ -80,21 +85,25 @@ const NavBar = () => {
               >
                 {link.dropdown ? (
                   <button
-                    className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isScrolled
-                      ? "text-zinc-600 hover:text-brand-main hover:bg-brand-main/5 dark:text-zinc-400"
-                      : "text-white/80 hover:text-white hover:bg-white/10"
-                      }`}
+                    className={`flex items-center gap-1 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      isScrolled
+                        ? "text-gray-700 hover:text-[#16A34A] hover:bg-gray-50"
+                        : "text-gray-800 hover:text-[#16A34A] hover:bg-gray-50"
+                    }`}
                   >
                     {link.name}
-                    <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${activeDropdown === link.name ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === link.name ? "rotate-180" : ""}`}
+                    />
                   </button>
                 ) : (
                   <Link
                     to={link.href}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isScrolled
-                      ? "text-zinc-600 hover:text-brand-main hover:bg-brand-main/5 dark:text-zinc-400"
-                      : "text-white/80 hover:text-white hover:bg-white/10"
-                      }`}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      isScrolled
+                        ? "text-gray-700 hover:text-[#16A34A] hover:bg-gray-50"
+                        : "text-gray-800 hover:text-[#16A34A] hover:bg-gray-50"
+                    }`}
                   >
                     {link.name}
                   </Link>
@@ -108,13 +117,13 @@ const NavBar = () => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 mt-2 w-56 p-2 rounded-2xl bg-white dark:bg-zinc-900 shadow-premium border border-zinc-100 dark:border-zinc-800"
+                      className="absolute top-full left-0 mt-2 w-56 p-2 rounded-md bg-white shadow-sm border border-gray-100"
                     >
                       {link.dropdown.map((subItem) => (
                         <Link
                           key={subItem.name}
                           to={subItem.href}
-                          className="flex items-center px-4 py-3 rounded-xl text-sm text-zinc-600 dark:text-zinc-400 hover:bg-brand-main/5 hover:text-brand-main transition-all group"
+                          className="flex items-center px-4 py-3 rounded-md text-sm text-gray-600 hover:bg-gray-100 hover:text-[#16A34A] transition-all group"
                         >
                           {subItem.name}
                         </Link>
@@ -127,15 +136,17 @@ const NavBar = () => {
           </div>
 
           {/* Actions */}
-          <div className="hidden lg:flex items-center gap-4">
-            <button className={`p-2 rounded-full transition-colors ${isScrolled ? 'text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800' : 'text-white/80 hover:bg-white/10'}`}>
+          <div className="hidden lg:flex items-center gap-6">
+            <button
+              className={`p-2 rounded-md transition-colors text-gray-700 hover:text-[#16A34A] hover:bg-gray-100`}
+            >
               <Search className="w-5 h-5" />
             </button>
             <Link to="/donate">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-action px-6 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2"
+                className="bg-[#16A34A] hover:bg-[#15803D] text-white px-6 py-2.5 rounded-md text-sm font-semibold flex items-center gap-2 shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Heart className="w-4 h-4 fill-current" />
                 Donate
@@ -146,14 +157,19 @@ const NavBar = () => {
           {/* Mobile Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`lg:hidden relative z-50 p-2 rounded-xl transition-all ${mobileMenuOpen
-              ? "bg-brand-main text-white"
-              : isScrolled
-                ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white"
-                : "bg-white/10 text-white backdrop-blur-sm"
-              }`}
+            className={`lg:hidden relative z-50 p-2 rounded-md transition-all ${
+              mobileMenuOpen
+                ? "bg-[#16A34A] text-white"
+                : isScrolled
+                  ? "bg-gray-100 text-gray-900"
+                  : "bg-white text-gray-900"
+            }`}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -166,14 +182,14 @@ const NavBar = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-40 bg-white dark:bg-zinc-950 lg:hidden flex flex-col pt-24 px-6 overflow-y-auto"
+            className="fixed inset-0 z-40 bg-white lg:hidden flex flex-col pt-24 px-6 overflow-y-auto"
           >
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <div key={link.name} className="flex flex-col">
                   {link.dropdown ? (
                     <div className="py-2">
-                      <div className="text-zinc-400 text-xs font-semibold uppercase tracking-widest px-4 mb-2">
+                      <div className="text-gray-400 text-xs font-semibold uppercase tracking-widest px-4 mb-2">
                         {link.name}
                       </div>
                       <div className="flex flex-col gap-1 pl-4">
@@ -182,7 +198,7 @@ const NavBar = () => {
                             key={sub.name}
                             to={sub.href}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="py-3 px-4 rounded-xl text-lg font-medium text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                            className="py-3 px-4 rounded-xl text-lg font-medium text-gray-900 hover:bg-gray-50"
                           >
                             {sub.name}
                           </Link>
@@ -193,7 +209,7 @@ const NavBar = () => {
                     <Link
                       to={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="py-4 px-4 rounded-xl text-2xl font-semibold text-zinc-900 dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                      className="py-4 px-4 rounded-xl text-2xl font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       {link.name}
                     </Link>
@@ -203,13 +219,18 @@ const NavBar = () => {
             </div>
 
             <div className="mt-auto py-10 flex flex-col gap-4">
-              <Link to="/donate" className="btn-action w-full py-4 rounded-2xl text-center font-bold text-lg flex items-center justify-center gap-2">
+              <Link
+                to="/donate"
+                className="btn-gradient w-full py-4 rounded-xl text-center font-bold text-lg flex items-center justify-center gap-2"
+              >
                 <Heart className="w-6 h-6 fill-current" />
                 Donate Now
               </Link>
               <div className="flex justify-center gap-6">
                 {/* Social placeholders */}
-                <div className="text-zinc-400 p-2 hover:text-brand-main transition-colors"><Globe className="w-6 h-6" /></div>
+                <div className="text-gray-400 p-2 hover:text-[#16A34A] transition-colors">
+                  <Globe className="w-6 h-6" />
+                </div>
               </div>
             </div>
           </motion.div>
@@ -220,4 +241,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
