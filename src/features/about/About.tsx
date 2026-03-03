@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
@@ -13,45 +13,6 @@ import {
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 import { useStats } from "@/hooks/useStats";
-
-function StatItem({
-  value,
-  suffix,
-  label,
-  visible,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-  visible: boolean;
-}) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!visible) return;
-    let startTime: number | null = null;
-    const duration = 2000;
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(eased * value));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [visible, value]);
-
-  return (
-    <div className="text-center p-6 rounded-md bg-white shadow-sm border border-gray-200 group hover:shadow-md transition-all cursor-pointer">
-      <div className="text-4xl font-bold text-[#16A34A] mb-2 tabular-nums group-hover:scale-105 transition-transform">
-        {count.toLocaleString()}
-        {suffix}
-      </div>
-      <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {label}
-      </div>
-    </div>
-  );
-}
 
 const fallbackStats = [
   { label: "Students Served", value: 5000, suffix: "+" },
@@ -122,10 +83,8 @@ const timeline = [
 ];
 
 export function About() {
-  const impactRef = useRef<HTMLDivElement>(null);
-  const [impactVisible, setImpactVisible] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
-  const { stats, loading: statsLoading } = useStats();
+  const { stats } = useStats();
 
   const heroImages = [
     "/src/assets/images/teachers.jpg",
@@ -139,17 +98,6 @@ export function About() {
     }, 6000);
     return () => clearInterval(timer);
   }, [heroImages.length]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setImpactVisible(true);
-      },
-      { threshold: 0.1 },
-    );
-    if (impactRef.current) observer.observe(impactRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">

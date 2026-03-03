@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -37,15 +37,6 @@ const fallbackStats = [
   { value: "12k", label: "Lives Impacted" },
 ];
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "circOut" as const },
-  },
-};
-
 export default function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const { theme, themeColors } = useTheme();
@@ -76,14 +67,12 @@ export default function HomePage() {
     },
   ];
 
-  const { stats, loading: statsLoading } = useStats();
+  const { stats } = useStats();
   // useStats();
   // usePrograms();
   useProjects();
   const { news } = useNews();
   const { upcoming: upcomingEvents, loading: eventsLoading } = useEvents();
-
-  const impactRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
