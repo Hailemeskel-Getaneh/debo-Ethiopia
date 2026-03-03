@@ -239,41 +239,33 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* IMPACT STATS */}
-        <section
-          ref={impactRef}
-          className="py-16 bg-white border-y border-gray-200"
-        >
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {statsLoading
-                ? Array(4)
-                    .fill(0)
-                    .map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-32 rounded-md bg-gray-200 animate-pulse"
-                      />
-                    ))
-                : (stats && stats.length > 0 ? stats : fallbackStats)
-                    .slice(0, 4)
-                    .map((stat, i) => (
-                      <motion.div
-                        key={i}
-                        variants={itemVariants}
-                        className="text-center p-6 rounded-md bg-white shadow-sm border border-gray-200 group hover:shadow-md transition-all cursor-pointer"
-                      >
-                        <div className="text-4xl font-bold text-[#16A34A] mb-2 tabular-nums group-hover:scale-105 transition-transform">
-                          {stat.value}
-                        </div>
-                        <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {"label" in stat
-                            ? stat.label
-                            : (stat as { name: string }).name}
-                        </div>
-                      </motion.div>
-                    ))}
-            </div>
+        {/* ── FLOATING STATS ── */}
+        <section className="relative -mt-12 z-10 px-4">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-md shadow-lg p-2 grid grid-cols-2 md:grid-cols-4 border border-gray-200"
+            >
+              {(stats && stats.length > 0 ? stats : fallbackStats)
+                .slice(0, 4)
+                .map((stat, i) => (
+                  <div
+                    key={i}
+                    className="py-6 px-3 text-center group hover:bg-gray-50 transition-colors rounded-sm"
+                  >
+                    <div className="text-2xl font-bold text-gray-900">
+                      {stat.value}
+                    </div>
+                    <p className="text-xs font-medium text-gray-500 mt-1 uppercase tracking-wider">
+                      {"label" in stat
+                        ? stat.label
+                        : (stat as { name: string }).name}
+                    </p>
+                  </div>
+                ))}
+            </motion.div>
           </div>
         </section>
 
