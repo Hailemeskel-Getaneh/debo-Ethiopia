@@ -7,7 +7,6 @@ import {
   ArrowRight,
   Grid,
   LayoutList,
-  Filter,
   X,
 } from "lucide-react";
 import NavBar from "../home/components/NavBar";

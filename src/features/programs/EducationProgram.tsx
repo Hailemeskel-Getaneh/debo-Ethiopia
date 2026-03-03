@@ -5,7 +5,6 @@ import {
   BookOpen,
   Monitor,
   Users,
-  ArrowRight,
   CheckCircle,
   ChevronRight,
   Sparkles,

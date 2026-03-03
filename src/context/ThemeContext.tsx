@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 type ThemeMode = "light" | "dark" | "green" | "blue" | "purple";
 
@@ -18,7 +18,7 @@ const themeColors: Record<ThemeMode, string> = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<ThemeMode>("light");
 
   return (
@@ -28,10 +28,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useTheme() {
+function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { ThemeProvider, useTheme };

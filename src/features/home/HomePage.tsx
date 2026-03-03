@@ -10,9 +10,6 @@ import {
   Calendar,
   MapPin,
   Clock,
-  Sun,
-  Moon,
-  Palette,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NavBar from "./components/NavBar";
@@ -40,16 +37,6 @@ const fallbackStats = [
   { value: "12k", label: "Lives Impacted" },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
 const itemVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -61,7 +48,7 @@ const itemVariants = {
 
 export default function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
-  const { theme, setTheme, themeColors } = useTheme();
+  const { theme, themeColors } = useTheme();
   const heroSlides = [
     {
       image: heroImg,
@@ -97,20 +84,6 @@ export default function HomePage() {
   const { upcoming: upcomingEvents, loading: eventsLoading } = useEvents();
 
   const impactRef = useRef<HTMLDivElement>(null);
-  const [impactVisible, setImpactVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setImpactVisible(true);
-        }
-      },
-      { threshold: 0.1 },
-    );
-    if (impactRef.current) observer.observe(impactRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
