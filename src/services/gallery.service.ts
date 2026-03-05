@@ -16,21 +16,21 @@ export const galleryService = {
   list: (params?: GalleryListParams) =>
     api.get<PaginatedResponse<GalleryItem>>('/gallery/', params as Record<string, unknown>),
 
-  get: (id: number) =>
+  get: (id: string | number) =>
     api.get<GalleryItem>(`/gallery/${id}/`),
 
   create: (data: GalleryPayload) =>
     api.post<GalleryItem>('/gallery/', data),
 
-  update: (id: number, data: Partial<GalleryPayload>) =>
+  update: (id: string | number, data: Partial<GalleryPayload>) =>
     api.patch<GalleryItem>(`/gallery/${id}/`, data),
 
-  delete: (id: number) =>
+  delete: (id: string | number) =>
     api.delete(`/gallery/${id}/`),
 
   // Aliases for user-api-integration
   getAll: () => api.get<PaginatedResponse<GalleryItem>>('/gallery/'),
-  getById: (id: number) => api.get<GalleryItem>(`/gallery/${id}/`),
+  getById: (id: string | number) => api.get<GalleryItem>(`/gallery/${id}/`),
 };
 
 export default galleryService;

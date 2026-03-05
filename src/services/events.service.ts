@@ -13,26 +13,26 @@ export interface EventPayload {
     location: string;
     start_date: string;
     end_date: string;
-    program_id?: number | null;
+    program_id?: string | number | null;
 }
 
 export const eventsService = {
     list: (params?: EventListParams) =>
         api.get<PaginatedResponse<Event>>('/events/', params as Record<string, unknown>),
 
-    get: (id: number) =>
+    get: (id: string | number) =>
         api.get<Event>(`/events/${id}/`),
 
     create: (data: EventPayload) =>
         api.post<Event>('/events/', data),
 
-    update: (id: number, data: Partial<EventPayload>) =>
+    update: (id: string | number, data: Partial<EventPayload>) =>
         api.patch<Event>(`/events/${id}/`, data),
 
-    delete: (id: number) =>
+    delete: (id: string | number) =>
         api.delete(`/events/${id}/`),
 
-    addImage: (eventId: number, image: File) => {
+    addImage: (eventId: string | number, image: File) => {
         const formData = new FormData();
         formData.append('image', image);
         return api.postMultipart<unknown>(`/events/${eventId}/images/`, formData);
@@ -40,7 +40,7 @@ export const eventsService = {
 
     // Aliases for compatibility with user-api-integration
     getAll: () => api.get<PaginatedResponse<Event>>('/events/'),
-    getById: (id: number) => api.get<Event>(`/events/${id}/`),
+    getById: (id: string | number) => api.get<Event>(`/events/${id}/`),
 };
 
 export default eventsService;

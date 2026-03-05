@@ -12,6 +12,6 @@ export const donationsService = {
     list: (params?: DonationListParams) =>
         api.get<PaginatedResponse<Donation>>('/donations/', params as Record<string, unknown>),
 
-    get: (id: number) =>
+    get: (id: string | number) =>
         api.get<Donation>(`/donations/${id}/`),
 };

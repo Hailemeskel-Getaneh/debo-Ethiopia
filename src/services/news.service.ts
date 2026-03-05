@@ -21,25 +21,25 @@ export const newsService = {
     list: (params?: NewsListParams) =>
         api.get<PaginatedResponse<NewsArticle>>('/news/', params as Record<string, unknown>),
 
-    get: (id: number) =>
+    get: (id: string | number) =>
         api.get<NewsArticle>(`/news/${id}/`),
 
     create: (data: NewsPayload) =>
         api.post<NewsArticle>('/news/', data),
 
-    update: (id: number, data: Partial<NewsPayload>) =>
+    update: (id: string | number, data: Partial<NewsPayload>) =>
         api.patch<NewsArticle>(`/news/${id}/`, data),
 
-    delete: (id: number) =>
+    delete: (id: string | number) =>
         api.delete(`/news/${id}/`),
 
-    publish: (id: number, payload?: PublishPayload) =>
+    publish: (id: string | number, payload?: PublishPayload) =>
         api.patch<NewsArticle>(`/news/${id}/publish/`, payload ?? {}),
 
-    unpublish: (id: number) =>
+    unpublish: (id: string | number) =>
         api.patch<NewsArticle>(`/news/${id}/unpublish/`, {}),
 
-    addImage: (newsId: number, image: File) => {
+    addImage: (newsId: string | number, image: File) => {
         const formData = new FormData();
         formData.append('image', image);
         return api.postMultipart<unknown>(`/news/${newsId}/images/`, formData);
@@ -47,7 +47,7 @@ export const newsService = {
 
     // Aliases for compatibility with user-api-integration
     getAll: () => api.get<PaginatedResponse<NewsArticle>>('/news/'),
-    getById: (id: number) => api.get<NewsArticle>(`/news/${id}/`),
+    getById: (id: string | number) => api.get<NewsArticle>(`/news/${id}/`),
 };
 
 export default newsService;
