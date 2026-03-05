@@ -8,20 +8,24 @@ export interface PaginatedResponse<T> {
 
 // ── Auth ──────────────────────────────────────────────────────────────────
 export interface User {
-    id: number;
+    id: string | number;
     email: string;
+    username?: string;
     first_name: string;
     last_name: string;
     phone_number?: string;
     image?: string | null;
+    image_url?: string | null;
     is_staff: boolean;
+    is_superuser?: boolean;
+    role?: string | number;
 }
 
 // ── Projects ──────────────────────────────────────────────────────────────
 export type ProjectStatus = 'planned' | 'active' | 'completed';
 
 export interface Project {
-    id: number;
+    id: string | number;
     name: string;
     description: string;
     location: string;
@@ -37,7 +41,7 @@ export interface Project {
 export type PaymentStatus = 'completed' | 'pending' | 'failed' | 'refunded';
 
 export interface Donation {
-    id: number;
+    id: string | number;
     first_name: string;
     last_name: string;
     email: string;
@@ -74,7 +78,7 @@ export interface NewsVideo {
 }
 
 export interface NewsArticle {
-    id: number;
+    id: string | number;
     title: string;
     content: string;
     author: {
@@ -98,7 +102,7 @@ export interface EventImage {
 }
 
 export interface Event {
-    id: number;
+    id: string | number;
     title: string;
     description: string;
     location: string;
@@ -120,7 +124,7 @@ export interface GalleryVideo {
 }
 
 export interface GalleryItem {
-    id: number;
+    id: string | number;
     title: string;
     description: string | null;
     images: GalleryImage[];
@@ -169,7 +173,7 @@ export interface Program {
 
 // ── Stats / Metrics ───────────────────────────────────────────────────────
 export interface StatMetric {
-    id: number;
+    id: string | number;
     name: string;
     value: number;
     updated_at: string;
@@ -177,19 +181,24 @@ export interface StatMetric {
 
 // ── Staff ─────────────────────────────────────────────────────────────────
 export interface Staff {
-    id: number;
-    first_name: string;
-    last_name: string;
-    position: string;
+    id: string | number;
+    user_id?: string | number;
+    full_name: string;
     email?: string;
+    role?: string | number;
+    region: string;
+    position: string;
     image?: string | null;
+    created_at?: string;
+    updated_at?: string;
 }
 
 // ── User Roles ────────────────────────────────────────────────────────────
 export interface UserRole {
-    id: number;
+    id: string | number;
     name: string;
     description?: string;
+    created_at?: string;
 }
 
 // ── Notifications ─────────────────────────────────────────────────────────

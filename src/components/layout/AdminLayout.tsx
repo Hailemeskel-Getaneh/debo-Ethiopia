@@ -20,6 +20,9 @@ import {
   Mail,
   BarChart3,
   BellRing,
+  Shield,
+  UserCog,
+  Crown,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import logo from "@/assets/images/image copy.png";
@@ -27,11 +30,11 @@ import logo from "@/assets/images/image copy.png";
 const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
-  const { logout, user } = useAuth();
+  const { logout, user, isSuperAdmin } = useAuth();
 
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
-    { name: "Users", icon: Users, path: "/admin/users" },
+    { name: "Users", icon: Users, path: "/admin/users", roles: ['superadmin'] }, // Only Super Admin for now
     { name: "Programs", icon: Layers, path: "/admin/programs" },
     { name: "Projects", icon: Briefcase, path: "/admin/projects" },
     { name: "Events", icon: Calendar, path: "/admin/events" },
@@ -40,10 +43,21 @@ const AdminLayout: React.FC = () => {
     { name: "Gallery", icon: ImageIcon, path: "/admin/gallery" },
     { name: "Messages", icon: MessageSquare, path: "/admin/messages" },
     { name: "Achievements", icon: Award, path: "/admin/achievements" },
-    { name: "Subscribers", icon: Mail, path: "/admin/subscribers" },
-    { name: "Metrics", icon: BarChart3, path: "/admin/metrics" },
+    { name: "Subscribers", icon: Mail, path: "/admin/subscribers", roles: ['superadmin'] },
+    { name: "Metrics", icon: BarChart3, path: "/admin/metrics", roles: ['superadmin'] },
     { name: "Notifications", icon: BellRing, path: "/admin/notifications" },
     { name: "Settings", icon: Settings, path: "/admin/settings" },
+  ];
+
+  const filteredNavItems = navItems.filter(item => {
+    if (!item.roles) return true;
+    const currentRole = isSuperAdmin ? 'superadmin' : (user?.role ? 'admin' : null);
+    return item.roles.includes(currentRole as string);
+  });
+
+  const superAdminItems = [
+    { name: "Roles", icon: Shield, path: "/admin/roles" },
+    { name: "Staffs", icon: UserCog, path: "/admin/staffs" },
   ];
 
   return (
@@ -82,7 +96,7 @@ const AdminLayout: React.FC = () => {
           <div className="px-4 mb-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
             Main Menu
           </div>
-          {navItems.map((item) => {
+          {filteredNavItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <Link
@@ -103,6 +117,37 @@ const AdminLayout: React.FC = () => {
               </Link>
             );
           })}
+
+          {/* Super Admin Section */}
+          {isSuperAdmin && (
+            <>
+              <div className="px-4 mt-4 mb-2 text-xs font-semibold text-amber-500 uppercase tracking-wider flex items-center gap-1.5">
+                <Crown className="w-3 h-3" />
+                Super Admin
+              </div>
+              {superAdminItems.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
+                      ? "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 shadow-sm ring-1 ring-amber-500/10"
+                      : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100"
+                      }`}
+                  >
+                    <item.icon
+                      className={`w-5 h-5 transition-colors duration-200 ${isActive
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
+                        }`}
+                    />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </>
+          )}
         </nav>
 
         {/* User Profile Footer */}
@@ -118,11 +163,12 @@ const AdminLayout: React.FC = () => {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors flex items-center gap-1.5">
                 {user?.first_name} {user?.last_name}
+                {isSuperAdmin && <Crown className="w-3 h-3 text-amber-500 shrink-0" />}
               </p>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
-                {user?.email}
+                {isSuperAdmin ? 'Super Admin' : user?.email}
               </p>
             </div>
             <button

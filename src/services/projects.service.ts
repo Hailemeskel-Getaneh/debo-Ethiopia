@@ -24,21 +24,21 @@ export const projectsService = {
     list: (params?: ProjectListParams) =>
         api.get<PaginatedResponse<Project>>('/projects/', params as Record<string, unknown>),
 
-    get: (id: number) =>
+    get: (id: string | number) =>
         api.get<Project>(`/projects/${id}/`),
 
     create: (data: ProjectPayload) =>
         api.post<Project>('/projects/', data),
 
-    update: (id: number, data: Partial<ProjectPayload>) =>
+    update: (id: string | number, data: Partial<ProjectPayload>) =>
         api.patch<Project>(`/projects/${id}/`, data),
 
-    delete: (id: number) =>
+    delete: (id: string | number) =>
         api.delete(`/projects/${id}/`),
 
     // Aliases for compatibility with user-api-integration
     getAll: () => api.get<PaginatedResponse<Project>>('/projects/'),
-    getById: (id: number) => api.get<Project>(`/projects/${id}/`),
+    getById: (id: string | number) => api.get<Project>(`/projects/${id}/`),
 };
 
 export default projectsService;

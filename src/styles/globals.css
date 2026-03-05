@@ -126,7 +126,7 @@
 
     /* Action Button - Solid coral */
     .btn-action {
-        @apply bg-red-500 text-white shadow-sm hover:bg-red-600 active:scale-[0.98] transition-all font-semibold px-6 py-3 rounded-md;
+        @apply bg-green-700 text-white shadow-sm hover:bg-red-600 active:scale-[0.98] transition-all font-semibold px-4 py-3 rounded-md;
     }
 
     /* Section spacing */

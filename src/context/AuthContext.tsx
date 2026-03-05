@@ -10,7 +10,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
     const isAuthenticated = !!user;
-    const userRole: Role | null = (user?.is_staff || user?.role === 'admin' || !!user) ? 'admin' : null;
+
+    // Backend role names (uppercase strings from /api/user-roles/)
+    // Support either string name or ID-based role in AuthUser
+    const roleUpper = String(user?.role || '').toUpperCase();
+    const isSuperAdmin = !!(user?.is_superuser || roleUpper === 'SUPER_ADMIN');
+
+    // EXECUTIVE_DIRECTOR is the admin-equivalent role (formerly "admin")
+    // Note: Removed !!user to prevent regular users from accessing admin routes by default.
+    const isAdminLike = isSuperAdmin || user?.is_staff || ['EXECUTIVE_DIRECTOR', 'ADMIN', 'PROGRAM_COORDINATOR'].includes(roleUpper);
+    const userRole: Role | null = isSuperAdmin ? 'superadmin' : isAdminLike ? 'admin' : null;
 
     // On mount, try to restore session from stored token
     useEffect(() => {
@@ -55,7 +64,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, userRole, user, login, logout, loading }}>
+        <AuthContext.Provider value={{ isAuthenticated, userRole, isSuperAdmin, user, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );

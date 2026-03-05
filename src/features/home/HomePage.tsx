@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -37,15 +37,6 @@ const fallbackStats = [
   { value: "12k", label: "Lives Impacted" },
 ];
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "circOut" as const },
-  },
-};
-
 export default function HomePage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const { theme, themeColors } = useTheme();
@@ -76,14 +67,12 @@ export default function HomePage() {
     },
   ];
 
-  const { stats, loading: statsLoading } = useStats();
+  const { stats } = useStats();
   // useStats();
   // usePrograms();
   useProjects();
   const { news } = useNews();
   const { upcoming: upcomingEvents, loading: eventsLoading } = useEvents();
-
-  const impactRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -97,45 +86,6 @@ export default function HomePage() {
       className={`min-h-screen ${themeColors[theme]} dark:bg-zinc-950 font-sans selection:bg-brand-main/20 selection:text-brand-main`}
     >
       <NavBar />
-
-      {/* Theme Switcher
-      <div className="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/10 dark:bg-black/30 backdrop-blur-md p-3 rounded-2xl border border-white/20">
-        <button
-          onClick={() => setTheme("light")}
-          className={`p-2 rounded-xl transition-all ${theme === "light" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Light"
-        >
-          <Sun className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => setTheme("dark")}
-          className={`p-2 rounded-xl transition-all ${theme === "dark" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Dark"
-        >
-          <Moon className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => setTheme("green")}
-          className={`p-2 rounded-xl transition-all ${theme === "green" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Green"
-        >
-          <Palette className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => setTheme("blue")}
-          className={`p-2 rounded-xl transition-all ${theme === "blue" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Blue"
-        >
-          <span className="text-xs font-bold">B</span>
-        </button>
-        <button
-          onClick={() => setTheme("purple")}
-          className={`p-2 rounded-xl transition-all ${theme === "purple" ? "bg-brand-main text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-          title="Purple"
-        >
-          <span className="text-xs font-bold">P</span>
-        </button>
-      </div> */}
 
       <main>
         {/* HERO SECTION */}
@@ -239,41 +189,33 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* IMPACT STATS */}
-        <section
-          ref={impactRef}
-          className="py-16 bg-white border-y border-gray-200"
-        >
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {statsLoading
-                ? Array(4)
-                    .fill(0)
-                    .map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-32 rounded-md bg-gray-200 animate-pulse"
-                      />
-                    ))
-                : (stats && stats.length > 0 ? stats : fallbackStats)
-                    .slice(0, 4)
-                    .map((stat, i) => (
-                      <motion.div
-                        key={i}
-                        variants={itemVariants}
-                        className="text-center p-6 rounded-md bg-white shadow-sm border border-gray-200 group hover:shadow-md transition-all cursor-pointer"
-                      >
-                        <div className="text-4xl font-bold text-[#16A34A] mb-2 tabular-nums group-hover:scale-105 transition-transform">
-                          {stat.value}
-                        </div>
-                        <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {"label" in stat
-                            ? stat.label
-                            : (stat as { name: string }).name}
-                        </div>
-                      </motion.div>
-                    ))}
-            </div>
+        {/* ── FLOATING STATS ── */}
+        <section className="relative -mt-12 z-10 px-4">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-md shadow-lg p-2 grid grid-cols-2 md:grid-cols-4 border border-gray-200"
+            >
+              {(stats && stats.length > 0 ? stats : fallbackStats)
+                .slice(0, 4)
+                .map((stat, i) => (
+                  <div
+                    key={i}
+                    className="py-6 px-3 text-center group hover:bg-gray-50 transition-colors rounded-sm"
+                  >
+                    <div className="text-2xl font-bold text-gray-900">
+                      {stat.value}
+                    </div>
+                    <p className="text-xs font-medium text-gray-500 mt-1 uppercase tracking-wider">
+                      {"label" in stat
+                        ? stat.label
+                        : (stat as { name: string }).name}
+                    </p>
+                  </div>
+                ))}
+            </motion.div>
           </div>
         </section>
 

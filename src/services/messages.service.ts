@@ -12,12 +12,12 @@ export const messagesService = {
     list: (params?: MessageListParams) =>
         api.get<PaginatedResponse<ContactMessage>>('/contact-messages/', params as Record<string, unknown>),
 
-    get: (id: number) =>
+    get: (id: string | number) =>
         api.get<ContactMessage>(`/contact-messages/${id}/`),
 
-    respond: (id: number, response: string) =>
+    respond: (id: string | number, response: string) =>
         api.patch<ContactMessage>(`/contact-messages/${id}/respond/`, { response }),
 
-    delete: (id: number) =>
+    delete: (id: string | number) =>
         api.delete(`/contact-messages/${id}/`),
 };

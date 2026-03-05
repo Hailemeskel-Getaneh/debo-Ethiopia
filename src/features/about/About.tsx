@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
@@ -13,45 +13,6 @@ import {
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 import { useStats } from "@/hooks/useStats";
-
-function StatItem({
-  value,
-  suffix,
-  label,
-  visible,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-  visible: boolean;
-}) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!visible) return;
-    let startTime: number | null = null;
-    const duration = 2000;
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(eased * value));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [visible, value]);
-
-  return (
-    <div className="text-center p-6 rounded-md bg-white shadow-sm border border-gray-200 group hover:shadow-md transition-all cursor-pointer">
-      <div className="text-4xl font-bold text-[#16A34A] mb-2 tabular-nums group-hover:scale-105 transition-transform">
-        {count.toLocaleString()}
-        {suffix}
-      </div>
-      <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {label}
-      </div>
-    </div>
-  );
-}
 
 const fallbackStats = [
   { label: "Students Served", value: 5000, suffix: "+" },
@@ -122,10 +83,8 @@ const timeline = [
 ];
 
 export function About() {
-  const impactRef = useRef<HTMLDivElement>(null);
-  const [impactVisible, setImpactVisible] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
-  const { stats, loading: statsLoading } = useStats();
+  const { stats } = useStats();
 
   const heroImages = [
     "/src/assets/images/teachers.jpg",
@@ -139,17 +98,6 @@ export function About() {
     }, 6000);
     return () => clearInterval(timer);
   }, [heroImages.length]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setImpactVisible(true);
-      },
-      { threshold: 0.1 },
-    );
-    if (impactRef.current) observer.observe(impactRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
@@ -207,33 +155,27 @@ export function About() {
           </div>
         </section>
 
-        {/* IMPACT STATS */}
-        <section
-          ref={impactRef}
-          className="py-16 bg-white border-y border-gray-200"
-        >
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {statsLoading
-                ? Array(4)
-                    .fill(0)
-                    .map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-32 rounded-md bg-gray-200 animate-pulse"
-                      />
-                    ))
-                : (stats && stats.length > 0 ? stats : fallbackStats)
-                    .slice(0, 4)
-                    .map((stat) => (
-                      <StatItem
-                        key={"label" in stat ? stat.label : stat.name}
-                        value={stat.value}
-                        suffix={"suffix" in stat ? stat.suffix || "" : ""}
-                        label={"label" in stat ? stat.label : stat.name}
-                        visible={impactVisible}
-                      />
-                    ))}
+        {/* ── FLOATING STATS ── */}
+        <section className="relative -mt-12 z-10 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="bg-white rounded-md shadow-lg p-2 grid grid-cols-2 md:grid-cols-4 border border-gray-200">
+              {(stats && stats.length > 0 ? stats : fallbackStats)
+                .slice(0, 4)
+                .map((stat) => (
+                  <div
+                    key={"label" in stat ? stat.label : stat.name}
+                    className="py-6 px-3 text-center group hover:bg-gray-50 transition-colors rounded-sm"
+                  >
+                    <div className="text-2xl font-bold text-gray-900">
+                      {stat.value}
+                      {"suffix" in stat ? stat.suffix || "" : ""}
+                      {"+"}
+                    </div>
+                    <p className="text-xs font-medium text-gray-500 mt-1 uppercase tracking-wider">
+                      {"label" in stat ? stat.label : stat.name}
+                    </p>
+                  </div>
+                ))}
             </div>
           </div>
         </section>
