@@ -13,7 +13,7 @@ const ManageMessages: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearch = useDebounce(searchTerm, 500);
-    const [selectedId, setSelectedId] = useState<number | null>(null);
+    const [selectedId, setSelectedId] = useState<string | number | null>(null);
     const [filterStatus, setFilterStatus] = useState('All');
     const [replyText, setReplyText] = useState('');
     const [sending, setSending] = useState(false);
@@ -56,7 +56,7 @@ const ManageMessages: React.FC = () => {
         finally { setSending(false); }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string | number) => {
         if (!confirm('Delete this message permanently?')) return;
         try {
             await messagesService.delete(id);

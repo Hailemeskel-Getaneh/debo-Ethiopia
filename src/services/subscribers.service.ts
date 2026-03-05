@@ -15,12 +15,12 @@ export const subscribersService = {
     list: (params?: SubscriberListParams) =>
         api.get<PaginatedResponse<Subscriber>>('/subscribers/', params as Record<string, unknown>),
 
-    get: (id: number) =>
+    get: (id: string | number) =>
         api.get<Subscriber>(`/subscribers/${id}/`),
 
     subscribe: (data: { email: string }) =>
         api.post<{ email: string }>('/subscribers/subscribe/', data),
 
-    delete: (id: number) =>
+    delete: (id: string | number) =>
         api.delete(`/subscribers/${id}/`),
 };

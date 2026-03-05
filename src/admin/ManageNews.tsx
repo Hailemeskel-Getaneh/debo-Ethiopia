@@ -34,7 +34,7 @@ const ManageNews: React.FC = () => {
   const [modalMode, setModalMode] = useState<"Add" | "Edit">("Add");
   const [selected, setSelected] = useState<NewsArticle | null>(null);
   const [saving, setSaving] = useState(false);
-  const [togglingId, setTogglingId] = useState<number | null>(null);
+  const [togglingId, setTogglingId] = useState<string | number | null>(null);
   const [notifySubscribers, setNotifySubscribers] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const PAGE_SIZE = 10;
