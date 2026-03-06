@@ -82,8 +82,8 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
+    transition: { staggerChildren: 0.1 },
+  },
 };
 
 const itemVariants = {
@@ -91,8 +91,8 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5 }
-  }
+    transition: { duration: 0.5 },
+  },
 };
 
 export function Newsletter() {
@@ -135,18 +135,23 @@ export function Newsletter() {
                   Monthly Dispatch
                 </div>
                 <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-[1.05] tracking-tight">
-                  Stay Close to the <span className="text-brand-main italic">Impact.</span>
+                  Stay Close to the{" "}
+                  <span className="text-brand-main italic">Impact.</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-white/70 mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  Every month we share one deep-dive story of resilience, program milestones, and upcoming ways to engage. No clutter, just the heart of Debo.
+                  Every month we share one deep-dive story of resilience,
+                  program milestones, and upcoming ways to engage. No clutter,
+                  just the heart of Debo.
                 </p>
 
                 <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-sm text-white/50 font-medium">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-brand-main/60" /> Spam-free Guaranteed
+                    <ShieldCheck className="w-5 h-5 text-brand-main/60" />{" "}
+                    Spam-free Guaranteed
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-brand-main/60" /> 2,400+ Active Readers
+                    <CheckCircle2 className="w-5 h-5 text-brand-main/60" />{" "}
+                    2,400+ Active Readers
                   </div>
                 </div>
               </motion.div>
@@ -158,8 +163,7 @@ export function Newsletter() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="relative"
               >
-                <div className="absolute -inset-4 bg-brand-main/20 blur-3xl rounded-full" />
-                <div className="relative glass-panel bg-white/95 dark:bg-zinc-900/90 rounded-[3rem] p-10 md:p-14 shadow-premium border border-white/40 dark:border-zinc-800/40">
+                <div className="relative bg-white rounded-md p-8 md:p-10 shadow-sm border border-gray-200">
                   <AnimatePresence mode="wait">
                     {submitted ? (
                       <motion.div
@@ -174,19 +178,28 @@ export function Newsletter() {
                           Welcome, Impact Maker!
                         </h2>
                         <p className="text-zinc-500 max-w-xs mx-auto leading-relaxed">
-                          Thank you for joining our community, {name || "friend"}. Check your inbox for our latest stories.
+                          Thank you for joining our community,{" "}
+                          {name || "friend"}. Check your inbox for our latest
+                          stories.
                         </p>
                       </motion.div>
                     ) : (
                       <div className="space-y-8">
                         <div>
-                          <h2 className="text-3xl font-black text-zinc-900 dark:text-white mb-2 tracking-tight">Join the Mission</h2>
-                          <p className="text-zinc-500 text-sm">Fill in your details to start receiving monthly updates.</p>
+                          <h2 className="text-3xl font-black text-zinc-900 dark:text-white mb-2 tracking-tight">
+                            Join the Mission
+                          </h2>
+                          <p className="text-zinc-500 text-sm">
+                            Fill in your details to start receiving monthly
+                            updates.
+                          </p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
                           <div className="space-y-2">
-                            <label className="text-xs font-black text-zinc-400 uppercase tracking-widest px-1">Your Full Name</label>
+                            <label className="text-xs font-black text-zinc-400 uppercase tracking-widest px-1">
+                              Your Full Name
+                            </label>
                             <input
                               type="text"
                               placeholder="Tigist Alemu"
@@ -197,7 +210,9 @@ export function Newsletter() {
                           </div>
 
                           <div className="space-y-2">
-                            <label className="text-xs font-black text-zinc-400 uppercase tracking-widest px-1">Email Address *</label>
+                            <label className="text-xs font-black text-zinc-400 uppercase tracking-widest px-1">
+                              Email Address *
+                            </label>
                             <input
                               type="email"
                               required
@@ -239,20 +254,21 @@ export function Newsletter() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {benefits.map((b, i) => (
                 <motion.div
                   key={i}
                   variants={itemVariants}
-                  className="group bg-zinc-50 dark:bg-zinc-900/50 rounded-[2.5rem] p-10 border border-zinc-100 dark:border-zinc-800 hover:border-brand-main/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden relative"
+                  className="group bg-gray-50 rounded-md p-6 border border-gray-200 hover:border-[#16A34A]/30 transition-all hover:-translate-y-1 overflow-hidden relative cursor-pointer"
                 >
-                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-main/5 blur-3xl rounded-full group-hover:bg-brand-main/20 transition-all" />
-                  <div className="w-16 h-16 bg-brand-main/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-brand-main group-hover:text-white transition-all duration-500">
-                    <b.icon className="w-8 h-8" />
+                  <div className="w-12 h-12 bg-[#16A34A]/10 rounded-md flex items-center justify-center mb-4 group-hover:bg-[#16A34A] group-hover:text-white transition-all">
+                    <b.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4 tracking-tight">{b.title}</h3>
-                  <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
+                  <h3 className="text-base font-bold text-gray-900 mb-2">
+                    {b.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
                     {b.desc}
                   </p>
                 </motion.div>
@@ -262,11 +278,15 @@ export function Newsletter() {
         </section>
 
         {/* ── ARCHIVE ── */}
-        <section className="py-32 bg-zinc-50 dark:bg-zinc-950">
+        <section className="py-16 bg-gray-100">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-20">
-              <span className="text-brand-main font-bold uppercase tracking-widest text-sm mb-4 block underline underline-offset-8 decoration-brand-main/20">The Archive</span>
-              <h2 className="text-4xl md:text-6xl font-black text-zinc-900 dark:text-white tracking-tight">Step Into <span className="italic">History.</span></h2>
+            <div className="text-center mb-10">
+              <span className="text-[#16A34A] font-bold uppercase tracking-wider text-sm mb-3 block">
+                The Archive
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                Step Into History.
+              </h2>
             </div>
 
             <motion.div
@@ -274,23 +294,23 @@ export function Newsletter() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
             >
               {pastIssues.map((issue, i) => (
                 <motion.div
                   key={i}
                   variants={itemVariants}
-                  className="group bg-white dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-premium transition-all duration-500 hover:-translate-y-2"
+                  className="group bg-white rounded-md overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer"
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <img
                       src={issue.image}
                       alt={issue.title}
-                      className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
+                      className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     {issue.tag && (
-                      <span className="absolute top-6 left-6 bg-brand-main text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
+                      <span className="absolute top-4 left-4 bg-[#16A34A] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-sm shadow">
                         {issue.tag}
                       </span>
                     )}
@@ -316,7 +336,10 @@ export function Newsletter() {
         <section className="py-32 relative overflow-hidden text-center bg-zinc-950">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-main/5 blur-[120px] rounded-full" />
           <div className="container relative z-10 mx-auto px-6">
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tight">Can't get enough? <br /> Consider a <span className="text-brand-main">donation.</span></h2>
+            <h2 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tight">
+              Can't get enough? <br /> Consider a{" "}
+              <span className="text-brand-main">donation.</span>
+            </h2>
             <Link to="/donate">
               <button className="btn-action px-12 py-6 rounded-2xl text-xl font-bold flex items-center gap-3 mx-auto shadow-2xl">
                 <Heart className="w-6 h-6 fill-current" />
@@ -330,4 +353,3 @@ export function Newsletter() {
     </div>
   );
 }
-
