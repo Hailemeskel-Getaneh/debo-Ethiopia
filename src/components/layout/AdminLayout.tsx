@@ -30,7 +30,7 @@ import logo from "@/assets/images/image copy.png";
 const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
-  const { logout, user, isSuperAdmin } = useAuth();
+  const { logout, user, isSuperAdmin, userRole } = useAuth();
 
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
@@ -51,7 +51,7 @@ const AdminLayout: React.FC = () => {
 
   const filteredNavItems = navItems.filter(item => {
     if (!item.roles) return true;
-    const currentRole = isSuperAdmin ? 'superadmin' : (user?.role ? 'admin' : null);
+    const currentRole = userRole;
     return item.roles.includes(currentRole as string);
   });
 

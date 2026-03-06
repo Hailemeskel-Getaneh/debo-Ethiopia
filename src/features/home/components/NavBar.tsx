@@ -14,7 +14,7 @@ const navLinks = [
     dropdown: [
       { name: "About Us", href: "/about" },
       { name: "Achievements", href: "/achievements" },
-      { name: "Board Leadership", href: "/BoardLeadership" },
+      { name: "Board Leadership", href: "/boardleadership" },
     ],
   },
   { name: "Programs", href: "/programs" },

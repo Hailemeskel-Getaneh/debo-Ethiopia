@@ -20,7 +20,8 @@ import AdminSettings from "../admin/AdminSettings";
 import ProtectedRoute from "./ProtectedRoute";
 import HomePage from "../features/home/HomePage";
 import { About } from "../features/about/About";
-import { BoardLeadership } from "../features/about/BoardLeadership";
+import BoardLeadership from "../features/about/BoardLeadership";
+
 import { ProgramsRouter } from "../features/programs/ProgramsRouter";
 import { ProjectsRouter } from "../features/projects/ProjectsRouter";
 import { EventsRouter } from "../features/events/EventsRouter";
@@ -66,7 +67,12 @@ const AppRoutes: React.FC = () => {
       <Route
         element={
           <ProtectedRoute
-            isAllowed={isAuthenticated && (userRole === "admin" || userRole === "superadmin" || isSuperAdmin)}
+            isAllowed={
+              isAuthenticated &&
+              (userRole === "admin" ||
+                userRole === "superadmin" ||
+                isSuperAdmin)
+            }
             redirectTo="/abc/login"
           />
         }
@@ -90,7 +96,10 @@ const AppRoutes: React.FC = () => {
           <Route path="/admin/staffs" element={<ManageStaffs />} />
 
           {/* Legacy Redirect for /dashboard */}
-          <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route
+            path="/dashboard"
+            element={<Navigate to="/admin/dashboard" replace />}
+          />
         </Route>
       </Route>
 

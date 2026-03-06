@@ -103,14 +103,11 @@ const ManageUsers: React.FC = () => {
         // Standard Staff roles (Admin, etc.) usually require is_staff = true in common systems
         const isStaffRole = roleObj ? (roleObj.name.toUpperCase() !== 'USER') : false;
 
-        const payload: UserCreatePayload & UserUpdatePayload = {
+        const payload: UserUpdatePayload = {
             first_name: formData.get('firstName') as string,
             last_name: formData.get('lastName') as string,
             phone_number: formData.get('phone') as string,
             is_staff: isStaffRole,
-            email: '', // Required for Create, but will be filled if Add
-            password: '', // Required for Create
-            re_password: '', // Required for Create
         };
 
         if (roleId && roleObj) {
@@ -125,10 +122,22 @@ const ManageUsers: React.FC = () => {
 
         try {
             if (modalMode === 'Add') {
-                payload.email = formData.get('email') as string;
-                payload.password = formData.get('password') as string;
-                payload.re_password = formData.get('rePassword') as string;
-                await usersService.create(payload);
+                const createPayload: UserCreatePayload = {
+                    first_name: formData.get('firstName') as string,
+                    last_name: formData.get('lastName') as string,
+                    phone_number: formData.get('phone') as string,
+                    email: formData.get('email') as string,
+                    password: formData.get('password') as string,
+                    re_password: formData.get('rePassword') as string,
+                };
+                if (roleId && roleObj) {
+                    createPayload.role = roleObj.name.toUpperCase();
+                    createPayload.role_id = roleId;
+                } else if (roleId) {
+                    createPayload.role = String(roleId).toUpperCase();
+                    createPayload.role_id = roleId;
+                }
+                await usersService.create(createPayload);
             } else if (selectedUser) {
                 await usersService.update(selectedUser.id, payload);
             }

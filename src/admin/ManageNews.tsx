@@ -6,6 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { newsService } from '../services/news.service';
 import type { NewsArticle } from '../types/admin';
+import { invalidateCache } from '../hooks/apiCache';
 
 const ManageNews: React.FC = () => {
     const [articles, setArticles] = useState<NewsArticle[]>([]);
@@ -69,6 +70,9 @@ const ManageNews: React.FC = () => {
             } else {
                 return;
             }
+
+            // Invalidate news cache so homepage gets updated data
+            invalidateCache('news');
 
             if (imageFile) {
                 try {

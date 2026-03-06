@@ -324,3 +324,4 @@ export function BoardLeadership() {
   );
 }
 
+export default BoardLeadership;
