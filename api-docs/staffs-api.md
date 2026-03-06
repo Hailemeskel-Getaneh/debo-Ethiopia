@@ -122,10 +122,15 @@ Links an existing user account to a new staff record.
 ```
 
 **Success (200 OK):**
-```json
 {
+  "id": 1,
+  "full_name": "Abebe Girma",
+  "email": "abebe@debo.et",
+  "role": "Staff",
   "region": "Oromia",
-  "position": "Senior Coordinator"
+  "position": "Senior Coordinator",
+  "created_at": "2026-01-10T09:00:00Z",
+  "updated_at": "2026-03-01T14:30:00Z"
 }
 ```
 

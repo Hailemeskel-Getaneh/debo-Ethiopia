@@ -225,7 +225,7 @@ export default function BoardLeadership() {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Leadership Team
+             In the Ground in Ethiopia
             </h2>
             <p className="text-gray-600 mb-8">
               Day-to-day operations and program execution
@@ -307,3 +307,5 @@ export default function BoardLeadership() {
     </div>
   );
 }
+
+

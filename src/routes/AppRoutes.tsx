@@ -20,6 +20,9 @@ import AdminSettings from "../admin/AdminSettings";
 import ProtectedRoute from "./ProtectedRoute";
 import HomePage from "../features/home/HomePage";
 import { About } from "../features/about/About";
+import BoardLeadership from "../features/about/BoardLeadership";
+
+
 
 import { ProgramsRouter } from "../features/programs/ProgramsRouter";
 import { ProjectsRouter } from "../features/projects/ProjectsRouter";
@@ -34,7 +37,6 @@ import ManagePrograms from "../admin/ManagePrograms";
 import NotificationHub from "../admin/NotificationHub";
 import ManageSubscribers from "../admin/ManageSubscribers";
 import ManageMetrics from "../admin/ManageMetrics";
-import BoardLeadership from "../features/about/BoardLeadership";
 import ManageRoles from "../admin/ManageRoles";
 import ManageStaffs from "../admin/ManageStaffs";
 
