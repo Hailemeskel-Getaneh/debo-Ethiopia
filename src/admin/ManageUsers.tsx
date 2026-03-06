@@ -15,7 +15,7 @@ import {
     Crown,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usersService } from '../services/users.service';
+import { usersService, type UserCreatePayload, type UserUpdatePayload } from '../services/users.service';
 import { rolesService } from '../services/roles.service';
 import { useAuth } from '../hooks/useAuth';
 import type { User } from '../types/admin';
@@ -103,11 +103,14 @@ const ManageUsers: React.FC = () => {
         // Standard Staff roles (Admin, etc.) usually require is_staff = true in common systems
         const isStaffRole = roleObj ? (roleObj.name.toUpperCase() !== 'USER') : false;
 
-        const payload: any = {
+        const payload: UserCreatePayload & UserUpdatePayload = {
             first_name: formData.get('firstName') as string,
             last_name: formData.get('lastName') as string,
             phone_number: formData.get('phone') as string,
             is_staff: isStaffRole,
+            email: '', // Required for Create, but will be filled if Add
+            password: '', // Required for Create
+            re_password: '', // Required for Create
         };
 
         if (roleId && roleObj) {
@@ -125,7 +128,7 @@ const ManageUsers: React.FC = () => {
                 payload.email = formData.get('email') as string;
                 payload.password = formData.get('password') as string;
                 payload.re_password = formData.get('rePassword') as string;
-                await usersService.create(payload as any);
+                await usersService.create(payload);
             } else if (selectedUser) {
                 await usersService.update(selectedUser.id, payload);
             }
