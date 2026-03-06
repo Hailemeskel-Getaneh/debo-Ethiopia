@@ -50,7 +50,8 @@ const ManageNews: React.FC = () => {
             });
             setArticles(data.results);
             setTotalCount(data.count);
-        } catch (_) {
+        } catch (error) {
+            console.error("Error fetching articles:", error);
             setError("Failed to load news articles.");
         } finally {
             setLoading(false);
@@ -72,7 +73,8 @@ const ManageNews: React.FC = () => {
             setArticles((prev) =>
                 prev.map((a) => (a.id === updated.id ? updated : a)),
             );
-        } catch (_) {
+        } catch (error) {
+            console.error("Error toggling publish status:", error);
             alert("Failed to toggle publish status.");
         } finally {
             setTogglingId(null);
@@ -112,7 +114,8 @@ const ManageNews: React.FC = () => {
             setIsModalOpen(false);
             setImageFile(null);
             fetchArticles();
-        } catch (_) {
+        } catch (error) {
+            console.error("Error saving article:", error);
             alert("Failed to save article.");
         } finally {
             setSaving(false);
@@ -126,7 +129,8 @@ const ManageNews: React.FC = () => {
             invalidateCache("news");
             setIsDeleteOpen(false);
             fetchArticles();
-        } catch (_) {
+        } catch (error) {
+            console.error("Error deleting article:", error);
             alert("Failed to delete article.");
         }
     };
