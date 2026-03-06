@@ -50,9 +50,9 @@ const AdminLayout: React.FC = () => {
   ];
 
   const filteredNavItems = navItems.filter(item => {
-    if (!item.roles) return true;
-    const currentRole = userRole;
-    return item.roles.includes(currentRole as string);
+    if (!item.roles) return true; // Always show items without role restrictions
+    if (!userRole) return false; // Hide role-restricted items if user has no role
+    return item.roles.includes(userRole);
   });
 
   const superAdminItems = [

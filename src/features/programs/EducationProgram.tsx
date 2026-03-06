@@ -5,10 +5,10 @@ import {
   BookOpen,
   Monitor,
   Users,
-  ArrowRight,
   CheckCircle,
   ChevronRight,
   Sparkles,
+  Heart,
 } from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
@@ -126,7 +126,8 @@ export function EducationProgram() {
               href="/donate"
               className="inline-flex items-center gap-2 bg-[#009639] text-white font-bold px-7 py-3.5 rounded-full hover:bg-[#007a2e] hover:shadow-xl transition-all duration-300"
             >
-              Fund Education <ArrowRight className="w-5 h-5" />
+              <Heart className="w-5 h-5 fill-current" />
+              Fund Education
             </a>
           </div>
 
@@ -300,7 +301,8 @@ export function EducationProgram() {
               href="/donate"
               className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 transition-all duration-300"
             >
-              Donate Now <ArrowRight className="w-5 h-5" />
+              <Heart className="w-5 h-5 fill-current" />
+              Donate Now
             </a>
           </div>
         </section>

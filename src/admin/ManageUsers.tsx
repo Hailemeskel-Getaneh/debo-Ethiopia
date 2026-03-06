@@ -141,6 +141,7 @@ const ManageUsers: React.FC = () => {
             } else if (selectedUser) {
                 await usersService.update(selectedUser.id, payload);
             }
+
             setIsModalOpen(false);
             fetchUsers();
         } catch {
@@ -374,7 +375,7 @@ const ManageUsers: React.FC = () => {
                 {isModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" />
-                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800">
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-3rem shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800">
                             <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800">
                                 <div className="flex items-center gap-3">
                                     <UserIcon className="w-5 h-5 text-primary-600" />

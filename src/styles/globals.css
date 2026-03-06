@@ -5,33 +5,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Inter:wght@100..900&display=swap');
 
 @theme {
-    /* NGO Branding Colors - Refined for High Impact (OKLCH) */
-    --color-primary-50: oklch(0.98 0.01 165);
-    --color-primary-100: oklch(0.95 0.03 165);
-    --color-primary-200: oklch(0.88 0.06 165);
-    --color-primary-300: oklch(0.78 0.10 165);
-    --color-primary-400: oklch(0.68 0.14 165);
-    --color-primary-500: oklch(0.58 0.17 165);
+    /* NGO Branding Colors - High Contrast (HEX) */
+    --color-primary-50: #F0FDF4;
+    --color-primary-100: #DCFCE7;
+    --color-primary-200: #BBF7D0;
+    --color-primary-300: #86EFAC;
+    --color-primary-400: #4ADE80;
+    --color-primary-500: #22C55E;
     /* Vibrant Brand Green */
-    --color-primary-600: oklch(0.50 0.18 165);
-    --color-primary-700: oklch(0.40 0.15 165);
-    --color-primary-800: oklch(0.30 0.12 165);
-    --color-primary-900: oklch(0.20 0.08 165);
-    --color-primary-950: oklch(0.12 0.05 165);
+    --color-primary-600: #16A34A;
+    --color-primary-700: #15803D;
+    --color-primary-800: #166534;
+    --color-primary-900: #14532D;
+    --color-primary-950: #052E16;
 
-    --color-secondary-50: oklch(0.98 0.02 45);
-    --color-secondary-500: oklch(0.70 0.18 45);
+    --color-secondary-50: #FFFBEB;
+    --color-secondary-500: #F59E0B;
     /* Warm Gold Accents */
-    --color-secondary-700: oklch(0.55 0.15 45);
-    --color-secondary-900: oklch(0.30 0.08 45);
+    --color-secondary-700: #B45309;
+    --color-secondary-900: #78350F;
 
-    --color-accent-500: oklch(0.65 0.22 25);
-    /* High Impact Coral for CTAs */
+    --color-accent-500: #F97316;
 
     /* Semantic Branding Aliases */
-    --color-brand-main: var(--color-primary-500);
-    --color-brand-secondary: var(--color-secondary-500);
-    --color-brand-action: var(--color-accent-500);
+    --color-brand-main: #16A34A;
+    --color-brand-secondary: #F59E0B;
+    --color-brand-action: #F97316;
 
     /* Typography */
     --font-sans: "Inter", ui-sans-serif, system-ui;
@@ -41,21 +40,24 @@
     --radius-3xl: 1.5rem;
     --radius-4xl: 2rem;
 
-    /* High-End Shadows */
-    --shadow-premium: 0 25px 50px -12px rgb(0 0 0 / 0.1), 0 0 40px 0 rgb(0 0 0 / 0.03);
-    --shadow-inner-glow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    /* Solid Shadows */
+    --shadow-premium: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --shadow-navbar: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 @layer base {
     html {
         -webkit-tap-highlight-color: transparent;
         scroll-behavior: smooth;
-        @apply bg-zinc-50;
     }
 
     body {
-        @apply antialiased text-zinc-900 font-sans dark:bg-zinc-950 dark:text-zinc-50;
+        @apply antialiased text-gray-900 font-sans;
         font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EC 100%);
+        min-height: 100vh;
     }
 
     h1,
@@ -65,77 +67,198 @@
     h5,
     h6,
     .font-display {
-        @apply font-heading tracking-tight;
+        @apply font-heading tracking-tight text-gray-900;
     }
 
+    /* Ensure headings have proper contrast */
+    h1 { @apply text-4xl font-bold; }
+    h2 { @apply text-3xl font-semibold; }
+    h3 { @apply text-2xl font-semibold; }
+    h4 { @apply text-xl font-medium; }
+
+    /* Paragraphs should have good contrast */
+    p {
+        @apply text-gray-700 leading-relaxed;
+    }
+
+    /* All buttons should have pointer cursor */
     button,
-    .btn {
-        @apply transition-all duration-300 active:scale-95;
+    .btn,
+    [role="button"] {
+        @apply cursor-pointer;
+        transition: all 0.3s ease;
+    }
+
+    /* Links should also have pointer cursor */
+    a,
+    [role="link"] {
+        @apply cursor-pointer;
     }
 
     /* Selection Color */
     ::selection {
-        @apply bg-brand-main/20 text-brand-main;
+        background-color: rgba(22, 163, 74, 0.2);
+        color: #16A34A;
     }
 }
 
 @layer components {
 
-    /* High-End Design Utilities */
-    .glass-panel {
-        @apply backdrop-blur-xl bg-white/70 border border-white/40 shadow-premium dark:bg-zinc-900/70 dark:border-zinc-800/40;
-    }
-
+    /* Solid Card - Better contrast */
     .glass-card {
-        @apply backdrop-blur-md bg-white/20 border border-white/30 dark:bg-zinc-900/20 dark:border-zinc-800/30;
+        @apply bg-white border border-gray-200 rounded-md;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
+    /* Primary Button - Solid brand green */
     .btn-gradient {
-        @apply bg-linear-to-br from-brand-main to-primary-700 text-white shadow-lg shadow-brand-main/20 hover:shadow-xl hover:shadow-brand-main/30 hover:brightness-110 active:scale-95 transition-all;
+        background-color: #16A34A;
+        color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s;
+    }
+    
+    .btn-gradient:hover {
+        background-color: #15803D;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
+    /* Action Button - Solid coral */
     .btn-action {
-        @apply bg-linear-to-br from-brand-action to-red-600 text-white shadow-lg shadow-brand-action/20 hover:shadow-xl hover:shadow-brand-action/30 hover:brightness-110 active:scale-95 transition-all;
+        @apply bg-green-700 text-white shadow-sm hover:bg-red-600 active:scale-[0.98] transition-all font-semibold px-4 py-3 rounded-md;
     }
 
+    /* Section spacing */
     .section-spacing {
-        @apply py-24 md:py-32;
+        @apply py-20 md:py-24;
+    }
+
+    /* Section with gradient background */
+    .section-gradient {
+        background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EC 100%);
+    }
+
+    /* Section with white background */
+    .section-white {
+        @apply bg-white;
+    }
+
+    /* Card component */
+    .card-solid {
+        @apply bg-white border border-gray-200 rounded-md;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    
+    .card-solid:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    /* Input with solid background */
+    .input-solid {
+        @apply bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none;
+        border-color: #E5E7EB;
+    }
+    
+    .input-solid:focus {
+        outline: none;
+        border-color: #16A34A;
+        box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    }
+
+    /* Text utilities for contrast */
+    .text-heading {
+        @apply text-gray-900;
+    }
+
+    .text-body {
+        @apply text-gray-700;
+    }
+
+    .text-muted {
+        @apply text-gray-600;
+    }
+
+    /* Badge with solid background */
+    .badge {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+    }
+
+    .badge-green {
+        @apply bg-green-100 text-green-800;
     }
 
     .text-balance {
         text-wrap: balance;
     }
 
-    /* Gradients */
+    /* Clean gradients */
     .gradient-gold {
-        @apply bg-linear-to-br from-secondary-500 to-amber-600;
+        @apply bg-gradient-to-br from-amber-500 to-amber-600;
     }
 
     .gradient-teal {
-        @apply bg-linear-to-br from-primary-400 to-primary-700;
+        @apply bg-gradient-to-br from-green-400 to-green-700;
     }
 
     .gradient-soft {
-        @apply bg-linear-to-br from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900;
+        background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EC 100%);
     }
 
-    /* Decorative Elements */
+    /* Decorative Elements - Subtle */
     .mesh-gradient {
-        background-color: transparent;
-        background-image:
-            radial-gradient(at 0% 0%, oklch(0.58 0.17 165 / 0.15) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, oklch(0.70 0.18 45 / 0.15) 0px, transparent 50%),
-            radial-gradient(at 0% 100%, oklch(0.65 0.22 25 / 0.15) 0px, transparent 50%);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     }
 
     .dot-pattern {
-        background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+        background-image: radial-gradient(circle, #16A34A 1px, transparent 1px);
         background-size: 24px 24px;
-        @apply opacity-[0.03] dark:opacity-[0.07];
+        @apply opacity-[0.03];
     }
 
-    /* Accessibility skip link — only visible on keyboard focus */
+    /* Hero section - No blur overlay */
+    .hero-section {
+        @apply relative min-h-[80vh] flex items-center;
+        background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EC 100%);
+    }
+
+    .hero-overlay {
+        display: none;
+    }
+
+    /* Remove blur overlays */
+    .blur-overlay {
+        display: none !important;
+    }
+
+    /* Accessibility skip link */
     .skip-link {
-        @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-6 focus:py-3 focus:rounded-2xl focus:bg-brand-main focus:text-white focus:font-bold focus:shadow-xl focus:outline-none;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+    
+    .skip-link:focus {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 9999;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        background-color: #16A34A;
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        clip: auto;
+        width: auto;
+        height: auto;
     }
 }

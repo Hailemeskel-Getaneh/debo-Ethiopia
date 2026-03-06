@@ -7,6 +7,9 @@ export interface StatsSummary {
   total_programs: number;
   total_donations: number;
   total_students: number;
+  total_followers?: number;
+  scholarship_students?: number;
+  active_scholarships?: number;
   recent_projects: Project[];
   recent_programs: Program[];
   recent_events: Event[];
@@ -44,7 +47,7 @@ export interface Event {
 }
 
 export const homeService = {
-  getStatsSummary: () => api.get<any>('/stats/summary/'),
+  getStatsSummary: () => api.get<StatsSummary>('/stats/summary/'),
   getProjects: () => api.get<any>('/projects/'),
   getPrograms: () => api.get<any>('/programs/'),
   getEvents: () => api.get<any>('/events/'),
