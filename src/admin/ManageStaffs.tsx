@@ -81,7 +81,7 @@ const ManageStaffs: React.FC = () => {
         try {
             if (modalMode === 'Add') {
                 await staffsService.create({
-                    user_id: Number(formData.get('userId')),
+                    user_id: formData.get('userId') as string,
                     region: formData.get('region') as string,
                     position: formData.get('position') as string,
                 });
