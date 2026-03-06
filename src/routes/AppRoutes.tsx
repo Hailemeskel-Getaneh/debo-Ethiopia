@@ -34,9 +34,11 @@ import ManagePrograms from "../admin/ManagePrograms";
 import NotificationHub from "../admin/NotificationHub";
 import ManageSubscribers from "../admin/ManageSubscribers";
 import ManageMetrics from "../admin/ManageMetrics";
+import ManageRoles from "../admin/ManageRoles";
+import ManageStaffs from "../admin/ManageStaffs";
 
 const AppRoutes: React.FC = () => {
-  const { isAuthenticated, userRole } = useAuth();
+  const { isAuthenticated, userRole, isSuperAdmin } = useAuth();
 
   return (
     <Routes>
@@ -64,7 +66,7 @@ const AppRoutes: React.FC = () => {
       <Route
         element={
           <ProtectedRoute
-            isAllowed={isAuthenticated && userRole === "admin"}
+            isAllowed={isAuthenticated && (userRole === "admin" || userRole === "superadmin" || isSuperAdmin)}
             redirectTo="/abc/login"
           />
         }
@@ -84,6 +86,8 @@ const AppRoutes: React.FC = () => {
           <Route path="/admin/metrics" element={<ManageMetrics />} />
           <Route path="/admin/notifications" element={<NotificationHub />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/roles" element={<ManageRoles />} />
+          <Route path="/admin/staffs" element={<ManageStaffs />} />
 
           {/* Legacy Redirect for /dashboard */}
           <Route path="/dashboard" element={<Navigate to="/admin/dashboard" replace />} />

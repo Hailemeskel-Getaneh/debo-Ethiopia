@@ -27,7 +27,7 @@ const ManageMetrics: React.FC = () => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [selectedMetric, setSelectedMetric] = useState<StatMetric | null>(null);
     const [saving, setSaving] = useState(false);
-    const [isDeleting, setIsDeleting] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState<string | number | null>(null);
 
     const fetchMetrics = useCallback(async () => {
         setLoading(true); setError(null);
@@ -68,7 +68,7 @@ const ManageMetrics: React.FC = () => {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string | number) => {
         if (!window.confirm('Are you sure you want to delete this metric?')) return;
         setIsDeleting(id);
         try {

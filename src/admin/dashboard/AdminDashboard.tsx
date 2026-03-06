@@ -41,7 +41,7 @@ const AdminDashboard: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [statsRes, donationsRes, eventsRes, usersRes, projectsRes] = await Promise.all([
+      const results = await Promise.allSettled([
         statsService.list(),
         donationsService.list({ page_size: 5 }),
         eventsService.list({ page_size: 5 }),
@@ -49,8 +49,22 @@ const AdminDashboard: React.FC = () => {
         projectsService.list({ page_size: 4 })
       ]);
 
+      // Unpack results safely
+      const statsRes = results[0].status === 'fulfilled' ? results[0].value : { results: [], count: 0 };
+      const donationsRes = results[1].status === 'fulfilled' ? results[1].value : { results: [], count: 0 };
+      const eventsRes = results[2].status === 'fulfilled' ? results[2].value : { results: [], count: 0 };
+      const usersRes = results[3].status === 'fulfilled' ? results[3].value : { results: [], count: 0 };
+      const projectsRes = results[4].status === 'fulfilled' ? results[4].value : { results: [], count: 0 };
+
+      // Log errors for debugging if any
+      results.forEach((res, idx) => {
+        if (res.status === 'rejected') {
+          console.warn(`Dashboard fetch failed for index ${idx}:`, res.reason);
+        }
+      });
+
       // Map metrics from statsRes and supplement with direct counts
-      const fetchedMetrics = statsRes.results || [];
+      const fetchedMetrics = Array.isArray(statsRes.results) ? [...statsRes.results] : [];
 
       const injectMetric = (name: string, value: number) => {
         const lower = name.toLowerCase();
@@ -75,18 +89,14 @@ const AdminDashboard: React.FC = () => {
       injectMetric('project', projectsRes.count || 0);
       injectMetric('event', eventsRes.count || 0);
 
-      // If direct count from donations is available, use it as fallback for count
-      // but 'donation' metric in dashboard usually implies money.
-      // We'll trust statsService for money, but fallback to 0 if not found.
-
       setMetrics(fetchedMetrics);
       setRecentDonations(donationsRes.results || []);
       setRecentEvents(eventsRes.results || []);
       setActiveProjects((projectsRes.results || []).slice(0, 4));
       setError(null);
     } catch (err) {
-      console.error('Failed to fetch dashboard data', err);
-      setError('Failed to load dashboard statistics. Please try refreshing.');
+      console.error('Fatal dashboard fetch error', err);
+      setError('Unexpected error loading dashboard. Please try refreshing.');
     } finally {
       setLoading(false);
     }
