@@ -72,16 +72,21 @@ export function PastEvents() {
       <NavBar />
       <main id="main-content">
         {/* ── HERO ── */}
-        <section className="relative pt-32 pb-20 bg-[#003d1a] overflow-hidden">
+        <section
+          className="relative pt-32 pb-20 overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+          }}
+        >
           <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#009639]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#16A34A]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-sm px-4 py-2 rounded-full mb-6">
-              <CheckCircle2 className="w-4 h-4 text-[#00b359]" /> Past Events
+              <CheckCircle2 className="w-4 h-4 text-[#16A34A]" /> Past Events
             </div>
             <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6">
-              Our <span className="text-[#00b359]">Past Events</span>
+              Our <span className="text-[#16A34A]">Past Events</span>
             </h1>
             <p className="text-lg text-white/80 max-w-2xl mx-auto">
               Explore the impactful events we've hosted and the communities

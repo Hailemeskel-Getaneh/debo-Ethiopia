@@ -308,7 +308,8 @@ export function HealthProgram() {
               href="/donate"
               className="inline-flex items-center gap-2 bg-[#00b359] text-black font-bold px-8 py-4 rounded-full hover:scale-105 transition-all duration-300"
             >
-              Donate Now <ArrowRight className="w-5 h-5" />
+              <Heart className="w-5 h-5 fill-current" />
+              Donate Now
             </a>
           </div>
         </section>

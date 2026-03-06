@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { Award, Calendar, Search, Sparkles, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Award,
+  Calendar,
+  Search,
+  Sparkles,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import NavBar from "../home/components/NavBar";
 import Footer from "../home/components/Footer";
 import { useAchievements } from "@/hooks/useAchievements";
 
-// Backend schema: { title, description, image_url, achieved_at }
 interface Achievement {
   title: string;
   description: string;
@@ -35,27 +41,31 @@ const Achievements: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-brand-main animate-spin mb-4" />
-        <p className="text-zinc-500 font-bold tracking-widest uppercase text-xs">Loading Impact...</p>
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
+        <Loader2 className="w-10 h-10 text-[#16A34A] animate-spin mb-4" />
+        <p className="text-gray-500 font-medium text-sm uppercase tracking-wider">
+          Loading...
+        </p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-6">
-        <div className="glass-panel p-12 rounded-[3rem] text-center max-w-lg border-red-500/20">
-          <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-8">
-            <Award className="w-10 h-10 text-red-500 opacity-50" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+        <div className="bg-white p-8 rounded-md text-center max-w-lg border border-gray-200 shadow-sm">
+          <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Award className="w-7 h-7 text-red-500" />
           </div>
-          <h2 className="text-2xl font-black text-white mb-4">Connection Interrupted</h2>
-          <p className="text-zinc-400 mb-10 leading-relaxed">{error}</p>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">
+            Connection Error
+          </h2>
+          <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="w-full py-5 bg-brand-main text-white font-black rounded-2xl shadow-xl shadow-brand-main/20 hover:brightness-110 active:scale-95 transition-all"
+            className="w-full py-2.5 bg-[#16A34A] text-white font-medium rounded-md shadow-sm hover:bg-[#15803D] transition-colors"
           >
-            Reconnect to Debo
+            Try Again
           </button>
         </div>
       </div>
@@ -66,79 +76,86 @@ const Achievements: React.FC = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
+      transition: { staggerChildren: 0.1 },
+    },
   };
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 selection:bg-brand-main/30">
+    <div className="min-h-screen bg-gray-50">
       <NavBar />
 
       <main id="main-content">
-        {/* ── HERO ── */}
-        <section className="relative pt-32 pb-24 overflow-hidden">
-          <div className="absolute inset-0 mesh-gradient opacity-40 dark:opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-50/50 to-zinc-50 dark:via-zinc-950/50 dark:to-zinc-950" />
-
-          <div className="relative container mx-auto px-6 text-center">
+        {/* HERO */}
+        <section
+          className="relative pt-28 pb-16 overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+          }}
+        >
+          <div className="container mx-auto px-6 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-card border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-black uppercase tracking-[0.3em] mb-10"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white/10 border border-white/20 text-[#16A34A] text-xs font-bold uppercase tracking-wider mb-6"
             >
-              <Sparkles className="w-3.5 h-3.5 text-brand-main" /> Debo Ethopia
+              <Sparkles className="w-3.5 h-3.5" /> Debo Ethiopia
             </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-6xl md:text-8xl font-black text-zinc-950 dark:text-white mb-8 tracking-tighter"
+              className="text-5xl md:text-7xl font-bold text-white mb-6"
             >
-              Legacy of <span className="text-brand-main">Impact</span>
+              Legacy of <span className="text-[#16A34A]">Impact</span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-lg md:text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto mb-16 font-medium leading-relaxed"
+              className="text-lg text-gray-300 max-w-2xl mx-auto mb-12"
             >
-              Documenting the milestones, awards, and transformative achievements that define our journey in empowering communities.
+              Documenting the milestones, awards, and transformative
+              achievements that define our journey in empowering communities.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
-              className="max-w-2xl mx-auto relative group"
+              className="max-w-xl mx-auto"
             >
-              <div className="absolute inset-0 bg-brand-main/20 blur-3xl group-focus-within:bg-brand-main/40 transition-all duration-500" />
-              <div className="relative glass-panel p-2 pl-8 rounded-[2rem] border-zinc-200 dark:border-zinc-800 flex items-center shadow-premium group-focus-within:border-brand-main/50 transition-all">
-                <Search className="w-6 h-6 text-zinc-400 group-focus-within:text-brand-main transition-colors shrink-0" />
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search milestones..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full px-6 py-4 bg-transparent text-zinc-900 dark:text-white placeholder-zinc-400 font-bold focus:outline-none"
+                  className="w-full pl-12 pr-4 py-3 rounded-md bg-white border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16A34A]/20 transition-all"
                 />
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* ── ACHIEVEMENTS GRID ── */}
-        <section className="pb-32 relative">
+        {/* ACHIEVEMENTS GRID */}
+        <section className="py-16">
           <div className="container mx-auto px-6">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-sm font-black text-zinc-400 uppercase tracking-widest">
-                Latest Milestones <span className="text-brand-main ml-2 opacity-50">/</span> {filtered.length} Results
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Latest Milestones <span className="text-[#16A34A] ml-2">/</span>{" "}
+                {filtered.length} Results
               </h2>
             </div>
 
@@ -147,7 +164,7 @@ const Achievements: React.FC = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-10"
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               <AnimatePresence mode="popLayout">
                 {filtered.length === 0 ? (
@@ -155,11 +172,15 @@ const Achievements: React.FC = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="col-span-full py-32 text-center glass-panel rounded-[3rem] border-dashed border-zinc-300 dark:border-zinc-800"
+                    className="col-span-full py-16 text-center bg-gray-100 rounded-md border border-dashed border-gray-300"
                   >
-                    <Award className="w-20 h-20 mx-auto mb-6 text-zinc-300 dark:text-zinc-700 opacity-40" />
-                    <p className="text-2xl font-black text-zinc-400 dark:text-zinc-600">No records found</p>
-                    <p className="text-zinc-500 mt-2 font-medium">Try refining your search term to find specific achievements.</p>
+                    <Award className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                    <p className="text-lg font-medium text-gray-400">
+                      No records found
+                    </p>
+                    <p className="text-gray-500 mt-1 text-sm">
+                      Try refining your search term.
+                    </p>
                   </motion.div>
                 ) : (
                   filtered.map((achievement, index) => (
@@ -167,54 +188,59 @@ const Achievements: React.FC = () => {
                       key={index}
                       layout
                       variants={itemVariants}
-                      className="group relative flex flex-col h-full bg-white dark:bg-zinc-900 rounded-[3rem] overflow-hidden border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-premium transition-all duration-700"
+                      className="group relative flex flex-col h-full bg-white rounded-md overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer"
                     >
-                      {/* Image Layer */}
-                      <div className="aspect-[16/11] overflow-hidden relative shrink-0">
-                        <div className="absolute inset-0 bg-zinc-950">
-                          {achievement.image_url ? (
-                            <img
-                              src={achievement.image_url}
-                              alt={achievement.title}
-                              className="w-full h-full object-cover group-hover:scale-110 group-hover:opacity-60 transition-all duration-1000"
-                            />
-                          ) : (
-                            <div className="w-full h-full mesh-gradient opacity-30 group-hover:opacity-20 transition-opacity" />
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent z-10" />
-                        </div>
+                      <div className="aspect-[16/11] overflow-hidden relative bg-gray-900">
+                        {achievement.image_url ? (
+                          <img
+                            src={achievement.image_url}
+                            alt={achievement.title}
+                            className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-60 transition-all duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900" />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                        <div className="absolute bottom-6 left-6 z-20">
-                          <div className="glass-panel px-4 py-2 rounded-xl border-white/20 flex items-center gap-3">
-                            <Calendar className="w-4 h-4 text-brand-main" />
-                            <span className="text-[10px] font-black text-white uppercase tracking-widest">
+                        <div className="absolute bottom-4 left-4 z-10">
+                          <div className="px-3 py-1.5 rounded-sm bg-white/90 flex items-center gap-2">
+                            <Calendar className="w-3.5 h-3.5 text-[#16A34A]" />
+                            <span className="text-[10px] font-medium text-gray-900 uppercase">
                               {formatDate(achievement.achieved_at)}
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="p-10 flex flex-col flex-1">
-                        <div className="inline-flex items-center gap-2 mb-6">
-                          <div className="w-1.5 h-1.5 rounded-full bg-brand-main" />
-                          <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Official Recognition</span>
+                      <div className="p-5 flex flex-col flex-1">
+                        <div className="inline-flex items-center gap-2 mb-3">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+                          <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
+                            Official Recognition
+                          </span>
                         </div>
 
-                        <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-4 leading-tight group-hover:text-brand-main transition-colors">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#16A34A] transition-colors">
                           {achievement.title}
                         </h3>
 
-                        <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium line-clamp-3 mb-10 text-sm">
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
                           {achievement.description}
                         </p>
 
-                        <div className="mt-auto pt-8 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
                           <div className="flex flex-col">
-                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Impact Date Indicator</span>
-                            <span className="text-sm font-bold text-zinc-900 dark:text-white">FY {new Date(achievement.achieved_at).getFullYear()} Milestone</span>
+                            <span className="text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-0.5">
+                              Impact Date
+                            </span>
+                            <span className="text-sm font-medium text-gray-900">
+                              FY{" "}
+                              {new Date(achievement.achieved_at).getFullYear()}{" "}
+                              Milestone
+                            </span>
                           </div>
-                          <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-brand-main group-hover:text-white transition-all duration-500">
-                            <Award className="w-6 h-6" />
+                          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#16A34A] group-hover:text-white transition-all">
+                            <Award className="w-5 h-5" />
                           </div>
                         </div>
                       </div>
@@ -226,19 +252,19 @@ const Achievements: React.FC = () => {
           </div>
         </section>
 
-        {/* ── FOOTER CTA ── */}
-        <section className="py-24 bg-brand-main relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-[url('/mesh-pattern.svg')] bg-cover" />
-          <div className="container relative z-10 mx-auto px-6 text-center">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight">Support Our Growing Legacy</h2>
-            <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium">
-              Every milestone achieved is a testament to the generosity of our supporters. Join us in making the next achievement possible.
+        {/* FOOTER CTA */}
+        <section className="py-16 bg-[#16A34A]">
+          <div className="container mx-auto px-6 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Support Our Growing Legacy
+            </h2>
+            <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
+              Every milestone achieved is a testament to the generosity of our
+              supporters. Join us in making the next achievement possible.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              <button className="bg-white text-zinc-950 font-black px-12 py-5 rounded-2xl text-lg hover:scale-105 active:scale-95 transition-all shadow-2xl flex items-center gap-3">
-                Donate Now <ArrowRight className="w-6 h-6" />
-              </button>
-            </div>
+            <button className="bg-white text-[#16A34A] font-medium px-8 py-3 rounded-md hover:scale-105 active:scale-95 transition-transform shadow-md flex items-center gap-2 mx-auto">
+              Donate Now <ArrowRight className="w-5 h-5" />
+            </button>
           </div>
         </section>
       </main>
@@ -249,4 +275,3 @@ const Achievements: React.FC = () => {
 };
 
 export default Achievements;
-
