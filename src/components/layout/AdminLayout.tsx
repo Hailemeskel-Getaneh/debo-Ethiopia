@@ -30,7 +30,7 @@ import logo from "@/assets/images/image copy.png";
 const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
-  const { logout, user, isSuperAdmin } = useAuth();
+  const { logout, user, isSuperAdmin, userRole } = useAuth();
 
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
