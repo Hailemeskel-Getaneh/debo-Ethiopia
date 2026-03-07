@@ -5,6 +5,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import AppRoutes from "./routes/AppRoutes";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import { AuthGuard } from "./auth/AuthGuard";
+import { GlobalErrorListener } from "./components";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <a href="#main-content" className="skip-link">
               Skip to main content
             </a>
+            <GlobalErrorListener />
             <ErrorBoundary>
               <AppRoutes />
             </ErrorBoundary>

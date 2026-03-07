@@ -2,9 +2,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, AlertTriangle, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { exceptionHandler, type AppError } from "./ExceptionHandler";
+import { exceptionHandler, type AppError } from "../api/ExceptionHandler";
 
-const GlobalErrorListener = () => {
+export const GlobalErrorListener = () => {
   const [errors, setErrors] = useState<(AppError & { id: number })[]>([]);
 
   useEffect(() => {
@@ -68,5 +68,3 @@ const GlobalErrorListener = () => {
     </div>
   );
 };
-
-export default GlobalErrorListener;

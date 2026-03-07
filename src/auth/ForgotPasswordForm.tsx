@@ -20,14 +20,8 @@ export const ForgotPasswordForm = () => {
   });
 
   const onSubmit = async (data: ForgotPasswordData) => {
-    try {
-      await requestPasswordReset(data.email);
-      setIsSubmitted(true);
-    } catch (err) {
-      // ExceptionHandler will catch this if it's a real API call
-      setIsSubmitted(false);
-    } finally {
-    }
+    await requestPasswordReset(data.email);
+    setIsSubmitted(true);
   };
 
   if (isSubmitted) {
