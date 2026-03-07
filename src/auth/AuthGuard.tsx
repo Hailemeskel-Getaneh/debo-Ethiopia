@@ -1,10 +1,10 @@
 // components/auth/AuthGuard.tsx
 import { useEffect } from "react";
-import { useAuthStore } from "../store/useAuthStore";
-import { tokenManager } from "../api/TokenManager";
+import { useAuthStore } from "@/store/useAuthStore";
+import { tokenManager } from "@/api/TokenManager";
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-  const { fetchMe, isAuthenticated, user, isLoading } = useAuthStore();
+  const { fetchMe, user, isLoading } = useAuthStore();
 
   useEffect(() => {
     if (tokenManager.getToken() && !user) {
