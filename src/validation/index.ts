@@ -3,4 +3,6 @@ export {
   loginSchema,
   type UserRegisterFormData,
   UserRegisterSchema,
+  type ForgotPasswordData,
+  forgotPasswordSchema,
 } from "./authSchema";

@@ -6,7 +6,7 @@ import AuthLayout from "../components/layout/AuthLayout";
 import AdminLayout from "../components/layout/AdminLayout";
 
 // Features
-import { ForgotPassword } from "../features/auth/pages";
+
 import { AdminDashboard } from "../admin/dashboard";
 import ManageUsers from "../admin/ManageUsers";
 import ManageProjects from "../admin/ManageProjects";
@@ -38,6 +38,7 @@ import BoardLeadership from "../features/about/BoardLeadership";
 import ManageRoles from "../admin/ManageRoles";
 import ManageStaffs from "../admin/ManageStaffs";
 import LoginPage from "../auth/LoginPage";
+import ForgotPasswordPage from "../auth/ForgotPasswordPage";
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated, userRole, isSuperAdmin } = useAuth();
@@ -59,9 +60,9 @@ const AppRoutes: React.FC = () => {
 
       {/* Auth Routes */}
       <Route element={<AuthLayout />}>
-        <Route path="/abc/logins" element={<LoginPage />} />
+        <Route path="/abc/login" element={<LoginPage />} />
         <Route path="/login" element={<Navigate to="/abc/login" replace />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
       {/* Admin Specific Routes */}

@@ -1,4 +1,3 @@
-// lib/validation.ts
 import { z } from "zod";
 
 const passwordSchema = z
@@ -29,5 +28,10 @@ export const UserRegisterSchema = z
     path: ["confirmPassword"],
   });
 
+export const forgotPasswordSchema = z.object({
+  email: z.email("Please enter a valid work email"),
+});
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type UserRegisterFormData = z.infer<typeof UserRegisterSchema>;
+export type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;

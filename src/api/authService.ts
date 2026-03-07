@@ -36,4 +36,19 @@ export const authService = {
       throw error;
     }
   },
+
+  resetPassword: async (email: string) => {
+    try {
+      const response = await baseApi.post("/auth/users/reset_password/", {
+        email: email,
+      });
+      return response.data;
+    } catch (error: any) {
+      exceptionHandler.emit({
+        message: error.response?.data?.detail || "Password rest failed",
+        type: "error",
+      });
+      throw error;
+    }
+  },
 };

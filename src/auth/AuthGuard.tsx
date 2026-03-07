@@ -1,9 +1,9 @@
 // components/auth/AuthGuard.tsx
-import { useEffect } from "react";
+import { useEffect, type PropsWithChildren } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { tokenManager } from "@/api/TokenManager";
 
-export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
+export const AuthGuard = ({ children }: PropsWithChildren) => {
   const { fetchMe, user, isLoading } = useAuthStore();
 
   useEffect(() => {

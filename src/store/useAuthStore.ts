@@ -17,6 +17,7 @@ interface AuthState {
   logout: () => Promise<void>;
   register: <T>(userData: T) => Promise<void>; // Added Register
   fetchMe: () => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -48,6 +49,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         message: "Registration successful! Please login.",
         type: "info",
       });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  requestPasswordReset: async (email: string) => {
+    set({ isLoading: true });
+    try {
+      await authService.resetPassword(email);
     } finally {
       set({ isLoading: false });
     }
