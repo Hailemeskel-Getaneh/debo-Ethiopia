@@ -3,26 +3,20 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import AppRoutes from "./routes/AppRoutes";
-import ErrorBoundary from "./components/common/ErrorBoundary";
 import { AuthGuard } from "./auth/AuthGuard";
 import { GlobalErrorListener } from "./components";
 
 function App() {
   return (
     <ThemeProvider>
-      <AuthGuard>
-        <AuthProvider>
-          <BrowserRouter>
-            <a href="#main-content" className="skip-link">
-              Skip to main content
-            </a>
+      <AuthProvider>
+        <BrowserRouter>
+          <AuthGuard>
             <GlobalErrorListener />
-            <ErrorBoundary>
-              <AppRoutes />
-            </ErrorBoundary>
-          </BrowserRouter>
-        </AuthProvider>
-      </AuthGuard>
+            <AppRoutes />
+          </AuthGuard>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
