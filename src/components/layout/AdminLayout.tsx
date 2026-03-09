@@ -25,7 +25,7 @@ import {
   Crown,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-import logo from "@/assets/images/image copy.png";
+import logo from "@/assets/images/logo.png";
 
 const AdminLayout: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);

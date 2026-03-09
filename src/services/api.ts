@@ -48,14 +48,20 @@ axiosInstance.interceptors.response.use(
         // Clean up pending request map on error
         pendingRequests.delete(key);
 
-        // Redirect to login on 401 if it's NOT a retry and NOT a login request
-        if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/auth/jwt/create')) {
+        // Redirect to login on 401 if it's NOT a retry, NOT a login request, and NOT a refresh request
+        const isAuthRequest = originalRequest.url?.includes('/auth/jwt/create') || originalRequest.url?.includes('/auth/jwt/refresh');
+
+        if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
             originalRequest._retry = true;
 
             try {
                 // Refresh token
                 const refresh = localStorage.getItem('refresh_token');
-                const res = await axiosInstance.post('/auth/jwt/refresh', { refresh });
+                if (!refresh) throw new Error('No refresh token available');
+
+                // VERY IMPORTANT: Use raw axios here, NOT axiosInstance,
+                // otherwise a 401 on the refresh endpoint triggers an infinite loop!
+                const res = await axios.post(`${API_BASE_URL}/auth/jwt/refresh/`, { refresh });
 
                 const newAccess = res.data.access;
                 if (newAccess) {
@@ -64,7 +70,9 @@ axiosInstance.interceptors.response.use(
                     return axiosInstance(originalRequest);
                 }
             } catch (refreshError) {
+                console.error('[Auth Error] Token refresh failed, redirecting to login:', refreshError);
                 localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
                 window.location.href = '/abc/login';
                 return Promise.reject(refreshError);
             }

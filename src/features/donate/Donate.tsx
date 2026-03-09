@@ -236,11 +236,10 @@ export function Donate() {
                         <button
                           key={s.n}
                           onClick={() => step > s.n && setStep(s.n as 1 | 2)}
-                          className={`flex-1 py-4 text-sm font-bold transition-all ${
-                            step === s.n
+                          className={`flex-1 py-4 text-sm font-bold transition-all ${step === s.n
                               ? "border-b-2 border-[#009639] text-[#009639]"
                               : "text-gray-400"
-                          }`}
+                            }`}
                         >
                           {s.n}. {s.label}
                         </button>
@@ -260,11 +259,10 @@ export function Donate() {
                                 <button
                                   key={f}
                                   onClick={() => setFrequency(f)}
-                                  className={`flex-1 py-3 rounded-xl text-sm font-bold border-2 transition-all ${
-                                    frequency === f
-                                      ? "border-[#009639] bg-[#009639]/5 text-[#009639]"
+                                  className={`flex-1 py-3 rounded-xl text-sm font-bold border-2 transition-all ${frequency === f
+                                      ? "border-rose-600 bg-rose-600/5 text-rose-600"
                                       : "border-gray-200 text-gray-500 hover:border-gray-300"
-                                  }`}
+                                    }`}
                                 >
                                   {f === "monthly" ? (
                                     <span className="flex items-center justify-center gap-2">
@@ -294,11 +292,10 @@ export function Donate() {
                                 <button
                                   key={amt}
                                   onClick={() => handlePreset(amt)}
-                                  className={`py-3.5 rounded-xl font-bold text-sm border-2 transition-all ${
-                                    selectedAmount === amt && !customAmount
-                                      ? "border-[#009639] bg-[#009639] text-white shadow-md"
-                                      : "border-gray-200 text-gray-700 hover:border-[#009639]/50"
-                                  }`}
+                                  className={`py-3.5 rounded-xl font-bold text-sm border-2 transition-all ${selectedAmount === amt && !customAmount
+                                      ? "border-rose-600 bg-rose-600 text-white shadow-md"
+                                      : "border-gray-200 text-gray-700 hover:border-rose-600/50"
+                                    }`}
                                 >
                                   ${amt}
                                 </button>
@@ -323,7 +320,7 @@ export function Donate() {
                                 onChange={(e) =>
                                   handleCustomChange(e.target.value)
                                 }
-                                className="w-full pl-8 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-[#009639] text-gray-900 font-semibold"
+                                className="w-full pl-8 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-rose-600 text-gray-900 font-semibold"
                               />
                             </div>
                           </div>
@@ -355,7 +352,7 @@ export function Donate() {
                                 <p className="text-xs text-white/80">
                                   {
                                     currentTier.perks[
-                                      currentTier.perks.length - 1
+                                    currentTier.perks.length - 1
                                     ]
                                   }
                                 </p>
@@ -366,7 +363,7 @@ export function Donate() {
                           <button
                             disabled={effectiveAmount < 1}
                             onClick={() => setStep(2)}
-                            className="w-full flex items-center justify-center gap-2 bg-[#009639] text-white font-bold py-4 rounded-xl hover:bg-[#007a2e] transition-all hover:shadow-lg disabled:opacity-40 text-lg"
+                            className="w-full flex items-center justify-center gap-2 bg-rose-600 text-white font-bold py-4 rounded-xl hover:bg-rose-700 transition-all hover:shadow-lg disabled:opacity-40 text-lg"
                           >
                             Continue <ArrowRight className="w-5 h-5" />
                           </button>
@@ -581,7 +578,7 @@ export function Donate() {
                             <button
                               type="submit"
                               disabled={loading}
-                              className="flex-[2] flex items-center justify-center gap-2 bg-[#009639] text-white font-bold py-3.5 rounded-xl hover:bg-[#007a2e] transition-all hover:shadow-lg disabled:opacity-60 text-base"
+                              className="flex-[2] flex items-center justify-center gap-2 bg-rose-600 text-white font-bold py-3.5 rounded-xl hover:bg-rose-700 transition-all hover:shadow-lg disabled:opacity-60 text-base"
                             >
                               {loading ? (
                                 <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />

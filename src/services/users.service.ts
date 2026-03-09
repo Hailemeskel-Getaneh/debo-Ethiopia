@@ -14,9 +14,7 @@ export interface UserCreatePayload {
     email: string;
     phone_number?: string;
     password: string;
-    re_password: string;
-    role?: string | number;
-    role_id?: string | number;
+    role?: number; // integer ID from /api/user-roles/
 }
 
 export interface UserUpdatePayload {
@@ -25,8 +23,7 @@ export interface UserUpdatePayload {
     phone_number?: string;
     is_staff?: boolean;
     is_superuser?: boolean;
-    role?: string | number;
-    role_id?: string | number;
+    role?: number; // integer ID from /api/user-roles/
 }
 
 export const usersService = {
@@ -40,6 +37,9 @@ export const usersService = {
 
     update: (id: string | number, data: UserUpdatePayload) =>
         api.patch<User>(`/auth/users/${id}/`, data),
+
+    setRole: (id: string | number, roleId: number) =>
+        api.patch<User>(`/auth/users/${id}/set-role/`, { role: roleId }),
 
     delete: (id: string | number) =>
         api.delete(`/auth/users/${id}/`),

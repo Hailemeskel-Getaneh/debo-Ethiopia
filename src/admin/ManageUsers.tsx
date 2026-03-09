@@ -97,28 +97,19 @@ const ManageUsers: React.FC = () => {
         e.preventDefault();
         setSaving(true);
         const formData = new FormData(e.currentTarget);
-        const roleId = formData.get('role') as string;
-        const roleObj = roles.find(r => String(r.id) === roleId);
-
-        // Standard Staff roles (Admin, etc.) usually require is_staff = true in common systems
-        const isStaffRole = roleObj ? (roleObj.name.toUpperCase() !== 'USER') : false;
+        const roleId = formData.get('role') as string; // This is the integer ID string from the select
 
         const payload: UserUpdatePayload = {
             first_name: formData.get('firstName') as string,
             last_name: formData.get('lastName') as string,
             phone_number: formData.get('phone') as string,
-            is_staff: isStaffRole,
         };
 
-        if (roleId && roleObj) {
-            payload.role = roleObj.name.toUpperCase(); // Sending NAME as 'role' (matches AuthContext logic)
-            payload.role_id = roleId;                   // Sending UUID as 'role_id' (matches DB schema)
-        } else if (roleId) {
-            payload.role = String(roleId).toUpperCase();
-            payload.role_id = roleId;
+        if (roleId) {
+            payload.role = parseInt(roleId, 10);
         }
 
-        console.log('Saving User Payload:', payload);
+        console.log('Update Payload:', payload);
 
         try {
             if (modalMode === 'Add') {
@@ -128,15 +119,11 @@ const ManageUsers: React.FC = () => {
                     phone_number: formData.get('phone') as string,
                     email: formData.get('email') as string,
                     password: formData.get('password') as string,
-                    re_password: formData.get('rePassword') as string,
                 };
-                if (roleId && roleObj) {
-                    createPayload.role = roleObj.name.toUpperCase();
-                    createPayload.role_id = roleId;
-                } else if (roleId) {
-                    createPayload.role = String(roleId).toUpperCase();
-                    createPayload.role_id = roleId;
+                if (roleId) {
+                    createPayload.role = parseInt(roleId, 10);
                 }
+                console.log('Create Payload:', createPayload);
                 await usersService.create(createPayload);
             } else if (selectedUser) {
                 await usersService.update(selectedUser.id, payload);
@@ -144,8 +131,14 @@ const ManageUsers: React.FC = () => {
 
             setIsModalOpen(false);
             fetchUsers();
-        } catch {
-            setError('Failed to save user. Please check if the email is unique and roles are valid.');
+        } catch (err: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const error = err as any;
+            console.error('API Error Response:', error.response?.data);
+            const errorMsg = error.response?.data
+                ? JSON.stringify(error.response.data)
+                : 'Failed to save user. Please check if the email is unique and roles are valid.';
+            setError(`Error: ${errorMsg}`);
         } finally {
             setSaving(false);
         }
