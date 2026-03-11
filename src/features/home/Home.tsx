@@ -1,16 +1,15 @@
-import { NavBar, Footer, DonationBanner, FooterNewsLetter } from "@/components";
+import { DonationBanner, Footer, NavBar, StatsFloating } from "@/components";
+import { useTheme } from "@/context/ThemeContext";
+import { useEvents } from "@/hooks/useEvents";
+import { useNews } from "@/hooks/useNews";
+import { useStats } from "@/hooks/useStats";
 import {
   Hero,
   LatestNews,
   MissionSection,
-  StatsFloating,
   UpcomingEvents,
 } from "./_components";
-import { heroSlides, fallbackStats } from "./data";
-import { useStats } from "@/hooks/useStats";
-import { useEvents } from "@/hooks/useEvents";
-import { useNews } from "@/hooks/useNews";
-import { useTheme } from "@/context/ThemeContext";
+import { fallbackStats, heroSlides } from "./data";
 
 export default function HomePage() {
   const { theme, themeColors } = useTheme();

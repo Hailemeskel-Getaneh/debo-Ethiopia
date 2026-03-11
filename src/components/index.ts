@@ -7,6 +7,7 @@ export { default as NavBar } from "./NavBar";
 export { default as Footer } from "./Footer";
 export { DonationBanner } from "./DonationBanner";
 export { FooterNewsLetter } from "./FooterNewsLetter";
+export { StatsFloating } from "./StatsFloating";
 export { Button } from "./button";
 export {
   Card,
