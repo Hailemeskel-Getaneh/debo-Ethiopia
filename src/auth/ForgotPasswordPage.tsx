@@ -1,4 +1,3 @@
-// pages/ForgotPassword.tsx
 import loginBg from "@/assets/images/login-bg.png";
 import { ForgotPasswordForm } from "@/auth/ForgotPasswordForm";
 import { motion } from "framer-motion";

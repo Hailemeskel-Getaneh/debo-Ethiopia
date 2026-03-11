@@ -10,8 +10,8 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
-import NavBar from "../home/components/NavBar";
-import Footer from "../home/components/Footer";
+import NavBar from "../../components/NavBar";
+import Footer from "../home/Footer";
 
 const programs = [
   {

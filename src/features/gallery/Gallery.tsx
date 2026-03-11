@@ -9,8 +9,8 @@ import {
   Play,
   Image,
 } from "lucide-react";
-import NavBar from "../home/components/NavBar";
-import Footer from "../home/components/Footer";
+import NavBar from "../../components/NavBar";
+import Footer from "../home/Footer";
 import { useGallery } from "@/hooks/useGallery";
 
 // Backend schema: { id, title, description, images[], videos[], created_at, updated_at }

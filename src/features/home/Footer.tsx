@@ -54,7 +54,7 @@ const Footer = () => {
       aria-label="Site Footer"
     >
       {/* Top Border */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-main to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-brand-main to-transparent" />
 
       {/* Decorative Elements */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-main/3 rounded-full blur-3xl" />

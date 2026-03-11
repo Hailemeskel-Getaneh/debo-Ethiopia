@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Mail, Linkedin, ArrowRight } from "lucide-react";
-import NavBar from "../home/components/NavBar";
-import Footer from "../home/components/Footer";
+import NavBar from "../../components/NavBar";
+import Footer from "../home/Footer";
 
 const board = [
   {

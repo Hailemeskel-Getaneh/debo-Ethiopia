@@ -18,7 +18,7 @@ import ManageMessages from "../admin/ManageMessages";
 import ManageAchievements from "../admin/ManageAchievements";
 import AdminSettings from "../admin/AdminSettings";
 import ProtectedRoute from "./ProtectedRoute";
-import HomePage from "../features/home/HomePage";
+import HomePage from "../features/home/Home";
 import { About } from "../features/about/About";
 
 import { ProgramsRouter } from "../features/programs/ProgramsRouter";

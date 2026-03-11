@@ -8,8 +8,8 @@ import {
   ArrowRight,
   Loader2,
 } from "lucide-react";
-import NavBar from "../home/components/NavBar";
-import Footer from "../home/components/Footer";
+import NavBar from "../../components/NavBar";
+import Footer from "../home/Footer";
 import { useAchievements } from "@/hooks/useAchievements";
 
 interface Achievement {

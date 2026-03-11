@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search, Calendar, User, ChevronRight, Sparkles } from "lucide-react";
-import NavBar from "../home/components/NavBar";
-import Footer from "../home/components/Footer";
+import NavBar from "../../components/NavBar";
+import Footer from "../home/Footer";
 import { useNews } from "@/hooks/useNews";
 
 // Backend schema: { id, title, content, author, images, videos, is_published, published_at, updated_at }

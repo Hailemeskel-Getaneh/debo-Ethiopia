@@ -1,4 +1,3 @@
-// components/GlobalErrorListener.tsx
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, AlertTriangle, X } from "lucide-react";
 import { useEffect, useState } from "react";

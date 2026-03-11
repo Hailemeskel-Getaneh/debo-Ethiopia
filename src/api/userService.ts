@@ -1,4 +1,3 @@
-// services/UserService.ts
 import apiClient from "./ApiClient";
 
 export interface UserProfile {

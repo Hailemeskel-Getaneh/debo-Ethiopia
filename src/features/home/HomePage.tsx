@@ -12,8 +12,8 @@ import {
   Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
+import NavBar from "../../components/NavBar";
+import Footer from "./Footer";
 import { useTheme } from "@/context/ThemeContext";
 
 // Assets
@@ -222,10 +222,10 @@ export default function HomePage() {
         {/* MISSION SECTION */}
         <section className="py-32 relative overflow-hidden bg-zinc-900">
           {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900" />
+          <div className="absolute inset-0 bg-linear-to-br from-zinc-900 via-zinc-800 to-zinc-900" />
           <div className="absolute inset-0 opacity-30">
-            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-main/20 via-transparent to-transparent" />
-            <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-brand-action/20 via-transparent to-transparent" />
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-brand-main/20 via-transparent to-transparent" />
+            <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,var(--tw-gradient-stops))] from-brand-action/20 via-transparent to-transparent" />
           </div>
 
           <div className="container mx-auto px-6 relative z-10">
@@ -290,13 +290,13 @@ export default function HomePage() {
                 className="relative group"
               >
                 <div className="absolute inset-0 bg-brand-main/30 rounded-[3rem] -rotate-3 transition-transform group-hover:rotate-0" />
-                <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-premium">
+                <div className="relative aspect-4/5 rounded-[3rem] overflow-hidden shadow-premium">
                   <img
                     src={imgAbout}
                     className="w-full h-full object-cover"
                     alt="About"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
                   <div className="absolute bottom-10 left-10 text-white">
                     <Award className="w-12 h-12 mb-4 text-brand-main" />
                     <h5 className="text-3xl font-bold mb-2">Impact First</h5>
@@ -312,7 +312,7 @@ export default function HomePage() {
 
         {/* UPCOMING EVENTS */}
         <section className="py-24 bg-white dark:bg-zinc-950 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent" />
 
           {/* Decorative elements */}
           <div className="absolute top-20 left-10 w-72 h-72 bg-brand-main/5 rounded-full blur-3xl" />
