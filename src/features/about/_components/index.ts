@@ -6,3 +6,4 @@ export { default as StoryCard } from "./StoryCard";
 export { default as Timeline } from "./Timeline";
 export { TimelineSection } from "./TimelineSection";
 export { default as ValueGrid } from "./ValueGrid";
+export { TeamMemberCard } from "./TeamMemberCard";
