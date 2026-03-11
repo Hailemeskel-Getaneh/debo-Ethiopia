@@ -12,8 +12,7 @@ import {
   Loader2,
   ShieldCheck,
 } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { NavBar, Footer } from "@/components";
 import { subscribersService } from "@/services";
 
 const pastIssues = [

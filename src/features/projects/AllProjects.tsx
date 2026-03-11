@@ -13,8 +13,7 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { NavBar, Footer } from "@/components";
 import { useProjects } from "@/hooks/useProjects";
 
 const statuses = [

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { Footer, NavBar } from "@/components";
+
 import { contactService } from "@/services";
 
 export function Contact() {

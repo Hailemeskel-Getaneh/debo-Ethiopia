@@ -8,8 +8,7 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { NavBar, Footer } from "@/components";
 
 // Professional Images for Economic Development
 import savingsImg from "@/assets/images/IMG_20240602_161145.jpg";

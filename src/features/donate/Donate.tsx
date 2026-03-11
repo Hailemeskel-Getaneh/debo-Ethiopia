@@ -14,8 +14,7 @@ import {
   Smartphone,
   Wallet,
 } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import {NavBar,Footer} from "@/components";
 
 const presetAmounts = [10, 25, 50, 100, 250, 500];
 

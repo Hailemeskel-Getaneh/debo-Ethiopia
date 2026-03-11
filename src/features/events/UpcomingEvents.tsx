@@ -1,6 +1,5 @@
 import { Calendar, MapPin, Clock, ChevronRight, Sparkles } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { NavBar, Footer } from "@/components";
 import { useEvents } from "@/hooks/useEvents";
 
 // Backend schema: { program_id, title, description, location, start_date, end_date }

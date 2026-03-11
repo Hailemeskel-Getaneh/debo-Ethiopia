@@ -10,8 +10,7 @@ import {
   Sparkles,
   Heart,
 } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { NavBar, Footer } from "@/components";
 
 const programs = [
   {

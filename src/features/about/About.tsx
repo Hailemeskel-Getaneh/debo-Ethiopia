@@ -10,8 +10,7 @@ import {
   ShieldCheck,
   TrendingUp,
 } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { NavBar, Footer } from "@/components";
 import { useStats } from "@/hooks/useStats";
 
 const fallbackStats = [

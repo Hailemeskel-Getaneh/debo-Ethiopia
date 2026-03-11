@@ -9,8 +9,7 @@ import {
   LayoutList,
   X,
 } from "lucide-react";
-import NavBar from "../../components/NavBar";
-import Footer from "../home/Footer";
+import { NavBar, Footer } from "@/components";
 import { usePrograms } from "@/hooks/usePrograms";
 
 interface Program {
