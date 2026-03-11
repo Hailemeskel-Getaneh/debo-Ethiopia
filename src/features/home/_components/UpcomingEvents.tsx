@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components";
 
 export const UpcomingEvents = ({
   events,
