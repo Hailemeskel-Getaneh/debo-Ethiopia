@@ -6,3 +6,4 @@ export {
   type ForgotPasswordData,
   forgotPasswordSchema,
 } from "./authSchema";
+export { contactSchema, type ContactFormData } from "./contactSchema";

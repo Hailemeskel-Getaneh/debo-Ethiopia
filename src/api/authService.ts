@@ -44,7 +44,9 @@ export const authService = {
       return response.data;
     } catch (error: any) {
       exceptionHandler.emit({
-        message: error.response?.data?.detail || "Password rest failed",
+        message:
+          error.response?.data?.detail ||
+          "Unable to send password reset link!!",
         type: "error",
       });
       throw error;
